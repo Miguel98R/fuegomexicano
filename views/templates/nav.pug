@@ -1,0 +1,26 @@
+nav.navbar.navbar-expand-lg.bg-dark
+    .container
+        button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+        |
+        a.navbar-brand(href='/')
+            img(src="./public/images/fuego/logo.png" style="max-height:63px;").img-fluid
+        .d-lg-none
+            a.bi-person.custom-icon.me-3(href='sign-in ')
+            |
+            a.bi-bag.custom-icon(href='product-detail ')
+        .collapse.navbar-collapse#navbarNav.text-white
+            ul.navbar-nav.mx-auto
+                li.nav-item
+                    a.nav-link(href='/') Inicio
+                li.nav-item
+                    a.nav-link(href='/blog') Blog
+                li.nav-item
+                    a.nav-link(href='/invitaciones') Invitaciones
+                li.nav-item
+                    a.nav-link(href='https://linktr.ee/hectorandrade' target="_blank") Redes
+
+            .d-none.d-lg-block
+                a.bi-person.custom-icon.me-3(href='sign-in ')
+                |
+                a.bi-bag.custom-icon(href='product-detail ')

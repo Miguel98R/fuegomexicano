@@ -1,0 +1,23 @@
+section.section-padding
+    .row
+            .col-12.text-center
+                h2.text-white.mb-5
+                    | Agenda
+                    span.text-danger.mx-1 2023
+
+    .container
+        .row
+            if eventsByMonth
+                each val , index in eventsByMonth
+                    .col-lg-4.col-md-4.col-12.my-3
+                        .card.bg-dark
+                            .card-body
+                                h5.my-3.display-6.text-center.card-title.text-danger= val.mes.charAt(0).toUpperCase() + val.mes.slice(1)
+                                .row
+                                    if(val.events)
+                                        each val2, index2  in val.events
+                                            .col-6.my-2
+                                                p.m-0.p-0.card-text.text-white.fw-bold(style="font-size:20px;")
+                                                    | #{val2.date}
+                                                p.card-text.text-white(style="font-size:15px;")
+                                                    |  #{val2.location}

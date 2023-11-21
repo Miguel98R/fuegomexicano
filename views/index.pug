@@ -1,0 +1,26 @@
+doctype html
+html(lang='es')
+    head
+        include templates/head
+        include templates/styles
+
+
+    body
+        section.preloader
+            .spinner
+                span.sk-inner-circle
+        main
+            include templates/nav
+            include templates/slider
+            include templates/acercaDe
+            include templates/agenda
+
+
+        include templates/footer
+        include templates/scripts
+        script(src='/public/js/jsWeb/home.js')
+
+
+
+
+

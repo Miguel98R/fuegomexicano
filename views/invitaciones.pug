@@ -1,0 +1,35 @@
+doctype html
+html(lang='es')
+    head
+        include templates/head
+        include templates/styles
+    body
+        section.preloader
+            .spinner
+                span.sk-inner-circle
+        main
+            include templates/nav
+            header.site-header.section-padding-img.site-header-image
+                .container
+                    .row
+                        .col-lg-6.col-12.header-info.text-center
+                            h1.display-2
+                                span.d-block.text-danger Invitaciones
+                            span.slick-title
+                                | Fuego
+                                span.text-danger Mexicano
+                            div
+                                span.slick-title.fw-lighter(style="font-size:12px;")
+                                    | Hector
+                                    span.text-danger Andrade
+
+                img.header-image.img-fluid(src='/public/images/fuego/fuego_7.jpg', alt)
+
+
+            section.team.section-padding
+                .container
+                    .row
+                        .col-12
+        include templates/footer
+        include templates/scripts
+        script(src='/public/js/jsWeb/home.js')
