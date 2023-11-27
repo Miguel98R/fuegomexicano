@@ -1,0 +1,33 @@
+doctype html
+html(lang='es')
+    head
+        include templates/head
+        include templates/styles
+    body
+        main
+            .page-wrapper#main-wrapper(data-layout='vertical', data-navbarbg='skin6', data-sidebartype='full', data-sidebar-position='fixed', data-header-position='fixed')
+                aside.left-sidebar
+                    include templates/menu
+                .body-wrapper
+                    header.app-header.bg-danger
+                        include templates/nav
+
+                    .container-fluid
+                        .row
+                            .col-lg-8.d-flex.align-items-strech
+                                .card.w-100
+                                    .card-body
+                                        .d-sm-flex.d-block.align-items-center.justify-content-between.mb-9
+                                            .mb-3.mb-sm-0
+                                                h5.card-title.fw-semibold Sales Overview
+                                            div
+                                                select.form-select
+                                                    option(value='1') March 2023
+                                                    option(value='2') April 2023
+                                                    option(value='3') May 2023
+                                                    option(value='4') June 2023
+                                        #chart
+
+        include templates/scripts
+        script(src=url_js_files + '/common.js?v=' + Math.random())
+        script(src=url_js_files + '/accords.js?v=' + Math.random())

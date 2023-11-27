@@ -4,9 +4,7 @@ html(lang='es')
         include templates/head
         include templates/styles
     body
-        section.preloader
-            .spinner
-                span.sk-inner-circle
+        include templates/spinner
         main
             include templates/nav
             header.site-header.section-padding-img.site-header-image
@@ -28,8 +26,53 @@ html(lang='es')
 
             section.team.section-padding
                 .container
-                    .row
-                        .col-12
+                    p.text-center Por favor llena el siguiente formulario
+                    .card.team
+                        .card-body.team
+
+                            div
+                                .row
+                                    .col-12.col-md-6
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='nombre' style='color: white;') Nombre :
+                                            input.form-control(type='text', id='nombre', name='nombre', required style='background-color: black; color: white;')
+
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='responsabilidad' style='color: white;') Puesto o responsabilidad :
+                                            input.form-control(type='text', id='responsabilidad', name='responsabilidad', required style='background-color: black; color: white;')
+
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='ministerio' style='color: white;') Ministerio :
+                                            input.form-control(type='text', id='ministerio', name='ministerio' style='background-color: black; color: white;')
+
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='email' style='color: white;') Email :
+                                            input.form-control(type='email', id='email', name='email', required style='background-color: black; color: white;')
+
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='contacto' style='color: white;') Numero de contacto :
+                                            input.form-control(type='tel', id='contacto', name='contacto', style='background-color: black; color: white;')
+
+                                    .col-12.col-md-6
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='fecha' style='color: white;') Fecha del evento :
+                                            input.form-control(type='date', id='fecha', name='fecha', required style='background-color: black; color: white;')
+
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='cantidad' style='color: white;') Numero de personas esperadas :
+                                            input.form-control(type='number', id='cantidad', name='cantidad', min=0 style='background-color: black; color: white;')
+
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='descripcion' style='color: white;') Hablanos del evento :
+                                            textarea.form-control(id='descripcion', name='descripcion', rows='5', required style='background-color: black; color: white;')
+
+                                        button.btn.custom-btn.w-100.my-3#sendInvitacion
+                                            i.mx-2.bi.bi-send
+                                            | Enviar invitación
+
+
+
+
         include templates/footer
         include templates/scripts
-        script(src='/public/js/jsWeb/home.js')
+        script(src=`/public/js/jsWeb/invitaciones.js?v=${Math.random()}`)

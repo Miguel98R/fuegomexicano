@@ -1,0 +1,25 @@
+div
+    .brand-logo.d-flex.align-items-center.justify-content-between
+        a.text-nowrap.logo-img(href='/panel')
+            h4.text-danger.my-3 Fuego
+                span.text-black Mexicano
+        .close-btn.d-xl-none.d-block.sidebartoggler.cursor-pointer#sidebarCollapse
+            i.ti.ti-x.fs-8
+    nav.sidebar-nav.scroll-sidebar(data-simplebar)
+        ul#sidebarnav
+
+
+            li.nav-small-cap
+                i.ti.ti-dots.nav-small-cap-icon.fs-4
+                |
+                span.hide-menu Menú
+
+            div(style="max-height: 500px; overflow-y: auto;")
+                if menu
+                    each item in menu
+                        li.sidebar-item
+                            a.sidebar-link(href=item.href, aria-expanded='false')
+                                span
+                                    i(class=`${item.icon}`)
+                                    |
+                                span.mx-1.hide-menu=item.label

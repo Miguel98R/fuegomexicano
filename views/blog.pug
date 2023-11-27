@@ -1,35 +1,49 @@
 doctype html
 html(lang='es')
-  head
-    include templates/head
-    include templates/styles
-  body
-    section.preloader
-      .spinner
-        span.sk-inner-circle
-    main
-      include templates/nav
-      header.site-header.section-padding-img.site-header-image
-        .container
-          .row
-            .col-lg-6.col-12.header-info.text-center
-              h1.display-2
-                span.d-block.text-danger Blog
-              span.slick-title
-                | Fuego
-                span.text-danger Mexicano
-              div
-                span.slick-title.fw-lighter(style="font-size:12px;")
-                  | Hector
-                  span.text-danger Andrade
+    head
+        include templates/head
+        include templates/styles
+    body
+        include templates/spinner
+        main
+            include templates/nav
+            header.site-header.section-padding-img.site-header-image
+                .container
+                    .row
+                        .col-lg-6.col-12.header-info.text-center
+                            h1.display-2
+                                span.d-block.text-danger Blog
+                            span.slick-title
+                                | Fuego
+                                span.text-danger Mexicano
+                            div
+                                span.slick-title.fw-lighter(style="font-size:12px;")
+                                    | Hector
+                                    span.text-danger Andrade
 
-        img.header-image.img-fluid(src='/public/images/fuego/fuego_5.jpg', alt)
+                img.header-image.img-fluid(src='/public/images/fuego/fuego_5.jpg', alt)
+
+            section.team.section-padding
+                .container
+                    #blogs.row
+                        div#template_blog
+                            .col-12
+                                .card.team.text-center
+                                    .row
+                                        .col-12.col-md-6
+
+                                            .card-img
+                                                img.img-fluid#img_blog(src='/public/images/fuego/fuego_10.jpg', style="max-height:450px;border-radius:9px;" alt)
+                                        .col-12.col-md-6
+                                            .card-body.my-3
+                                                h3#title_blog.text-white FUEGO MEXICANO
+                                                p#subtitle_blog.fw-lighter.text-white UN LLAMADO A VALORAR LO QUE DIOS TE DIO
+                                                p Publicación :
+                                                    span#date_blog.fw-lighter.text-white.mx-2  2/3/2023
+                                                button#read_blog.custom-btn.btn Leer
 
 
-      section.team.section-padding
-        .container
-          .row
-            .col-12
-    include templates/footer
-    include templates/scripts
-    script(src='/public/js/jsWeb/home.js')
+
+        include templates/footer
+        include templates/scripts
+        script(src=`/public/js/jsWeb/blog.js?v=${Math.random()}`)

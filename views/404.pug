@@ -1,0 +1,28 @@
+doctype html
+html(lang='es')
+    head
+        include templates/head
+        include templates/styles
+    body
+        include templates/spinner
+        main
+
+            header.site-header.py-3
+                .container.text-center.my-5
+                    .row
+                        .col-lg-12.col-12.header-info
+                            h1.display-1
+                                span.d-block.text-primary ERROR
+                                |
+                                span.d-block.text-dark 404
+                                p PAGINA NO ENCONTRADA
+
+                            a.display-5.custom-btn.btn(href="/")
+                                i.mx-2.bi.bi-arrow-return-left
+                                | Regresar al home
+
+
+
+
+        include templates/footer
+        include templates/scripts

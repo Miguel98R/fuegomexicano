@@ -1,7 +1,16 @@
 const express = require('express')
 const router = express.Router()
 
+//--------------------------------------------------------------------------------------------------------------------//
+//                                               ROUTES OF CONTROL-PANEL                                              //
+//--------------------------------------------------------------------------------------------------------------------//
 
+//GET THE ROUTES OF CONTROL PANEL
+router.use(require('./panelRoutesVIews'))
+
+//--------------------------------------------------------------------------------------------------------------------//
+//                                                  ROUTES OF FRONTEND                                                //
+//--------------------------------------------------------------------------------------------------------------------//
 
 router.get("/", (req, res) => {
     let eventsByMonth = [
@@ -36,31 +45,44 @@ router.get("/", (req, res) => {
         }
     ]
 
+    let images = ['/public/images/fuego/fuego_1.jpg', '/public/images/fuego/fuego_2.jpg', '/public/images/fuego/fuego_3.jpg', '/public/images/fuego/fuego_4.jpg']
 
     res.render("index", {
         title: 'Fuego Mexicano | Home',
-        eventsByMonth
+        eventsByMonth,
+        images
     });
 });
 
 router.get("/blog", (req, res) => {
-    res.render("blog",{
+    res.render("blog", {
         title: 'Fuego Mexicano | Blog',
 
     });
 });
 
 router.get("/invitaciones", (req, res) => {
-    res.render("invitaciones",{
+    res.render("invitaciones", {
         title: 'Fuego Mexicano | Invitaciones',
 
     });
 });
 
-////---------------------------------------------
-router.get("/contact", (req, res) => {
-    res.render("contact");
+router.get("/products", (req, res) => {
+    res.render("products", {
+        title: 'Fuego Mexicano | Merch',
+
+    });
 });
+
+//RENDER IF DOES NOT EXIST THE PAGE
+router.get("/:page", async (req, res) => {
+
+    res.render("404");
+});
+
+////-------------------------------------------------------------------------------------
+
 router.get("/faq", (req, res) => {
     res.render("faq");
 });
@@ -68,9 +90,7 @@ router.get("/faq", (req, res) => {
 router.get("/product-detail", (req, res) => {
     res.render("product-detail");
 });
-router.get("/products", (req, res) => {
-    res.render("products");
-});
+
 router.get("/sign-in", (req, res) => {
     res.render("sign-in");
 });
