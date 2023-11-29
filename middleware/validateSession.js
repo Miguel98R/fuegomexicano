@@ -1,12 +1,5 @@
-let menu = [
-    {href: '/conf_web', icon: 'bi-gear', label: 'Configuración Web', access: ['admin']},
-    {href: '/conf_blog', icon: 'bi-book', label: 'Blog', access: ['admin', 'editor']},
-    {href: '/conf_invitations', icon: 'bi-envelope', label: 'Invitaciones', access: ['admin']},
-    {href: '/conf_products', icon: 'bi-shop', label: 'Productos', access: ['admin', 'seller']},
-    {href: '/presales', icon: 'bi-bag', label: 'Preventas', access: ['admin', 'seller']},
-    {href: '/orders', icon: 'bi-bag-check', label: 'Órdenes', access: ['admin', 'manager']},
-    {href: './users', icon: 'bi-people-fill', label: 'Usuarios', access: ['admin']}
-]
+
+let menu = require("../conf/menu")
 let validateSession = function (req, res, next) {
 
     if (req.session.user) {

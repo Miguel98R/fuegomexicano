@@ -55,6 +55,143 @@ router.get("/panel", validateSession, (req, res) => {
 
     res.render("panel/index", {
         title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Dashboard",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+router.get("/conf_web", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/conf_web", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Web",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+router.get("/conf_blog", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/conf_blog", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Blog",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+router.get("/conf_invitations", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/conf_blog", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Invitaciones",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+
+router.get("/conf_agenda", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/conf_agenda", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Agenda",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+router.get("/conf_products", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/conf_products", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Productos",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+router.get("/presales", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/presales", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Pre ventas",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+router.get("/orders", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/orders", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Ordenes",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+router.get("/historic", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/historic", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Historico ventas",
+        url_js_files,
+        menu
+
+    });
+
+});
+
+router.get("/conf_users", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/users", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Usuarios",
         url_js_files,
         menu
 

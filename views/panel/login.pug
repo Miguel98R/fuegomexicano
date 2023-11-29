@@ -9,13 +9,13 @@ html(lang='es')
                 .position-relative.overflow-hidden.radial-gradient.min-vh-100.d-flex.align-items-center.justify-content-center
                     .d-flex.align-items-center.justify-content-center.w-100
                         .row.justify-content-center.w-100
-                            .col-4
-                            .col-4
+                            .col-2.col-md-4
+                            .col-8.col-md-4
                                 .card.mb-0.mt-4
                                     .card-body
 
                                         a.text-nowrap.logo-img.text-center.d-block.py-3.w-100(href='/fgPanel')
-                                            img(src='/public/images/fuego/logo_.png', style="max-height:200px;", alt).img-fluid.rounded-pill
+                                            img(src='/public/images/fuego/logo_.png', style="max-height:140px;", alt).img-fluid.rounded-pill
                                         p.text-center.fw-bold.text-black Iniciar sesión
                                         form#loginForm(role='form' action="api/auth/loginSesion" method="POST").text-start
 
@@ -36,7 +36,7 @@ html(lang='es')
                                     a(href='https://mikerosasdev.com/')
                                         p(style="font-size:11px").copyright-text
                                             | Desarrollado por Mike Rosas Dev
-                            .col-4
+                            .col-2.col-md-4
 
 
 
@@ -46,8 +46,8 @@ html(lang='es')
 
 
         include templates/scripts
-        script(src=`/public/js/jsPanel/common.js?v=${Math.random()}`)
+        script(src=`${url_js_files}/common.js?v=${Math.random()}`)
         script.
             var message_error = '!{message_error}';
 
-        script(src=`/public/js/jsPanel/login.js?v=${Math.random()}`)
+        script(src=`${url_js_files}/login.js?v=${Math.random()}`)
