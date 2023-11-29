@@ -2,7 +2,7 @@ const apiUrl = "/api/users"
 
 const createAdmin = (body) => {
     api_conection("POST", `${apiUrl}/createAdmin`, body, function () {
-
+        location.href = "/fgPanel"
     })
 }
 $(async function () {

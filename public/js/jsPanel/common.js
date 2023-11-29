@@ -70,7 +70,7 @@ const notyf = new Notyf({
 
 
 $('#close_session').click(function () {
-    location.href = '/api/users/logout/admin'
+    location.href = '/api/auth/logout/'
 })
 
 

@@ -13,7 +13,7 @@ let validateSession = function (req, res, next) {
 
         let dataUser = req.session.user
 
-        const level = dataUser.userConf.usersTypes
+        const level = dataUser.usersTypes
 
         let meenu
 

@@ -9,24 +9,26 @@ html(lang='es')
                 .position-relative.overflow-hidden.radial-gradient.min-vh-100.d-flex.align-items-center.justify-content-center
                     .d-flex.align-items-center.justify-content-center.w-100
                         .row.justify-content-center.w-100
-                            .col-md-3.col-lg-3.col-xxl-3
+                            .col-4
+                            .col-4
                                 .card.mb-0.mt-4
                                     .card-body
 
                                         a.text-nowrap.logo-img.text-center.d-block.py-3.w-100(href='/fgPanel')
-                                            img(src='/public/images/fuego/logo_.png', width='180', alt).rounded-pill
-                                        p.text-center Iniciar sesión
-                                        form
-                                            .mb-3
-                                                label.form-label(for='exampleInputEmail1') Usuario
-                                                |
-                                                input.form-control#exampleInputEmail1(type='email', aria-describedby='emailHelp')
-                                            .mb-4
-                                                label.form-label(for='exampleInputPassword1') Contraseña
-                                                |
-                                                input.form-control#exampleInputPassword1(type='password')
+                                            img(src='/public/images/fuego/logo_.png', style="max-height:200px;", alt).img-fluid.rounded-pill
+                                        p.text-center.fw-bold.text-black Iniciar sesión
+                                        form#loginForm(role='form' action="api/auth/loginSesion" method="POST").text-start
 
-                                            a.btn.btn-primary.w-100.py-8.fs-4.mb-4.rounded-2(href='panel') Entrar
+                                            .mb-3
+                                                label.form-label(for='user_name') Usuario
+                                                |
+                                                input.form-control#user_name(type='text' name="user_name" aria-describedby='emailHelp')
+                                            .mb-4
+                                                label.form-label(for='password') Contraseña
+                                                |
+                                                input.form-control#password(type='password' name="password")
+
+                                            button#loginBtn.btn.btn-primary.w-100.py-8.fs-4.mb-4.rounded-2 Entrar
                                 div.text-center.my-1
                                     p.copyright-text
                                         | Hector Andrade © 2023
@@ -34,6 +36,7 @@ html(lang='es')
                                     a(href='https://mikerosasdev.com/')
                                         p(style="font-size:11px").copyright-text
                                             | Desarrollado por Mike Rosas Dev
+                            .col-4
 
 
 
@@ -43,3 +46,8 @@ html(lang='es')
 
 
         include templates/scripts
+        script(src=`/public/js/jsPanel/common.js?v=${Math.random()}`)
+        script.
+            var message_error = '!{message_error}';
+
+        script(src=`/public/js/jsPanel/login.js?v=${Math.random()}`)

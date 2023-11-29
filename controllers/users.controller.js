@@ -17,7 +17,7 @@ module.exports = {
     createAdmin: async (req, res) => {
         let body = req.body
         console.log("body-----------", body)
-        return
+
         try {
 
             // Buscar si ya existe un usuario con el mismo correo electrónico o nombre de usuario

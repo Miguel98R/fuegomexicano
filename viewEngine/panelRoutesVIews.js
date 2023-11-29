@@ -12,9 +12,8 @@ router.get("/fgPanel", (req, res) => {
 
 
     let message_error = ''
-
-    if (req?.query?.message_error) {
-        message_error = req.query.message_error
+    if(req?.query?.message_error){
+        message_error = req?.query?.message_error
     }
 
 
@@ -24,11 +23,13 @@ router.get("/fgPanel", (req, res) => {
             title: 'Fuego Mexicano | Control Panel',
             url_js_files,
 
+
         });
     } else {
         res.render("panel/login", {
             title: 'Fuego Mexicano | Control Panel',
             url_js_files,
+            message_error
 
         })
     }
