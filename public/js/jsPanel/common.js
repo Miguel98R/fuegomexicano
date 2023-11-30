@@ -6,6 +6,22 @@ moment.locale('es', {
     weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
 });
 
+let language = {
+    lengthMenu: "Mostrar _MENU_ registros",
+    zeroRecords: "No se encontraron resultados",
+    info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+    infoFiltered: "(filtrado de un total de _MAX_ registros)",
+    sSearch: "Buscar:",
+    oPaginate: {
+        sFirst: "Primero",
+        sLast: "Último",
+        sNext: "Siguiente",
+        sPrevious: "Anterior",
+    },
+    sProcessing: "Procesando...",
+}
+
 /*;(function ($) {
     $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
@@ -49,7 +65,7 @@ const notyf = new Notyf({
         {
             type: 'warning',
             background: 'orange',
-            icon: '<i class="fas fa-exclamation"></i>',
+            icon: '<i class="bi bi-exclamation-circle"></i>',
             duration: 2000,
             dismissible: true
         },

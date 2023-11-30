@@ -8,6 +8,10 @@ const usersSchema = new Schema({
         type: String,
         required: false,
     },
+    email: {
+        type: String,
+        required: false,
+    },
     name: {
         type: String,
         required: false,
@@ -22,6 +26,12 @@ const usersSchema = new Schema({
         enum: ['admin', 'user'],
         default: 'user'
     },
+    active: {
+        type: Boolean,
+        require: true,
+        default: false
+
+    }
 
 }, {
     timestamps: true

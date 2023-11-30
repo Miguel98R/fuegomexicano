@@ -20,23 +20,33 @@ html(lang='es')
                                 .card.w-100
                                     .card-header
                                         div.my-2.text-end
-                                            button#new_user.btn.btn-primary.mx-2
-                                                i.mx-1.bi.bi-person
+                                            // En pantallas grandes (no celular), muestra solo el texto
+                                            button.new_user.btn.btn-primary.mx-2.d-none.d-lg-inline
+                                                i.mx-2.bi.bi-person
                                                 | Nuevo usuario
+                                            // En pantallas pequeñas (celulares), muestra solo el icono
+                                            button.new_user.btn.btn-primary.mx-2.d-inline.d-lg-none
+                                                i.bi.bi-person
 
 
 
-                                    .card-body
 
-                                        div(style="overflow-y: auto;  height: 250px;")
-                                            table#tblUsers.table.table-hover
-                                                thead
-                                                    tr.my-5.text-center
+                                        .card-body
+
+                                        div(style="overflow-y: auto;  height: 500px;")
+                                            table#tblUsers.table.table-hover.py-3
+                                                thead.table
+                                                    tr.my-5
 
                                                         th Nombre
+                                                        th Usuario
+                                                        th Email
                                                         th Status
-                                                        th Accciones
+                                                        th Rol
+                                                        th Acciones
+
+        include modals/newUserModal
 
         include templates/scripts
         script(src=url_js_files + '/common.js?v=' + Math.random())
-        script(src=url_js_files + '/accords.js?v=' + Math.random())
+        script(src=url_js_files + '/users.js?v=' + Math.random())
