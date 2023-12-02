@@ -22,10 +22,14 @@
 
                     input.form-control#password(type='password')
                 .mb-4
-                    label.form-label(for="type_users") Select User Type:
+                    label.form-label(for="type_users") Seleccionar el tipo de usuario:
                     select.form-select#type_users(name="type_users")
                         option(value="admin") Administrator
                         option(value="user") User
+                .mb-4
+                    label.mx-2.form-check-label(for="active") Activo:
+                    input.form-check-input#active(type='checkbox', aria-describedby='activeHelp')
+
 
 
             .modal-footer

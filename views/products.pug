@@ -27,23 +27,58 @@ html(lang='es')
             section.products
                 .container
                     .row
-                        .col-12
-                            h2.mb-5 New Arrivals
-                        .col-lg-4.col-12.mb-3
-                            .product-thumb
-                                a(href='product-detail ')
-                                    img.img-fluid.product-image(src='/public/images/product/evan-mcdougall-qnh1odlqOmk-unsplash.jpeg', alt)
-                                .product-top.d-flex
-                                    span.product-alert.me-auto New Arrival
-                                    |
-                                    a.bi-heart-fill.product-icon(href='#')
-                                .product-info.d-flex
-                                    div
-                                        h5.product-title.mb-0
-                                            a.product-title-link(href='product-detail ') Tree pot
-                                        p.product-p Original package design from house
-                                    small.product-price.text-muted.ms-auto $25
+                    .col-12
+                        h2.mb-5.text-white Lista de productos
+                    .row#grid_products
+
+
+            div#template_products_.col-lg-4.col-6.mb-3(style="display:none;")
+
+                .product-thumb
+                    img#image_product_.img-fluid.product-image()
+
+                    .product-top.d-flex
+                        span.product-alert.me-auto#stock_aviable_
+                        |
+                        //a.bi-heart-fill.product-icon(href='#')
+
+                    .product-info.d-flex
+                        div
+                            h5.product-title.mb-0
+                                a.product-title-link(href='')#name_product_
+                            p.product-p#description_product_
+                        small.product-price.text-muted.ms-auto#price_product_
+
+                    div.p-0.m-0
+                        .row
+                            .col-4
+                                button#add_product_.add_product.w-100.btn.custom-btn_store.product-p
+                                    i.mx-2.bi.bi-dash-circle(style="font-size")
+
+                            .col-4
+                                input#quantity_input_.form-control.w-100.text-center(type='number', min='1', value='1', style='width: 50px; margin-right: 10px;')
+
+                            .col-4
+                                button#remove_product_.remove_product.w-100.btn.custom-btn_store.product-p
+                                    i.mx-2.bi.bi-plus-circle
+
+
+
+
+
+
+                    div.p-0.m-0
+                        // Botones originales
+                        button#shop_now_.shop_now.w-100.btn.custom-btn_store.product-p
+                            i.mx-2.bi.bi-cart-check-fill
+                            | Comprar ahora
+
+                        button#add_cart_.add_cart.w-100.btn.custom-btn_store.product-p
+                            i.mx-2.bi.bi-cart-plus
+                            | Agregar al carrito
+
 
         include templates/footer
         include templates/scripts
+        script(src=`/public/js/jsWeb/common.js?v=${Math.random()}`)
         script(src=`/public/js/jsWeb/merch.js?v=${Math.random()}`)

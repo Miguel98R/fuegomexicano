@@ -19,6 +19,7 @@ const usersSchema = new Schema({
     password: {
         type: String,
         required: false,
+        select: false
     },
     usersTypes: {
         type: String,

@@ -51,15 +51,23 @@ router.get("/register", (req, res) => {
 router.get("/panel", validateSession, (req, res) => {
 
 
-    let menu = req?.session?.menu
+    if (req?.session?.user && req?.session?.user.usersTypes=="admin" && req?.session?.user.active) {
+        let menu = req?.session?.menu
+        res.render("panel/index", {
+            title: 'Fuego Mexicano | Control Panel',
+            conf_page:"Dashboard",
+            url_js_files,
+            menu
 
-    res.render("panel/index", {
-        title: 'Fuego Mexicano | Control Panel',
-        conf_page:"Dashboard",
-        url_js_files,
-        menu
+        });
 
-    });
+    } else {
+        res.render("panel/login", {
+            title: 'Fuego Mexicano | Control Panel',
+            url_js_files,
+
+        })
+    }
 
 });
 

@@ -20,7 +20,7 @@ module.exports = {
         try {
 
             // Buscar si ya existe un usuario con el mismo correo electrónico o nombre de usuario
-            let searchUser = await usersModel.findOne({$or: [{email: user_name}, {user_name: user_name}]}).select(['user_name', 'name', 'password', 'usersTypes']).lean()
+            let searchUser = await usersModel.findOne({$or: [{email: user_name}, {user_name: user_name}]}).select(['user_name', 'name', 'password', 'usersTypes','active']).lean()
 
             if (!searchUser) {
                 res.redirect('/fgPanel?message_error=Usuario incorrecto')

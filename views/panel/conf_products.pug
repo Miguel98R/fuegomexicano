@@ -21,9 +21,9 @@ html(lang='es')
                                     .card-header
                                         div.my-2.text-end
                                             // En pantallas grandes (no celular), muestra solo el texto
-                                            button.new_user.btn.btn-primary.mx-2.d-none.d-lg-inline
-                                                i.mx-2.bi.bi-person
-                                                | Nuevo usuario
+                                            button.new_product.btn.btn-primary.mx-2.d-none.d-lg-inline
+                                                i.mx-2.bi.bi-shop-window
+                                                | Nuevo producto
                                             // En pantallas pequeñas (celulares), muestra solo el icono
                                             button.new_user.btn.btn-primary.mx-2.d-inline.d-lg-none
                                                 i.bi.bi-person
@@ -34,21 +34,21 @@ html(lang='es')
                                         .card-body
 
                                         div(style="overflow-y: auto;  height: 500px;")
-                                            table#tblUsers.table.table-hover.py-3
+                                            table#tblProducts.table.table-hover.py-3
                                                 thead.table
                                                     tr.my-5
 
                                                         th Nombre
-                                                        th Usuario
-                                                        th Email
+                                                        th Descripción
+                                                        th Precio
+                                                        th Stock
                                                         th Status
-                                                        th Rol
                                                         th Acciones
 
-        include modals/newUserModal
-        include modals/editUserModal
+        include modals/newProductModal
+        include modals/editProductModal
 
 
         include templates/scripts
         script(src=url_js_files + '/common.js?v=' + Math.random())
-        script(src=url_js_files + '/users.js?v=' + Math.random())
+        script(src=url_js_files + '/merch.js?v=' + Math.random())

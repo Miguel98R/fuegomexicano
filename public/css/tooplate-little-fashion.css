@@ -226,6 +226,14 @@ strong {
   padding: 16.50px 20px;
 }
 
+.custom-btn_store {
+  background: var(--white-color); var(--dark-color);
+  border-radius: 1px;
+  color: var(--dark-color);
+  font-size: var(--copyright-text-font-size);
+  padding: 14px 20px;
+}
+
 .social-btn {
   background: transparent;
   border: 1px solid var(--grey-color);
@@ -250,6 +258,12 @@ strong {
 }
 
 .custom-btn:hover,
+.slick-slideshow .custom-btn:hover {
+  background: var(--primary-color);
+  color: var(--white-color);
+}
+
+.custom-btn_store:hover,
 .slick-slideshow .custom-btn:hover {
   background: var(--primary-color);
   color: var(--white-color);

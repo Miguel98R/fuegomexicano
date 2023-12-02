@@ -6,6 +6,7 @@ moment.locale('es', {
     weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
 });
 
+/*
 ;(function ($) {
     $.fn.datepicker.dates['es'] = {
         days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
@@ -20,18 +21,8 @@ moment.locale('es', {
         format: "yyyy-mm-dd"
     };
 }(jQuery));
+*/
 
-const toolbarOptionsQuill = [
-    [{'header': [1, 2, 3, 4, 5, 6, false]}],
-    [{'font': []}],
-    [{'size': ['small', false, 'large', 'huge']}],
-    ['bold', 'italic', 'underline', 'strike'],
-    [{'color': []}, {'background': []}],
-    [{'list': 'ordered'}, {'list': 'bullet'}],
-    [{'align': []}],
-    ['link', 'image', 'video'],
-    ['clean']
-];
 
 HoldOptions = {
     theme: "custom",
@@ -66,11 +57,6 @@ const notyf = new Notyf({
         }
     ]
 });
-
-$('#close_session').click(function () {
-    location.href = '/api/users/logout/admin'
-})
-
 
 const api_conection = async function (method, url, data, f_, error_) {
 
@@ -126,93 +112,9 @@ const api_conection = async function (method, url, data, f_, error_) {
 }
 
 
-function formatState(opt) {
-    if (!opt.id) {
-        return opt.text.toUpperCase();
-    }
-
-    var optimage = $(opt.element).attr('data-image');
-
-    if (!optimage) {
-        return opt.text;
-    } else {
-        var $opt = $(
-            '<span ><img src="' + optimage + '" width="30px" /> ' + opt.text + '</span>'
-        );
-        return $opt;
-    }
-};
-
-const downloadFile = function (text, filename, ext) {
-    if (!ext) {
-        filename = filename + '.csv';
-    } else {
-        filename = filename + ext;
-    }
-    var universalBOM = "\uFEFF";
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text + universalBOM));
-    element.setAttribute('download', filename);
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-}
-
-var copy_clipboard = function (elementID) {
-    var copyText = document.getElementById(elementID);
-    copyText.select();
-    copyText.setSelectionRange(0, 99999);
-    document.execCommand("copy");
-
-}
-
-let countSales = () => {
-    const statusToElementMap = {
-        'Cotizacion': '#in_Cotizaciones',
-        'Cotizacion_canceled': '#inin_Cotizaciones_canceladas',
-        'PRV_preOrder': '#in_Pre_orden_Preventas',
-        'PRV_sale': '#in_Preventas',
-        'PRV_toLiberate': '#in_Preventas_por_liberar',
-        'PRV_canceled': '#in_Preventas_canceladas',
-        'OR_preOrder': '#in_Pre_Ordenes',
-        'OR_sale': '#in_Ordenes',
-        'OR_DHL': '#in_Seguimiento_DHL',
-        'OR_uber': '#in_Seguimiento_Uber',
-        'OR_toDeliver': '#in_Ordenes_por_enviar',
-        'OR_historic': '#in_Historico',
-        'OR_canceled': '#in_Ordenes_canceladas'
-    };
 
 
-    api_conection('GET', '/api/sales/countSalesStatus', {}, (data) => {
-        const cont_array = data.data;
 
-
-        cont_array.forEach((item) => {
-            const status = item.status;
-            const elementSelector = statusToElementMap[status];
-
-            if (elementSelector) {
-                $(elementSelector).text(item.count);
-            }
-        });
-
-        let count_general = 0
-        cont_array.forEach((item) => {
-
-            if (item.status === 'PRV_sale' || item.status === 'PRV_toLiberate' || item.status === 'OR_sale' || item.status === 'OR_DHL' || item.status === 'OR_uber' || item.status === 'OR_toDeliver') {
-                count_general = count_general + (item.count)
-            }
-        });
-
-        $('#in_General').text(count_general);
-    });
-
-
-};
-
-countSales();
 
 
 

@@ -1,5 +1,5 @@
 const apiUrl = "/api/users"
-let columns = [
+const columns = [
 
     {
         data: 'name',
@@ -18,9 +18,9 @@ let columns = [
             let status = ''
             if (type === 'display') {
 
-                if(data){
+                if (data) {
                     status = `<p class="fw-bold text-success">Activo</p>`
-                }else{
+                } else {
                     status = `<p class="fw-bold text-danger">Desactivado</p>`
                 }
 
@@ -47,12 +47,10 @@ let columns = [
     }
 
 
-
-
 ]
-let dt = $("#tblUsers").DataTable({
+const dt = $("#tblUsers").DataTable({
     responsive: true,
-    language:language,
+    language: language,
     data: [],
     lengthMenu: [
         [5, 10, 15, 25, 50, 100, 1000],
@@ -79,49 +77,81 @@ let dt = $("#tblUsers").DataTable({
     },
 
 });
-
 const createNewUsers = (body) => {
     HoldOn.open(HoldOptions)
     api_conection("POST", `${apiUrl}/createUsers`, body, function () {
         HoldOn.close()
         drawDataTable(dt)
         $("#newUserModal").modal("hide")
-    },function (response) {
+    }, function (response) {
         notyf.error(response.message)
         HoldOn.close()
     })
 }
-
 const deleteUser = (id_user) => {
     HoldOn.open(HoldOptions)
     api_conection("DELETE", `${apiUrl}/findIdAndDelete/${id_user}`, {}, function () {
         HoldOn.close()
+        notyf.success("Usuario eliminado")
         drawDataTable(dt)
     })
 }
-
-
 const drawDataTable = (data_table) => {
     HoldOn.open(HoldOptions)
     api_conection("POST", apiUrl + "/datatable_aggregate", {}, function (data) {
         HoldOn.close()
         let data_query = data.data;
 
-
         data_table.clear();
         data_table.rows.add(data_query).draw();
     });
 }
 
+const editUser = (id) => {
+
+    let body = {
+        name: $('#name_edit').val(),
+        user_name: $('#user_name_edit').val(),
+        email: $('#email_edit').val(),
+        password: $('#password_edit').val(),
+        usersTypes: $('#type_users_edit').val(),
+        active: $('#active_edit').prop('checked'),
+
+    }
+
+    $("#editUserModal").modal("hide")
+    HoldOn.open(HoldOptions)
+    api_conection("PUT", `${apiUrl}/updateById/${id}`, {body}, function () {
+        HoldOn.close()
+        notyf.success("Usuario actualizado")
+        drawDataTable(dt)
+    })
+}
+
+const getDataUser = (id_user) => {
+    HoldOn.open(HoldOptions)
+    api_conection("GET", `${apiUrl}/getOneById/${id_user}`, {}, function (data) {
+        HoldOn.close()
+        let userData = data.data
+        console.log("userData", userData)
+
+        $('#name_edit').val(userData.name);
+        $('#user_name_edit').val(userData.user_name);
+        $('#email_edit').val(userData.email);
+        $('#password_edit').val('');
+
+        $('#type_users_edit').val(userData.usersTypes);
+        $('#active_edit').prop('checked', userData.active);
 
 
+    })
+}
 
 
 $(async function () {
 
 
-
-    $(".new_user").click(function () {
+    $(".new_user").click(async function () {
         $("#newUserModal").modal("show")
     })
 
@@ -140,11 +170,19 @@ $(async function () {
             user_name: $("#user_name").val(),
             email: $("#email").val(),
             password: $("#password").val(),
-            type: userType
+            type: userType,
+            active: $('#active').prop('checked'),
         };
 
         await createNewUsers(body);
     });
+
+
+    $("#editUser").click(async function () {
+        let id_user = $(this).attr("id_user");
+        editUser(id_user)
+
+    })
 
     $(document.body).on("click", ".delete-button", function () {
         let id_user = $(this).attr("data-id");
@@ -163,25 +201,17 @@ $(async function () {
                     // Usuario confirmó la eliminación, ejecutar deleteUser
                     deleteUser(id_user);
 
-                    // Mostrar mensaje de éxito después de eliminar
-                    Swal.fire({
-                        title: "Eliminado",
-                        text: "El usuario ha sido eliminado.",
-                        icon: "success"
-                    });
-                } else {
-                    // Usuario canceló la eliminación, mostrar un mensaje de confirmación
-                    Swal.fire({
-                        title: "Eliminación cancelada",
-                        text: "El usuario no ha sido eliminado.",
-                        icon: "info"
-                    });
                 }
             });
     });
 
 
-
+    $(document.body).on("click", ".edit-button", function () {
+        let id_user = $(this).attr("data-id");
+        $("#editUserModal").modal("show")
+        $("#editUser").attr("id_user", id_user)
+        getDataUser(id_user)
+    });
 
     drawDataTable(dt)
 

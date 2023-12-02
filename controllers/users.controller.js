@@ -79,7 +79,8 @@ module.exports = {
                 user_name: body.user_name,
                 email: body.email,
                 password: passwordHash,
-                usersTypes: body.usersTypes
+                usersTypes: body.usersTypes,
+                active: body.active
 
             })
             await newUser.save()
@@ -113,6 +114,56 @@ module.exports = {
             })
         }
     },
+    findIdAndDelete: ms.findIdAndDelete(usersModel, options),
+    updateById: async (req, res) => {
+        let {body} = req.body
+        let {id} = req.params
+
+        console.log(id)
+        console.log(body)
+
+        try {
+
+            let userSearch = await usersModel.findById(id).select('user_name email name usersTypes password active')
+            if (!userSearch) {
+                res.status(404).json({
+                    success: false,
+                })
+            }
+
+            let password
+
+            if (body.password == '' || body.password == undefined) {
+                password = userSearch.password
+            } else {
+                password = await encrypt(body.password)
+
+            }
+
+            userSearch.user_name = body.user_name || userSearch.user_name;
+            userSearch.email = body.email || userSearch.email;
+            userSearch.name = body.name || userSearch.name;
+            userSearch.password = password
+            userSearch.usersTypes = body.usersTypes || userSearch.usersTypes;
+            userSearch.active = body.active;
+
+
+            await userSearch.save()
+
+            res.status(200).json({
+                success: true,
+            })
+        } catch (e) {
+            console.error(e)
+            res.status(500).json({
+                success: false,
+                error: e
+
+            })
+        }
+
+    },
+
     createMany: ms.createMany(usersModel, validationObject, populationObject, options),
 
     getOneWhere: ms.getOneWhere(usersModel, populationObject, options),
@@ -121,9 +172,6 @@ module.exports = {
 
     findUpdateOrCreate: ms.findUpdateOrCreate(usersModel, validationObject, populationObject, options),
     findUpdate: ms.findUpdate(usersModel, validationObject, populationObject, options),
-    updateById: ms.updateById(usersModel, validationObject, populationObject, options),
-
-    findIdAndDelete: ms.findIdAndDelete(usersModel, options),
 
 
     aggregate: ms.aggregate(usersModel, aggregate_pipeline, options),

@@ -1,7 +1,7 @@
 let apiato = require('apiato')
 let ms = new apiato()
 
-let productsModel = require('../models/products.model')
+const productsModel = require('../models/products.model')
 
 
 //APIATO CONFIGURE
@@ -26,6 +26,23 @@ module.exports = {
 
     findIdAndDelete: ms.findIdAndDelete(productsModel, options),
 
-    datatable_aggregate: ms.datatable_aggregate(productsModel, aggregate_pipeline_dt, ''),
+    datatable_aggregate: async (req, res) => {
+
+
+        try {
+
+            let data = await productsModel.find().select('name price description image active stock')
+            res.status(200).json({
+                success: true,
+                data: data
+            })
+        } catch (e) {
+            console.error(e)
+            res.status(500).json({
+                success: false,
+                error: e
+            })
+        }
+    },
     aggregate: ms.aggregate(productsModel, aggregate_pipeline, options),
 }
