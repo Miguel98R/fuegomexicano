@@ -112,6 +112,21 @@ const api_conection = async function (method, url, data, f_, error_) {
 }
 
 
+const updateNumProducts = () => {
+    // Obtén el carrito desde el localStorage
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Calcula el número total de productos en el carrito
+    let numProducts = cart.length
+
+    // Pinta el número en la clase .num_products
+    $(".num_products").text(numProducts);
+};
+
+// Llama a la función al cargar la página
+$(function () {
+    updateNumProducts();
+});
 
 
 

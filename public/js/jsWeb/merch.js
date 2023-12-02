@@ -9,11 +9,11 @@ const drawProducts = (id_product) => {
     plantilla.find('#name_product_').attr('id', 'name_product_' + id_product)
     plantilla.find('#description_product_').attr('id', 'description_product_' + id_product)
     plantilla.find('#price_product_').attr('id', 'price_product_' + id_product)
-    plantilla.find('#shop_now_').attr('id', 'shop_now_' + id_product).attr("id_product",id_product)
-    plantilla.find('#add_cart_').attr('id', 'add_cart_' + id_product).attr("id_product",id_product)
-    plantilla.find('#add_product_').attr('id', 'add_product_' + id_product).attr("id_product",id_product)
-    plantilla.find('#quantity_input_').attr('id', 'quantity_input_' + id_product).attr("id_product",id_product)
-    plantilla.find('#remove_product_').attr('id', 'remove_product_' + id_product).attr("id_product",id_product)
+    plantilla.find('#shop_now_').attr('id', 'shop_now_' + id_product).attr("id_product", id_product)
+    plantilla.find('#add_cart_').attr('id', 'add_cart_' + id_product).attr("id_product", id_product)
+    plantilla.find('#add_product_').attr('id', 'add_product_' + id_product).attr("id_product", id_product)
+    plantilla.find('#quantity_input_').attr('id', 'quantity_input_' + id_product).attr("id_product", id_product)
+    plantilla.find('#remove_product_').attr('id', 'remove_product_' + id_product).attr("id_product", id_product)
 
 
     return plantilla
@@ -24,12 +24,12 @@ const getProducts = async () => {
         for (let item of data_product) {
             let stock = ""
             let color = ""
-            if(item.stock>0){
-                stock=`Stock disponible`
-                color="text-success"
-            }else {
-                stock=`Agotado`
-                color="text-danger"
+            if (item.stock > 0) {
+                stock = `Stock disponible`
+                color = "text-success"
+            } else {
+                stock = `Agotado`
+                color = "text-danger"
             }
 
             let element = drawProducts(item._id)
@@ -37,45 +37,117 @@ const getProducts = async () => {
             element.find('#stock_aviable_' + item._id).text(stock).addClass(color)
             element.find('#name_product_' + item._id).text(item.name)
             element.find('#description_product_' + item._id).text(item.description)
-            element.find('#price_product_' + item._id).text("$"+item.price)
+            element.find('#price_product_' + item._id).text("$" + item.price).attr("price",item.price)
+            element.find('#quantity_input_' + item._id).attr("min",1).attr("max",item.stock)
 
             $('#grid_products').append(element)
         }
     })
 }
 
-const createCartStorage = async ()=>{
-    var productName = $("#name_product_").text();
-    var productPrice = $("#price_product_").text();
-    var quantity = $("#quantity_input_").val();
-
+const createCartStorage = async (id) => {
+    let productName = $("#name_product_" + id).text();
+    let productPrice = Number($("#price_product_" + id).attr('price'))
+    let quantity = Number($("#quantity_input_" + id).val())
+    let image = $("#image_product_" + id).attr('src');
 
     var product = {
+        id_product: id,
         name: productName,
         price: productPrice,
-        quantity: quantity
-
+        quantity,
+        image,
     };
 
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    var cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    let existingProduct = cart.find(item => item.id_product === id);
 
-    cart.push(product);
+    if (existingProduct) {
 
+        existingProduct.quantity = quantity;
+    } else {
+
+        cart.push(product);
+    }
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
-    alert("Producto agregado al carrito");
+    notyf.success("Producto agregado al carrito");
 
-    // También puedes redirigir al usuario a la página del carrito u otra acción
-    // window.location.href = "/cart";
-});
+    updateNumProducts();
+};
 
+
+const createCartShopNow = async (id) => {
+    let productName = $("#name_product_" + id).text();
+    let productPrice = Number($("#price_product_" + id).attr('price'))
+    let quantity = Number($("#quantity_input_" + id).val())
+    let image = $("#image_product_" + id).attr('src');
+
+    var product = {
+        id_product: id,
+        name: productName,
+        price: productPrice,
+        quantity,
+        image,
+    };
+
+    let cart = [product];
+
+    // Sobrescribe el carrito actual en el localStorage con el nuevo producto
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateNumProducts();
+};
+
+
+
+const increaseQuantity = async (id_product) => {
+    let quantityInput = $("#quantity_input_" + id_product);
+    let maxValue = parseInt(quantityInput.attr("max"));
+    let currentQuantity = parseInt(quantityInput.val());
+
+    if (currentQuantity < maxValue) {
+        quantityInput.val(currentQuantity + 1);
+    }
+};
+
+
+const decreaseQuantity = async (id_product) => {
+    let quantityInput = $("#quantity_input_" + id_product);
+
+    let currentQuantity = parseInt(quantityInput.val());
+
+    if (currentQuantity > 1) {
+        quantityInput.val(currentQuantity - 1);
+    }
 }
+
+
+
 $(async function () {
     await getProducts()
 
-    $(".add_cart").click(function () {
-    }
+    $(".add_cart").click(async function () {
+        let id_product = $(this).attr("id_product")
+        await createCartStorage(id_product)
+    })
+
+    $(".shop_now").click(async function () {
+        let id_product = $(this).attr("id_product")
+        await createCartShopNow(id_product)
+    })
+
+
+    $(".add_product").click(async function () {
+        let id_product = $(this).attr("id_product")
+        await increaseQuantity(id_product);
+    });
+
+    $(".remove_product").click(async function () {
+        let id_product = $(this).attr("id_product")
+        await decreaseQuantity(id_product);
+    });
+
 })

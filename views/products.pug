@@ -26,13 +26,16 @@ html(lang='es')
                 img.header-image.img-fluid(src='/public/images/fuego/logo_.png', alt)
             section.products
                 .container
-                    .row
-                    .col-12
-                        h2.mb-5.text-white Lista de productos
+                    div.mb-5
+                        h2.text-white Lista de productos
+                        span.slick-title.fw-lighter(style="font-size:18px;")
+                            i.mx-3.bi.bi-bag-check-fill
+                            | EL ENVIO
+                            span.text-danger  ES GRATIS
                     .row#grid_products
 
 
-            div#template_products_.col-lg-4.col-6.mb-3(style="display:none;")
+            div#template_products_.col-lg-4.col-12.mb-3.mx-1(style="display:none;")
 
                 .product-thumb
                     img#image_product_.img-fluid.product-image()
@@ -52,20 +55,15 @@ html(lang='es')
                     div.p-0.m-0
                         .row
                             .col-4
-                                button#add_product_.add_product.w-100.btn.custom-btn_store.product-p
+                                button#remove_product_.remove_product.w-100.btn.custom-btn_store.product-p(type='button')
                                     i.mx-2.bi.bi-dash-circle(style="font-size")
 
                             .col-4
-                                input#quantity_input_.form-control.w-100.text-center(type='number', min='1', value='1', style='width: 50px; margin-right: 10px;')
+                                input#quantity_input_.form-control.w-100.text-center.quantity_input(type='number', min='1', value='1', style='width: 50px; margin-right: 10px;', oninput='this.value = Math.max(1, this.value)')
 
                             .col-4
-                                button#remove_product_.remove_product.w-100.btn.custom-btn_store.product-p
+                                button#add_product_.add_product.w-100.btn.custom-btn_store.product-p(type='button')
                                     i.mx-2.bi.bi-plus-circle
-
-
-
-
-
 
                     div.p-0.m-0
                         // Botones originales
