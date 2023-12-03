@@ -1,6 +1,4 @@
-let apiato = require('apiato')
-let ms = new apiato()
-
+let ms = require('../helpers/apiato.helper')
 const productsModel = require('../models/products.model')
 
 

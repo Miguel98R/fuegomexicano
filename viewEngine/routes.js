@@ -75,6 +75,10 @@ router.get("/products", (req, res) => {
     });
 });
 
+router.get("/checkout", (req, res) => {
+    res.render("checkout");
+});
+
 //RENDER IF DOES NOT EXIST THE PAGE
 router.get("/:page", async (req, res) => {
 
@@ -83,9 +87,7 @@ router.get("/:page", async (req, res) => {
 
 ////-------------------------------------------------------------------------------------
 
-router.get("/faq", (req, res) => {
-    res.render("faq");
-});
+
 
 router.get("/product-detail", (req, res) => {
     res.render("product-detail");

@@ -99,6 +99,7 @@ const createCartShopNow = async (id) => {
     // Sobrescribe el carrito actual en el localStorage con el nuevo producto
     localStorage.setItem("cart", JSON.stringify(cart));
     updateNumProducts();
+    location.href="/checkout"
 };
 
 

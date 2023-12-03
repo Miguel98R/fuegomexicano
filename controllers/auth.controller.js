@@ -1,7 +1,6 @@
 let usersModel = require('../models/users.model')
 
-let apiato = require('apiato')
-let ms = new apiato()
+let ms = require('../helpers/apiato.helper')
 const {encrypt, compare} = require('../helpers/handleBcrypt')
 
 
