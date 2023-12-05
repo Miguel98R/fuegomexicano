@@ -1,0 +1,95 @@
+.card.card-body.bg-black(style='background-color: black; padding: 10px;')
+    div.bg-black
+        .row
+            .col-12.col-md-6.mb-3
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='email' style='color: white;') Correo electrónico :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-envelope-fill
+                        input.form-control(type='email', id='email', name='email', required style='background-color: black; color: white;')
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='name' style='color: white;') Nombre(s) :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-person-fill
+                        input.form-control(type='text', id='name', name='name', required style='background-color: black; color: white;')
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='lastName' style='color: white;') Apellidos :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-person-fill
+                        input.form-control(type='text', id='lastName', name='lastName', required style='background-color: black; color: white;')
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='gender' style='color: white;') Género :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-person
+                        select.form-select(id='gender', name='gender', required style='background-color: black; color: white;')
+                            option(value='') Selecciona una opción
+                            option(value='Masculino') Masculino
+                            option(value='Femenino') Femenino
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='phone' style='color: white;') Número de celular :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-telephone-fill
+                        input.form-control(type='tel', id='phone', name='phone', required style='background-color: black; color: white;')
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='address' style='color: white;') Calle :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-house-door-fill
+                        input.form-control(type='text', id='address', name='address', required style='background-color: black; color: white;')
+
+
+            .col-12.col-md-6.mb-3
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='noInt' style='color: white;') No Int. :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-house-door-fill
+                        input.form-control(type='text', id='noInt', name='noInt', required style='background-color: black; color: white;')
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='noExt' style='color: white;') No. Ext :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-house-door-fill
+                        input.form-control(type='text', id='noExt', name='noExt', required style='background-color: black; color: white;')
+
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='neighborhood' style='color: white;') Colonia :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-house-door-fill
+                        input.form-control(type='text', id='neighborhood', name='neighborhood', required style='background-color: black; color: white;')
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                        label.text-danger.my-1(for='city' style='color: white;') Ciudad :
+                        div.input-group
+                            span.input-group-text(style='background-color: black; color: white;')
+                                i.bi.bi-geo-alt-fill
+                            input.form-control(type='text', id='city', name='city', required style='background-color: black; color: white;')
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='state' style='color: white;') Estado :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-geo-alt-fill
+                        input.form-control(type='text', id='state', name='state', required style='background-color: black; color: white;')
+
+                .form-group.my-2(style='background-color: black; padding: 10px;')
+                    label.text-danger.my-1(for='zip' style='color: white;') Código postal :
+                    div.input-group
+                        span.input-group-text(style='background-color: black; color: white;')
+                            i.bi.bi-geo-alt-fill
+                        input.form-control(type='text', id='zip', name='zip', required style='background-color: black; color: white;')
+
+

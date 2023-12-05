@@ -18,9 +18,9 @@ const invitacionesSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
+
     },
-    numeroContacto: {
+    celular: {
         type: String,
         required: true,
     },
@@ -28,7 +28,7 @@ const invitacionesSchema = new Schema({
         type: Date,
         required: true,
     },
-    numeroPersonasEsperadas: {
+    numeroPersonas: {
         type: Number,
         required: true,
     },

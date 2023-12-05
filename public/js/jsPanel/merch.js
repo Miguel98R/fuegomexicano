@@ -247,8 +247,6 @@ $(async function () {
                         $('#image_save_edit').val(`/${imagePath}`);
                     }
 
-
-                    $('#result').html(`Imagen subida con éxito. Ruta: ${imagePath}`);
                 } else {
                     console.error('Error al subir la imagen:', data.message);
                 }

@@ -106,7 +106,7 @@ router.get("/conf_invitations", validateSession, (req, res) => {
 
     let menu = req?.session?.menu
 
-    res.render("panel/conf_blog", {
+    res.render("panel/conf_invitations", {
         title: 'Fuego Mexicano | Control Panel',
         conf_page:"Invitaciones",
         url_js_files,

@@ -76,7 +76,10 @@ router.get("/products", (req, res) => {
 });
 
 router.get("/checkout", (req, res) => {
-    res.render("checkout");
+    res.render("checkout", {
+        title: 'Fuego Mexicano | Checkout',
+
+    });
 });
 
 //RENDER IF DOES NOT EXIST THE PAGE
@@ -90,7 +93,7 @@ router.get("/:page", async (req, res) => {
 
 
 router.get("/product-detail", (req, res) => {
-    res.render("product-detail");
+    res.render("db_images-detail");
 });
 
 router.get("/sign-in", (req, res) => {

@@ -3,6 +3,7 @@ let ms = require('../helpers/apiato.helper')
 let invitacionesModel = require('../models/invitaciones.model')
 
 
+
 //APIATO CONFIGURE
 let validationObject = {}
 let populationObject = false
@@ -24,7 +25,24 @@ module.exports = {
     updateById: ms.updateById(invitacionesModel, validationObject, populationObject, options),
 
     findIdAndDelete: ms.findIdAndDelete(invitacionesModel, options),
+    datatable_aggregate: async (req, res) => {
 
-    datatable_aggregate: ms.datatable_aggregate(invitacionesModel, aggregate_pipeline_dt, ''),
+
+        try {
+
+            let dataI = await invitacionesModel.find()
+            res.status(200).json({
+                success: true,
+                data: dataI
+            })
+        } catch (e) {
+            console.error(e)
+            res.status(500).json({
+                success: false,
+                error: e
+            })
+        }
+    },
+
     aggregate: ms.aggregate(invitacionesModel, aggregate_pipeline, options),
 }

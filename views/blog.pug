@@ -25,25 +25,42 @@ html(lang='es')
 
             section.team.section-padding
                 .container
-                    #blogs.row
-                        div#template_blog
-                            .col-12
-                                .card.team.text-center
-                                    .row
-                                        .col-12.col-md-6
-
-                                            .card-img
-                                                img.img-fluid#img_blog(src='/public/images/fuego/fuego_10.jpg', style="max-height:450px;border-radius:9px;" alt)
-                                        .col-12.col-md-6
-                                            .card-body.my-3
-                                                h3#title_blog.text-white FUEGO MEXICANO
-                                                p#subtitle_blog.fw-lighter.text-white UN LLAMADO A VALORAR LO QUE DIOS TE DIO
-                                                p Publicación :
-                                                    span#date_blog.fw-lighter.text-white.mx-2  2/3/2023
-                                                button#read_blog.custom-btn.btn Leer
+                    .row#blogs
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        div#template_blog_.col-12(style="display:none;")
+            .card.team.text-center
+                .row
+                    .col-12.col-md-6
+
+                        .card-img
+                            img.img-fluid#img_blog_(src='/public/images/fuego/fuego_10.jpg', style="max-height:450px;border-radius:9px;" alt)
+                    .col-12.col-md-6
+                        .card-body.my-3
+                            h3#title_blog_.text-white FUEGO MEXICANO
+                            p#subtitle_blog_.fw-lighter.text-white UN LLAMADO A VALORAR LO QUE DIOS TE DIO
+                            p Publicación :
+                                span#date_blog_.fw-lighter.text-white.mx-2  2/3/2023
+                            button#read_blog_.read_blogs.custom-btn.btn Leer
+
+
+
+        include modals/blogContentModal
         include templates/footer
         include templates/scripts
         script(src=`/public/js/jsWeb/common.js?v=${Math.random()}`)

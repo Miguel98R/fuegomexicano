@@ -19,15 +19,7 @@ const usersModel = new Schema({
         type: String,
         required: true,
         enum: ['Masculino', 'Femenino'],
-        default: 'No responder'
-    },
-    birthDate: {
-        type: Date,
-        required: false
-    },
-    email: {
-        type: String,
-        required: false
+        default: 'Masculino'
     },
 
     cellphone: {

@@ -21,6 +21,16 @@ const drawProducts = (id_product) => {
 const getProducts = async () => {
     await api_conection("GET", apiProducts + "/getMany", {}, async function (data) {
         let data_product = data.data
+
+        if (data_product.length === 0) {
+
+            var mensajeMercanciaProxima = "<h4 class='py-4 display-5 text-center fw-lighter text-white'>Próximamente conocerás nuestra mercancía oficial. ¡Estamos trabajando en ello!</h4>";
+
+            $('#grid_products').append(mensajeMercanciaProxima);
+            return;
+        }
+
+
         for (let item of data_product) {
             let stock = ""
             let color = ""

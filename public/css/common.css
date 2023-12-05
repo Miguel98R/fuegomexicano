@@ -1,5 +1,7 @@
+/* Estilo del scrollbar vertical y horizontal */
 ::-webkit-scrollbar {
     width: 3px;
+    height: 3px;
     background-color: #f5f5f5;
 }
 
@@ -27,9 +29,19 @@
 ::-webkit-scrollbar-corner {
     background-color: #f5f5f5;
 }
+
+
+
 .form-control:focus {
     border-color: #dc3d45;
     box-shadow: 0 0 5px #dc3d45; /* Optional: Add a subtle box shadow for emphasis */
 }
+.quantity_input::-webkit-inner-spin-button,
+.quantity_input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
-
+.quantity_input {
+    -moz-appearance: textfield;
+}

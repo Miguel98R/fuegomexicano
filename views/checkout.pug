@@ -11,21 +11,102 @@ html(lang='es')
                 .container
                     .row
                         .col-lg-6.col-12.header-info.text-center
-                            h1.display-2
-                                span.slick-title
-                                    | Check
-                                    span.text-danger out
+                            h1.display-2.text-danger
+
+                                | Checkout
             seccion
                 .container
-                    .row
-                        .col-12-col-md-6.col-lg-6
-                            .row#products
-                        .col-12-col-md-6.col-lg-6
-                            div
+                    div.my-4.py-3
+                        h5.text-white.fw-lighter
+                            | Información personal
+                        div.text-white.m-3
+                            .card.bg-dark
+                                .d-inline-flex.gap-1
+                                    button.m-3.custom-btn.btn(type='button' data-bs-toggle='collapse' data-bs-target='#collapseUser' aria-expanded='false' aria-controls='collapseUser')
+                                        | VER INFORMACIÓN PERSONAL
+
+                                #collapseUser.collapse.bg-black
+                                    include templates/userForm
+                    div.my-4.py-3
+                        h5.text-white.fw-lighter
+                            | Detalle de la venta
+                        .row
+                            .col-12.col-md-8
+                                h6.py-3.text-white Carrito actual
+                                div(style='overflow-y: auto; max-height: 600px;')
+                                    .row#products_table
+
+                            .col-12.col-md-4
+                                .row
+                                    .col-6
+                                        p No.Productos
+                                    .col-6
+                                        p#no_products 2
+                                .row
+                                    .col-6
+                                        p Envio
+                                    .col-6
+                                        p.text-success Gratis
+                                .row
+                                    .col-6
+                                        p Total a pagar
+                                    .col-6
+                                        p#total 2
+                                div
+                                    h6.text-white.fw-lighter
+                                        | Selecciona el tipo de pago
+                                    ul.list-group
+                                        li.list-group-item(style='background-color: black; padding: 10px;')
+                                            input#transferenciaRadio.form-check-input.me-1(type='radio' name='listGroupRadio' value='transferencia' checked='')
+                                            label.form-check-label(for='transferenciaRadio' style='color: white;')
+                                                i.bi.bi-bank.mx-2
+                                                | Pago por Transferencia
+
+                                        li.list-group-item(style='background-color: black; padding: 10px;')
+                                            input#mercadoPagoRadio.form-check-input.me-1(type='radio' name='listGroupRadio' value='mercadoPago')
+                                            label.form-check-label(for='mercadoPagoRadio' style='color: white;')
+                                                i.bi.bi-credit-card.mx-2
+                                                | Pago por Mercado Pago
+                                    button.my-5.btn.btn-success#savePayment
+                                        | Proceder al pago
 
 
 
-        div#template_products_check.col-12
+
+
+
+
+
+
+
+
+
+
+        div#template_products_check_.col-12.my-1(style="display:none;")
+            .row
+                .col-4.text-center
+                    img#img_product_(style="max-height:180px;border-radius:10px;").img-fluid
+                    div
+                        p.my-2#name_product_
+                        p $
+                            span#price_unit_
+
+                .col-3
+                    .form-group(style='background-color: black;')
+                        label.text-danger(style='color: white;') Cantidad solicitada:
+                        input.quantity_change.text-center.form-control.w-75.my-1#quantity_(type="number" min="1" style='background-color: black; color: white;')
+
+                .col-3
+                    label.text-danger(style='color: white;')  Total del producto:
+                    p $
+                        span#total_product_
+                .col-2
+
+                    button#delete-button_.delete_item.btn.btn-danger(type="button")
+                        i.bi.bi-trash
+
+
+
 
 
 

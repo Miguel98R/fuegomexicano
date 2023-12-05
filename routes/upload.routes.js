@@ -5,10 +5,10 @@ const router = express.Router();
 
 // Configuración de Multer para manejar la carga de archivos
 const storage = multer.diskStorage({
-    destination: './public/images/product',  // Ruta donde se guardarán las imágenes
+    destination: './public/images/db_images',  // Ruta donde se guardarán las imágenes
     filename: function (req, file, cb) {
         const extname = path.extname(file.originalname);
-        const newFileName = `product_${Date.now()}${extname}`;
+        const newFileName = `imgDb_${Date.now()}${extname}`;
         cb(null, newFileName);
     }
 });

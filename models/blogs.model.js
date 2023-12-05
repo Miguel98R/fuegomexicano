@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const {Schema} = mongoose;
 
-const imagesModel = require('./images.model')
+
 
 
 const blogSchema = new Schema({
@@ -19,13 +19,23 @@ const blogSchema = new Schema({
         required: false,
     },
     image: {
-        type: Schema.Types.ObjectId,
-        ref: imagesModel,
-        required: false
+        type: String,
+        required: false,
+    },
+    isPublicate: {
+        type: Boolean,
+        default: false,
+    },
+    publicationDate: {
+        type: Date,
+        required: false,
+        default: Date.now,
+
     },
     creationDate: {
         type: Date,
         default: Date.now,
+        required: false
     },
 }, {
     timestamps: true

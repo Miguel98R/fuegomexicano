@@ -19,7 +19,7 @@ const userAddressModel = new Schema({
         type: String,
         required: false
     },
-    cp: {
+    zip: {
         type: Number,
         required: false
     },

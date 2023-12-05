@@ -2,6 +2,7 @@ let ms = require('../helpers/apiato.helper')
 let blogsModel = require('../models/blogs.model')
 
 
+
 //APIATO CONFIGURE
 let validationObject = {}
 let populationObject = false
@@ -24,6 +25,22 @@ module.exports = {
 
     findIdAndDelete: ms.findIdAndDelete(blogsModel, options),
 
-    datatable_aggregate: ms.datatable_aggregate(blogsModel, aggregate_pipeline_dt, ''),
-    aggregate: ms.aggregate(blogsModel, aggregate_pipeline, options),
+    datatable_aggregate: async (req, res) => {
+
+
+        try {
+
+            let dataB = await blogsModel.find()
+            res.status(200).json({
+                success: true,
+                data: dataB
+            })
+        } catch (e) {
+            console.error(e)
+            res.status(500).json({
+                success: false,
+                error: e
+            })
+        }
+    }, aggregate: ms.aggregate(blogsModel, aggregate_pipeline, options),
 }
