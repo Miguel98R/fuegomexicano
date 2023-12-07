@@ -18,37 +18,38 @@ html(lang='es')
 
 
                                 .card.w-100
-                                    .card-header
-                                        div.my-2.text-end
-                                            // En pantallas grandes (no celular), muestra solo el texto
-                                            button.new_product.btn.btn-primary.mx-2.d-none.d-lg-inline
-                                                i.mx-2.bi.bi-shop-window
-                                                | Nuevo producto
-                                            // En pantallas pequeñas (celulares), muestra solo el icono
-                                            button.new_user.btn.btn-primary.mx-2.d-inline.d-lg-none
-                                                i.bi.bi-person
+                                    .row#months
 
 
 
+        div.col-12.col-md-6(style="display:none;")#template_month_
+            .card(style="border-radius:9px;").m-1
+                .card-body(style="border-radius:9px;")
+                    div.text-center
+                        h3#name_month_
+                        .form-group
+                            label Visible:
+                            input.mx-2#active_month_(type="checkbox").active_month
+                    div().my-3
+                        .row#events_
+                .card-footer.text-center
+                    buttons#add_event_.add_event.btn.btn-success.btn-sm Agregar fecha
 
-                                        .card-body
+        div.col-12(style="display:none")#template_event_.my-2
+            .row.text-center
+                .col-4
+                    p#date_event_
+                .col-4
+                    p#location_event_
+                .col-4
+                    button.btn.btn-danger#delete_event_.delete_event
+                        i.bi.bi-trash
 
-                                        div(style="overflow-y: auto;  height: 500px;")
-                                            table#tblProducts.table.table-hover.py-3
-                                                thead.table
-                                                    tr.my-5
 
-                                                        th Nombre
-                                                        th Descripción
-                                                        th Precio
-                                                        th Stock
-                                                        th Status
-                                                        th Acciones
 
-        include modals/newProductModal
-        include modals/editProductModal
-
+        include modals/add_eventModal
+        include modals/editEventModal
 
         include templates/scripts
         script(src=url_js_files + '/common.js?v=' + Math.random())
-        script(src=url_js_files + '/merch.js?v=' + Math.random())
+        script(src=url_js_files + '/agenda.js?v=' + Math.random())

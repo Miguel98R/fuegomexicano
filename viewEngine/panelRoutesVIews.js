@@ -22,6 +22,7 @@ router.get("/fgPanel", (req, res) => {
         res.render("panel/index", {
             title: 'Fuego Mexicano | Control Panel',
             url_js_files,
+            menu
 
 
         });

@@ -8,4 +8,6 @@ router.use("/upload/", require("./upload.routes"))
 router.use("/payments/", require("./payments.routes"))
 router.use("/invitations/", require("./invitations.routes"))
 router.use("/blogs/", require("./blogs.routes"))
+router.use("/agendas/", require("./agendas.routes"))
+router.use("/datesAgenda/", require("./datesAgendas.router"))
 module.exports = router
