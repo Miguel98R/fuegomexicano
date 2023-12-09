@@ -1,5 +1,7 @@
+/* Estilo del scrollbar vertical y horizontal */
 ::-webkit-scrollbar {
     width: 3px;
+    height: 3px;
     background-color: #f5f5f5;
 }
 
@@ -27,6 +29,4 @@
 ::-webkit-scrollbar-corner {
     background-color: #f5f5f5;
 }
-
-
 

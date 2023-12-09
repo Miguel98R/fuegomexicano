@@ -10,6 +10,7 @@ router.put('/updateById/:id', calendarController.updateById)
 router.delete('/findIdAndDelete/:id', calendarController.findIdAndDelete)
 router.get('/getOneById/:id', calendarController.getOneById)
 router.get('/getMany', calendarController.getMany)
+router.get('/getManyActives', calendarController.getManyActives)
 
 router.post('/createMany', calendarController.createMany)
 router.post('/aggregate', calendarController.aggregate)

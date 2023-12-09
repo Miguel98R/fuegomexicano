@@ -45,6 +45,38 @@ module.exports = {
             console.error(e);
         }
     },
+    getManyActives: async (req, res) => {
+        try {
+            const result = await calendarModel.aggregate([
+                {
+                    $match: {
+                        active: true
+                    }
+                },
+
+                {
+                    $lookup: {
+                        from: agendaModel.collection.name,
+                        localField: 'events',
+                        foreignField: '_id',
+                        as: 'events',
+                    },
+                },
+
+            ]);
+
+            res.status(200).json({
+                success: true,
+                data: result,
+            });
+        } catch (e) {
+            res.status(500).json({
+                success: false,
+                error: e.message,
+            });
+            console.error(e);
+        }
+    },
 
     findUpdateOrCreate: ms.findUpdateOrCreate(calendarModel, validationObject, populationObject, options),
     findUpdate: ms.findUpdate(calendarModel, validationObject, populationObject, options),

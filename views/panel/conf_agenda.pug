@@ -23,25 +23,26 @@ html(lang='es')
 
 
         div.col-12.col-md-6(style="display:none;")#template_month_
-            .card(style="border-radius:9px;").m-1
-                .card-body(style="border-radius:9px;")
-                    div.text-center
-                        h3#name_month_
+            .card(style="border-radius:9px;").m-3.bg-transparent
+                .card-body(style="border-radius:9px;height:380px;")
+                    div
+                        h2#name_month_
                         .form-group
                             label Visible:
                             input.mx-2#active_month_(type="checkbox").active_month
-                    div().my-3
-                        .row#events_
+                    div(style="max-height: 235px; overflow-y: auto;")
+                        .row.my-3#events_
                 .card-footer.text-center
-                    buttons#add_event_.add_event.btn.btn-success.btn-sm Agregar fecha
+
+                    button#add_events_.btn.btn-success.btn-sm Agregar fecha
 
         div.col-12(style="display:none")#template_event_.my-2
-            .row.text-center
-                .col-4
-                    p#date_event_
-                .col-4
+            .row
+                .col-3.text-center
+                    p.fw-bolder#date_event_
+                .col-6.text-center
                     p#location_event_
-                .col-4
+                .col-3.text-center
                     button.btn.btn-danger#delete_event_.delete_event
                         i.bi.bi-trash
 
