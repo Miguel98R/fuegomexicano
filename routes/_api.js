@@ -9,5 +9,6 @@ router.use("/payments/", require("./payments.routes"))
 router.use("/invitations/", require("./invitations.routes"))
 router.use("/blogs/", require("./blogs.routes"))
 router.use("/agendas/", require("./agendas.routes"))
-router.use("/datesAgenda/", require("./datesAgendas.router"))
+router.use("/datesAgenda/", require("./datesAgendas.routes"))
+router.use("/sales/", require("./sales.routes"))
 module.exports = router

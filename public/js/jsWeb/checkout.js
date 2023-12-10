@@ -1,3 +1,4 @@
+const apiSales = "/api/sales"
 const drawProductsCheck = (id_product) => {
     let plantilla = $('#template_products_check_').clone()
 
@@ -31,7 +32,7 @@ const drawUserData = (storedUser) => {
 
 const getStorageCart = () => {
     try {
-        const cart = JSON.parse(localStorage.getItem('cart')) || {};
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
         return cart;
     } catch (error) {
         console.error('Error al obtener el carrito desde localStorage:', error);
@@ -178,12 +179,12 @@ const getStorageUser = () => {
 const createConfgSale = async () => {
     let no_products = Number($("#no_products").text())
     let total_Sale = Number($("#total").text())
-    let metodoPago = $("input[name='listGroupRadio']:checked").val();
+    let type_payout = $("input[name='listGroupRadio']:checked").val();
 
     let conf = {
         no_products,
         total_Sale,
-        metodoPago,
+        type_payout,
     };
 
     localStorage.setItem('sale_conf', JSON.stringify(conf));
@@ -200,10 +201,28 @@ const getStorageConf = () => {
     }
 };
 
+const createNewSaleTransfer = async (body) => {
+
+    api_conection('POST', `${apiSales}/createSaleTransfer`, body, async function (data) {
+
+        let uri = data.data
+        console.log("data_sale----------------", uri)
+
+        if (body.statusSale == 'PRV_sale') {
+            $("#payout_modal").modal("hide")
+            $("#pagarDespuesCOnfiModal").modal("show")
+            $("#enlace_").val(uri)
+            $("#enlace_a_").attr("href", uri)
+            localStorage.clear();
+
+        }
+    })
+}
+
 $(async function () {
     const cartData = await getStorageCart();
-    if(cartData.length==0){
-        location.href="/products"
+    if (cartData.length == 0) {
+        location.href = "/products"
     }
 
     const storedUser = await getStorageUser();
@@ -240,13 +259,47 @@ $(async function () {
     });
 
     $("#savePayment").click(async function () {
+        $("#description_payout").html('')
 
         await createStorageUser();
         await createConfgSale();
         let storedUser = getStorageUser();
         let storedConfSale = getStorageConf();
+        let text = ''
+
+        if (storedConfSale.type_payout == "mercadoPago") {
+            text = `<p>Ha optado por realizar su pago a través de <b>Mercado Pago</b>. Será redirigido a la página oficial para completar la transacción. Si surge alguna pregunta o inquietud, no dude en ponerse en contacto con nuestro equipo de soporte.</p>`
+            $("#datos_transfer").hide()
+            $("#pagar_despues").hide()
+            $("#continue_payout").text('Continuar con el pago')
+        } else {
+            text = `<p>Ha elegido efectuar el pago mediante <b>transferencia</b>. Puede adjuntar su comprobante de pago, y nuestro equipo se encargará de verificar la transacción. También tiene la opción de realizar el pago más adelante. Le recordamos que dispone de un plazo de 3 días para completar la transacción. Si necesita los datos para la transferencia bancaria, a continuación se muestran:</p>`
+            $("#datos_transfer").show()
+            $("#pagar_despues").show()
+            $("#continue_payout").text('Adjuntar pago')
+        }
+
+
+        $("#description_payout").append(text)
+
+        $("#payout_modal").modal("show")
 
 
     });
+
+    $("#pagar_despues").click(async function () {
+
+        let body = {
+            storedUser: getStorageUser(),
+            storedConfSale: getStorageConf(),
+            storedCart: getStorageCart(),
+            statusSale: 'PRV_sale',
+            img_payment: ''
+
+        }
+        await createNewSaleTransfer(body)
+
+
+    })
 
 })

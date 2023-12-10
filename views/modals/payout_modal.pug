@@ -1,0 +1,24 @@
+#payout_modal.modal.fade(tabindex='-1' aria-labelledby='newUserLabel' aria-hidden='true')
+    .modal-dialog.modal-lg
+        .modal-content
+
+            .modal-body
+
+                .mb-3
+                    h2 Antes de continuar...
+                    div#description_payout
+
+                .mb-3
+                    div#datos_transfer.text-center(style="display:none;")
+                        h5 CLABE INTERBANCARIA
+                        h6 0022 9070 1642 6317 53
+                        h5 PATRICIA TOSCANO PETRIZ
+                        h5 BANAMEX
+
+
+
+            .modal-footer
+                button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Cerrar
+                button#pagar_despues(style="display:none;").btn.btn-warning.text-white(type='button') Pagar después
+                button#continue_payout.btn.btn-success(type='button') Continuar
+

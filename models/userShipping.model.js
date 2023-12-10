@@ -6,7 +6,7 @@ const userModel = require('./users.model');
 const userAddressModel = require('./userAddress.model');
 
 
-const usersModel = new Schema({
+const usersShoppingsSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -18,7 +18,7 @@ const usersModel = new Schema({
     gender: {
         type: String,
         required: true,
-        enum: ['Masculino', 'Femenino'],
+        enum: ['Masculino', 'Femenino','Sin responder'],
         default: 'Masculino'
     },
 
@@ -45,6 +45,6 @@ const usersModel = new Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model('users', usersModel)
+module.exports = mongoose.model('usersShoppings', usersShoppingsSchema)
 
 

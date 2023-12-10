@@ -29,6 +29,11 @@ const productSchema = new Schema({
     stock: {
         type: Number,
         required: false,
+    },
+    count_sale: {
+        type: Number,
+        required: false,
+        default: 0
     }
 
 }, {
