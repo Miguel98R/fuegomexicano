@@ -8,7 +8,7 @@ let {
 
 
 
-router.post("/create-order", createOrder);
+router.post("/createOrder", createOrder);
 
 router.post("/webhook", receiveWebhook);
 

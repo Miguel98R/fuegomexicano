@@ -6,6 +6,7 @@ let usersAddresModel = require('../models/userAddress.model')
 let usersShoppingModel = require('../models/userShipping.model')
 let productModel = require('../models/products.model')
 
+const {sendMail, template} = require('./../helpers/mail.helper')
 
 //APIATO CONFIGURE
 let validationObject = {}
@@ -82,7 +83,7 @@ module.exports = {
                 })
             } else {
 
-                searchAddress = await usersAddresModel.findById(usersShoppingModel.userAddress)
+                searchAddress = await usersAddresModel.findById(searchShopping.userAddress)
 
                 searchAddress.noExt = data_user.noExt
                 searchAddress.noInt = data_user.noInt
@@ -159,10 +160,18 @@ module.exports = {
             let URI = fullUrl + '/checkout-payments/' + newSale._id
 
 
+            let fullName = searchShopping.name + ' ' + searchShopping.lastName + ' '
+
+            let image_banner = 'http://ec2-3-143-55-82.us-east-2.compute.amazonaws.com:3080/public/images/fuego/logo_.png'
+
+            let mail = await template.generic(image_banner, 'Recordatorio de pago', 'Finaliza tu pago', `Hola ${fullName}  es un recordatorio para finalizar tu compra por la cantidad de $ ${total_sale}, dale click al siguiente boton para finalizarla`, URI, 'Click Aqui')
+
+            await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', data_user.email, 'Finaliza tu pago.', mail)
+
 
             res.status(200).json({
                 success: true,
-                data:URI
+                data: URI
 
             })
         } catch (e) {

@@ -1,4 +1,5 @@
 const apiSales = "/api/sales"
+const apiPayments = "/api/payments"
 const drawProductsCheck = (id_product) => {
     let plantilla = $('#template_products_check_').clone()
 
@@ -202,24 +203,46 @@ const getStorageConf = () => {
 };
 
 const createNewSaleTransfer = async (body) => {
-
+    HoldOn.open(HoldOptions)
     api_conection('POST', `${apiSales}/createSaleTransfer`, body, async function (data) {
-
+        HoldOn.close()
         let uri = data.data
         console.log("data_sale----------------", uri)
 
         if (body.statusSale == 'PRV_sale') {
+
             $("#payout_modal").modal("hide")
             $("#pagarDespuesCOnfiModal").modal("show")
             $("#enlace_").val(uri)
             $("#enlace_a_").attr("href", uri)
             localStorage.clear();
 
+            const cart2 = await getStorageCart();
+
+            await drawTableProducts(cart2)
+
         }
     })
 }
 
+const createNewSaleMP = async (body) => {
+    HoldOn.open(HoldOptions)
+    api_conection('POST', `${apiPayments}/createOrder`, body, async function (data) {
+        HoldOn.close()
+        let uri = data.URI
+        console.log("uri----------------", uri)
+
+        localStorage.clear();
+
+        location.href = uri
+
+    })
+}
+
 $(async function () {
+
+    $('#pagarDespuesCOnfiModal').modal({backdrop: 'static', keyboard: false})
+
     const cartData = await getStorageCart();
     if (cartData.length == 0) {
         location.href = "/products"
@@ -271,12 +294,15 @@ $(async function () {
             text = `<p>Ha optado por realizar su pago a través de <b>Mercado Pago</b>. Será redirigido a la página oficial para completar la transacción. Si surge alguna pregunta o inquietud, no dude en ponerse en contacto con nuestro equipo de soporte.</p>`
             $("#datos_transfer").hide()
             $("#pagar_despues").hide()
-            $("#continue_payout").text('Continuar con el pago')
+            $("#continue_payout").hide()
+            $("#continue_payout_mp").show()
+
         } else {
             text = `<p>Ha elegido efectuar el pago mediante <b>transferencia</b>. Puede adjuntar su comprobante de pago, y nuestro equipo se encargará de verificar la transacción. También tiene la opción de realizar el pago más adelante. Le recordamos que dispone de un plazo de 3 días para completar la transacción. Si necesita los datos para la transferencia bancaria, a continuación se muestran:</p>`
             $("#datos_transfer").show()
             $("#pagar_despues").show()
-            $("#continue_payout").text('Adjuntar pago')
+            $("#continue_payout").show()
+            $("#continue_payout_mp").hide()
         }
 
 
@@ -286,6 +312,21 @@ $(async function () {
 
 
     });
+
+    $("#continue_payout_mp").click(async function () {
+
+        let body = {
+            storedUser: getStorageUser(),
+            storedConfSale: getStorageConf(),
+            storedCart: getStorageCart(),
+            statusSale: 'PRV_sale',
+            img_payment: ''
+
+        }
+        await createNewSaleMP(body)
+
+
+    })
 
     $("#pagar_despues").click(async function () {
 
@@ -301,5 +342,16 @@ $(async function () {
 
 
     })
+
+    $("#copy_enlace").click(function () {
+
+        var enlaceInput = document.getElementById("enlace_");
+
+        enlaceInput.select();
+        document.execCommand("copy");
+
+
+        notyf.success("Enlace copiado: " + enlaceInput.value);
+    });
 
 })

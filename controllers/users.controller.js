@@ -161,6 +161,7 @@ module.exports = {
 
     },
 
+
     createMany: ms.createMany(usersModel, validationObject, populationObject, options),
 
     getOneWhere: ms.getOneWhere(usersModel, populationObject, options),
