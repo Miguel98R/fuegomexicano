@@ -11,6 +11,7 @@ const salesModel = require("../models/sales.model");
 const client = new MercadoPagoConfig({accessToken: process.env.MERCADOPAGO_API_KEY,});
 const payment = new Payment(client);
 const preference = new Preference(client);
+let uuid = require('uuid')
 
 
 module.exports = {
@@ -18,7 +19,6 @@ module.exports = {
         const urlHost = req.protocol + '://' + req.get('host');
 
         let body = req.body
-        console.log("body", body)
 
         try {
 
@@ -168,9 +168,13 @@ module.exports = {
             }
 
 
+            let unique_id = uuid.v4()
+            let email_user = data_user.email
 //---------------------------------------- CREATE SALE MERCADO PAGO
             let result = await preference.create({
                 body: {
+                    metadata: {unique_id,email_user},
+                    payer,
                     items: [
                         {
                             title: 'Fuego Mexicano',
@@ -181,32 +185,32 @@ module.exports = {
                         }
                     ],
                     back_urls: {
-                        success: urlHost + "/api/payments/success",
-                        failure: urlHost + "/api/payments/failure",
-                        pending: urlHost + "/api/payments/pending",
+                        success: urlHost + "/",
+                        failure: urlHost + "/",
+                        pending: urlHost + "/",
 
                     },
-                    redirect_urls: {
-                        success: urlHost + "/api/payments/success",
-                        failure: urlHost + "/api/payments/failure",
-                        pending: urlHost + "/api/payments/pending",
-
-                    },
-
-                    //notification_url:urlHost+"/webhook"
-                    notification_url: "https://5f37-187-187-206-41.ngrok-free.app/api/payments/webhook"
+                    //notification_url:urlHost+"/api/payments/webhook"
+                    notification_url: "https://5db5-187-187-202-238.ngrok-free.app/api/payments/webhook"
                 }
             })
-
-
-            console.log("result---------------", result)
 
             let URI = result.init_point
 
 
+            res.status(200).json({
+                success: true,
+                result,
+                URI
+
+            })
+
+
             let newPayment = new paymentModel({
+                unique_id,
                 client_id: result.client_id,
-                id_payment: result.collector_id,
+                collector_id: result.collector_id,
+                id_payment: result.id,
                 operation_type: result.operation_type,
                 total: total_sale,
                 url_payment: URI,
@@ -231,7 +235,6 @@ module.exports = {
 
             })
 
-/*
 
             let fullName = searchShopping.name + ' ' + searchShopping.lastName + ' '
 
@@ -240,15 +243,8 @@ module.exports = {
             let mail = await template.generic(image_banner, 'Notificación de pago', 'Finaliza tu pago', `Hola ${fullName}  es un recordatorio para finalizar tu compra por la cantidad de $ ${total_sale}, dale click al siguiente boton para finalizarla`, URI, 'Click Aqui')
 
             await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', data_user.email, 'Finaliza tu pago.', mail)
-*/
 
 
-            res.status(200).json({
-                success: true,
-                result,
-                URI
-
-            })
         } catch (e) {
             console.error(e)
             res.status(500).json({
@@ -266,24 +262,43 @@ module.exports = {
                 const data = await payment.get({
                     id: payment_['data.id'],
                 })
-                console.log("data--------------", data);
 
-                let searchPayment = await paymentModel.findOne({id_payment: data.collector_id})
+               /* const capture = await payment.capture({
+                     id: payment_['data.id'],
+                 })*/
 
-                searchPayment.status_order = data.status
-                searchPayment.status_detail = data.status_detail
-                searchPayment.total = data?.transaction_amount?.total_paid_amount
+                let searchPayment = await paymentModel.findOne({unique_id: data.metadata.unique_id})
+
+                searchPayment.status_order = data?.status
+                searchPayment.status_detail = data?.status_detail
+                searchPayment.total = data?.transaction_amount
                 await searchPayment.save()
 
-                let sale = await salesModel.findOne({paymentInfo:searchPayment._id})
+                let sale = await salesModel.findOne({paymentInfo: searchPayment._id})
                 sale.statusSale = 'OR_sale'
                 await sale.save()
+
+                let image_banner = 'http://ec2-3-143-55-82.us-east-2.compute.amazonaws.com:3080/public/images/fuego/logo_.png'
+
+                let URI = 'https://fuegomexicano.com'
+
+                const mail = await template.generic(
+                    image_banner,
+                    'Compra realizada',
+                    '¡Felicidades!',
+                    `Hola, hemos recibido tu pago a través de Mercado Pago. Nuestro equipo revisará que todo esté en orden y procederemos a enviarte tu pedido. Agradecemos tu compra. Haz clic en el siguiente botón para visitar nuestra página:`,
+                    URI,
+                    'Ir a la Página'
+                );
+
+                await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', data.metadata.email_user, 'Compra realizada.', mail)
+
             }
 
 
             res.sendStatus(204);
         } catch (error) {
-            console.log(error);
+            console.error(error);
             return res.status(500).json({message: "Something goes wrong"});
         }
     }

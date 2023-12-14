@@ -1,5 +1,6 @@
 const apiSales = "/api/sales"
 const apiPayments = "/api/payments"
+const apiUsers = "/api/users"
 const drawProductsCheck = (id_product) => {
     let plantilla = $('#template_products_check_').clone()
 
@@ -133,7 +134,7 @@ const createStorageUser = async () => {
     let name = $("#name").val();
     let lastName = $("#lastName").val();
     let gender = $("#gender").val();
-    let phone = $("#phone").val();
+    let cellphone = $("#phone").val();
     let address = $("#address").val();
     let noInt = $("#noInt").val();
     let noExt = $("#noExt").val();
@@ -143,28 +144,29 @@ const createStorageUser = async () => {
     let zip = $("#zip").val();
 
     // Verifica si todos los campos tienen valores
-    if (!email || !name || !lastName || !gender || !phone || !address || !neighborhood || !city || !state || !zip) {
+    if (!email || !name || !lastName || !gender || !cellphone || !address || !neighborhood || !city || !state || !zip) {
         notyf.open({type: "warning", message: "Llena todos los campos para continuar"});
-        return;
+        return
     }
 
     // Crea un objeto con la información del usuario
     let user = {
-        email: email,
-        name: name,
-        lastName: lastName,
-        gender: gender,
-        phone: phone,
-        address: address,
-        noInt: noInt,
-        noExt: noExt,
-        neighborhood: neighborhood,
-        city: city,
-        state: state,
-        zip: zip
+        email,
+        name,
+        lastName,
+        gender,
+        cellphone,
+        address,
+        noInt,
+        noExt,
+        neighborhood,
+        city,
+        state,
+        zip
     };
 
     localStorage.setItem('user', JSON.stringify(user));
+
 }
 
 const getStorageUser = () => {
@@ -202,6 +204,25 @@ const getStorageConf = () => {
     }
 };
 
+const getUserDataEmail = async (email) => {
+    await api_conection("POST", `${apiUsers}/getUserDataEmail/${email}`, {}, (data) => {
+        let dataUser = data.user
+
+        $("#email").val(dataUser.email);
+        $("#name").val(dataUser.name);
+        $("#lastName").val(dataUser.lastName);
+        $("#gender").val(dataUser.gender);
+        $("#phone").val(dataUser.cellphone);
+        $("#address").val(dataUser.address);
+        $("#noInt").val(dataUser.noInt);
+        $("#noExt").val(dataUser.noExt);
+        $("#neighborhood").val(dataUser.neighborhood);
+        $("#city").val(dataUser.city);
+        $("#state").val(dataUser.state);
+        $("#zip").val(dataUser.zip);
+    })
+};
+
 const createNewSaleTransfer = async (body) => {
     HoldOn.open(HoldOptions)
     api_conection('POST', `${apiSales}/createSaleTransfer`, body, async function (data) {
@@ -230,11 +251,11 @@ const createNewSaleMP = async (body) => {
     api_conection('POST', `${apiPayments}/createOrder`, body, async function (data) {
         HoldOn.close()
         let uri = data.URI
-        console.log("uri----------------", uri)
 
-        localStorage.clear();
+        localStorage.removeItem('sale_conf');
+        localStorage.removeItem('cart');
 
-        location.href = uri
+       location.href = uri
 
     })
 }
@@ -282,34 +303,37 @@ $(async function () {
     });
 
     $("#savePayment").click(async function () {
-        $("#description_payout").html('')
+        $("#description_payout").html('');
 
         await createStorageUser();
         await createConfgSale();
-        let storedUser = getStorageUser();
-        let storedConfSale = getStorageConf();
-        let text = ''
+        let storedUser = await getStorageUser();
+        let storedConfSale = await getStorageConf();
 
-        if (storedConfSale.type_payout == "mercadoPago") {
-            text = `<p>Ha optado por realizar su pago a través de <b>Mercado Pago</b>. Será redirigido a la página oficial para completar la transacción. Si surge alguna pregunta o inquietud, no dude en ponerse en contacto con nuestro equipo de soporte.</p>`
-            $("#datos_transfer").hide()
-            $("#pagar_despues").hide()
-            $("#continue_payout").hide()
-            $("#continue_payout_mp").show()
-
+        if (Object.keys(storedUser).length === 0) {
+            return;
         } else {
-            text = `<p>Ha elegido efectuar el pago mediante <b>transferencia</b>. Puede adjuntar su comprobante de pago, y nuestro equipo se encargará de verificar la transacción. También tiene la opción de realizar el pago más adelante. Le recordamos que dispone de un plazo de 3 días para completar la transacción. Si necesita los datos para la transferencia bancaria, a continuación se muestran:</p>`
-            $("#datos_transfer").show()
-            $("#pagar_despues").show()
-            $("#continue_payout").show()
-            $("#continue_payout_mp").hide()
+            let text = '';
+
+            if (storedConfSale.type_payout == "mercadoPago") {
+                text = `<p>Ha optado por realizar su pago a través de <b>Mercado Pago</b>. Será redirigido a la página oficial para completar la transacción. Si surge alguna pregunta o inquietud, no dude en ponerse en contacto con nuestro equipo de soporte.</p>`;
+                $("#datos_transfer").hide();
+                $("#pagar_despues").hide();
+                $("#continue_payout").hide();
+                $("#continue_payout_mp").show();
+
+            } else {
+                text = `<p>Ha elegido efectuar el pago mediante <b>transferencia</b>. Puede adjuntar su comprobante de pago, y nuestro equipo se encargará de verificar la transacción. También tiene la opción de realizar el pago más adelante. Le recordamos que dispone de un plazo de 3 días para completar la transacción. Si necesita los datos para la transferencia bancaria, a continuación se muestran:</p>`;
+                $("#datos_transfer").show();
+                $("#pagar_despues").show();
+                $("#continue_payout").show();
+                $("#continue_payout_mp").hide();
+            }
+
+            $("#description_payout").append(text);
+
+            $("#payout_modal").modal("show");
         }
-
-
-        $("#description_payout").append(text)
-
-        $("#payout_modal").modal("show")
-
 
     });
 
@@ -352,6 +376,23 @@ $(async function () {
 
 
         notyf.success("Enlace copiado: " + enlaceInput.value);
+    });
+
+    $("#email").change(async function () {
+        let val = $(this).val()
+        await getUserDataEmail(val)
+    })
+
+    $("#copyButton").click(function () {
+        var copyText = document.getElementById('copy_clabe');
+        var range = document.createRange();
+        range.selectNode(copyText);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+
+        notyf.success("Copiado con éxito: " + copyText.innerText);
     });
 
 })

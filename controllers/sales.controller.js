@@ -7,6 +7,7 @@ let usersShoppingModel = require('../models/userShipping.model')
 let productModel = require('../models/products.model')
 
 const {sendMail, template} = require('./../helpers/mail.helper')
+const mongoose = require("mongoose");
 
 //APIATO CONFIGURE
 let validationObject = {}
@@ -74,7 +75,7 @@ module.exports = {
                     name: data_user.name,
                     lastName: data_user.lastName,
                     gender: data_user.gender,
-                    cellphone: data_user.phone,
+                    cellphone: data_user.cellphone,
                     userConf: searchUser._id,
                     userAddress: searchAddress._id,
                     count_sale: 1,
@@ -98,7 +99,7 @@ module.exports = {
                 await searchAddress.save()
 
 
-                searchShopping.cellphone = data_user.phone
+                searchShopping.cellphone = data_user.cellphone
 
                 searchShopping.count_sale = Number(searchShopping.count_sale) + 1
 
@@ -122,7 +123,7 @@ module.exports = {
 
                 let newDetalle = await salesDetailsModel.create({
 
-                    product: item.idProd,
+                    product: item.id_product,
                     stockAlMomento: stockActual,
                     cant: Number(item.quantity),
                     priceProduct: Number(item.price),
@@ -185,7 +186,82 @@ module.exports = {
     createMany: ms.createMany(salesModel, validationObject, populationObject, options),
 
     getOneWhere: ms.getOneWhere(salesModel, populationObject, options),
-    getOneById: ms.getOneById(salesModel, populationObject, options),
+    getOneById: async (req, res) => {
+        let { id } = req.params;
+
+        try {
+            let sale = await salesModel.aggregate([
+                {
+                    $match: {
+                        _id: mongoose.Types.ObjectId(id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: salesDetailsModel.collection.name,
+                        localField: 'details_sale',
+                        foreignField: '_id',
+                        as: 'salesDetails'
+                    }
+                },
+                {
+                    $unwind: '$salesDetails'
+                },
+                {
+                    $lookup: {
+                        from: productModel.collection.name,
+                        localField: 'salesDetails.product',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        cant_products: { $first: '$cant_products' },
+                        date_sale: { $first: '$date_sale' },
+                        subtotal_sale: { $first: '$subtotal_sale' },
+                        total_envio: { $first: '$total_envio' },
+                        total_sale: { $first: '$total_sale' },
+                        details_sale: {
+                            $push: {
+                                _id: '$salesDetails._id',
+                                product: '$product',
+                                cant: '$salesDetails.cant',
+                                priceProduct: '$salesDetails.priceProduct',
+                                total_detalle: '$salesDetails.total_detalle',
+
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        cant_products: 1,
+                        date_sale: 1,
+                        subtotal_sale: 1,
+                        total_envio: 1,
+                        total_sale: 1,
+                        details_sale: 1
+                    }
+                }
+            ]);
+
+            res.status(200).json({
+                success: true,
+                sale
+            });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e
+            });
+        }
+    },
+
+
     getMany: ms.getMany(salesModel, populationObject, options),
 
     findUpdateOrCreate: ms.findUpdateOrCreate(salesModel, validationObject, populationObject, options),

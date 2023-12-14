@@ -5,7 +5,15 @@ const {Schema} = mongoose;
 
 
 const paymentsSchema = new Schema({
+    unique_id: {
+        type: String,
+        required: false,
+    },
     client_id: {
+        type: String,
+        required: false,
+    },
+    collector_id: {
         type: String,
         required: false,
     },

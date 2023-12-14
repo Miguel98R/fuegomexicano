@@ -7,9 +7,11 @@ let usersController = require('../controllers/users.controller')
 router.post('/createAdmin', usersController.createAdmin)
 router.post('/createUsers', usersController.createUsers)
 router.post('/datatable_aggregate', usersController.datatable_aggregate)
+router.post('/getUserDataEmail/:email', usersController.getUserDataEmail)
 router.put('/updateById/:id', usersController.updateById)
 router.delete('/findIdAndDelete/:id', usersController.findIdAndDelete)
 router.get('/getOneById/:id', usersController.getOneById)
+
 
 
 router.post('/createMany', usersController.createMany)

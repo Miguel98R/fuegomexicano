@@ -11,9 +11,15 @@
                 .mb-3
                     div#datos_transfer.text-center(style="display:none;")
                         h5 CLABE INTERBANCARIA
-                        h6 0022 9070 1642 6317 53
+                        h6#copy_clabe 0022 9070 1642 6317 53
+                            button#copyButton.btn.btn-primary.btn-sm.mx-2(data-clipboard-target="#copy_clabe")
+                                i.bi.bi-clipboard
+                                |  Copiar CLABE
                         h5 PATRICIA TOSCANO PETRIZ
-                        h5 BANAMEX
+
+                        h5 BANCO: BANAMEX
+
+
 
 
 

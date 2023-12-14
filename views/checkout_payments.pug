@@ -13,26 +13,15 @@ html(lang='es')
                         .col-lg-6.col-12.header-info.text-center
                             h1.display-2.text-danger
 
-                                | Checkout
+                                | Finalizar compra
             seccion
                 .container
-                    div.my-4.py-3
-                        h5.text-white.fw-lighter
-                            | Información personal
-                        div.text-white.m-3
-                            .card.bg-dark
-                                .d-inline-flex.gap-1
-                                    button.m-3.custom-btn.btn(type='button' data-bs-toggle='collapse' data-bs-target='#collapseUser' aria-expanded='false' aria-controls='collapseUser')
-                                        | VER INFORMACIÓN PERSONAL
 
-                                #collapseUser.collapse.bg-black
-                                    include templates/userForm
                     div.my-4.py-3
                         h5.text-white.fw-lighter
                             | Detalle de la venta
                         .row
                             .col-12.col-md-8
-                                h6.py-3.text-white Carrito actual
                                 div(style='overflow-y: auto; max-height: 600px;')
                                     .row#products_table
 
@@ -44,7 +33,7 @@ html(lang='es')
                                         p#no_products 2
                                 .row
                                     .col-6
-                                        p Envio
+                                        p Envió
                                     .col-6
                                         p.text-success Gratis
                                 .row
@@ -52,23 +41,15 @@ html(lang='es')
                                         p Total a pagar
                                     .col-6
                                         p#total 2
-                                div
+                                div.py-2
                                     h6.text-white.fw-lighter
-                                        | Selecciona el tipo de pago
-                                    ul.list-group
-                                        li.list-group-item(style='background-color: black; padding: 10px;')
-                                            input#transferenciaRadio.form-check-input.me-1(type='radio' name='listGroupRadio' value='transferencia' checked='')
-                                            label.form-check-label(for='transferenciaRadio' style='color: white;')
-                                                i.bi.bi-bank.mx-2
-                                                | Pago por Transferencia
+                                        | Adjuntar archivo
+                                    div
+                                         input#img_payment.form-control.me-1(type='file')
+                                         input#img_payment_save.form-control.me-1(type='text' style="display:none;")
 
-                                        li.list-group-item(style='background-color: black; padding: 10px;')
-                                            input#mercadoPagoRadio.form-check-input.me-1(type='radio' name='listGroupRadio' value='mercadoPago')
-                                            label.form-check-label(for='mercadoPagoRadio' style='color: white;')
-                                                i.bi.bi-credit-card.mx-2
-                                                | Pago por Mercado Pago
                                     button.my-5.btn.btn-success#savePayment
-                                        | Proceder al pago
+                                        | Enviar comprobante
 
 
 
@@ -84,36 +65,28 @@ html(lang='es')
 
         div#template_products_check_.col-12.my-1(style="display:none;")
             .row
-                .col-4.text-center
+                .col-8.text-center
                     img#img_product_(style="max-height:180px;border-radius:10px;").img-fluid
                     div
                         p.my-2#name_product_
                         p $
                             span#price_unit_
 
-                .col-3
+                .col-2
                     .form-group(style='background-color: black;')
-                        label.text-danger(style='color: white;') Cantidad solicitada:
-                        input.quantity_change.text-center.form-control.w-75.my-1#quantity_(type="number" min="1" style='background-color: black; color: white;')
+                        label.text-danger(style='color: white;') Cantidad:
+                        p.text-center.w-75.my-1#quantity_(type="number" min="1" style='background-color: black; color: white;')
 
-                .col-3
+                .col-2
                     label.text-danger(style='color: white;')  Total del producto:
                     p $
                         span#total_product_
-                .col-2
-
-                    button#delete-button_.delete_item.btn.btn-danger(type="button")
-                        i.bi.bi-trash
 
 
-
-
-
-
-
-
-        include modals/payout_modal
         include templates/footer
         include templates/scripts
+        script.
+
+            let ID = '!{id}';
         script(src=`/public/js/jsWeb/common.js?v=${Math.random()}`)
-        script(src=`/public/js/jsWeb/checkout.js?v=${Math.random()}`)
+        script(src=`/public/js/jsWeb/checkout_payment.js?v=${Math.random()}`)

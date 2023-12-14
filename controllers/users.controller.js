@@ -1,4 +1,7 @@
 let usersModel = require('../models/users.model')
+let userShippingModel = require('../models/userShipping.model')
+let usersAddressModel = require('../models/userAddress.model')
+
 let ms = require('../helpers/apiato.helper')
 const {encrypt} = require('../helpers/handleBcrypt')
 const {datatable_aggregate} = require("../helpers/dt_aggregate.helper");
@@ -159,6 +162,65 @@ module.exports = {
             })
         }
 
+    },
+    getUserDataEmail: async (req, res) => {
+        try {
+            const {email} = req.params;
+
+
+            const userSearch = await usersModel.findOne({email});
+
+            if (!userSearch) {
+                return res.status(404).json({success: false});
+            }
+
+            const user = await usersModel.aggregate([
+                {$match: {email: userSearch.email}},
+                {
+                    $lookup: {
+                        from: userShippingModel.collection.name,  // Reemplaza con el nombre real de la colección
+                        localField: '_id',
+                        foreignField: 'userConf',
+                        as: 'shipping',
+                    },
+                },
+                {$unwind: '$shipping'},
+                {
+                    $lookup: {
+                        from: usersAddressModel.collection.name,  // Reemplaza con el nombre real de la colección
+                        localField: 'shipping.userAddress',
+                        foreignField: '_id',
+                        as: 'address',
+                    },
+                },
+                {$unwind: '$address'},
+                {
+                    $project: {
+                        email: 1,
+                        name: '$shipping.name',
+                        lastName: '$shipping.lastName',
+                        gender: '$shipping.gender',
+                        cellphone: '$shipping.cellphone',
+                        address: '$address.address',
+                        noInt: '$address.noInt',
+                        noExt: '$address.noExt',
+                        neighborhood: '$address.neighborhood',
+                        city: '$address.city',
+                        state: '$address.state',
+                        zip: '$address.zip',
+                    },
+                },
+            ]).exec();
+
+            if (!user || user.length === 0) {
+                return res.status(404).json({success: false});
+            }
+
+            return res.status(200).json({success: true, user: user[0]});
+        } catch (e) {
+            console.error(e);
+            return res.status(500).json({success: false, error: e});
+        }
     },
 
 

@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
+let salesModel = require('../models/sales.model')
+let salesDetailsModel = require('../models/salesDetails.model')
+
 //--------------------------------------------------------------------------------------------------------------------//
 //                                               ROUTES OF CONTROL-PANEL                                              //
 //--------------------------------------------------------------------------------------------------------------------//
@@ -82,6 +85,18 @@ router.get("/checkout", (req, res) => {
     });
 });
 
+router.get("/checkout-payments/:id", async (req, res) => {
+
+    let {id} = req.params
+
+    res.render("checkout_payments", {
+        title: 'Fuego Mexicano | Checkout payments',
+        id
+
+
+    });
+});
+
 //RENDER IF DOES NOT EXIST THE PAGE
 router.get("/:page", async (req, res) => {
 
@@ -89,7 +104,6 @@ router.get("/:page", async (req, res) => {
 });
 
 ////-------------------------------------------------------------------------------------
-
 
 
 router.get("/product-detail", (req, res) => {
