@@ -15,27 +15,13 @@ html(lang='es')
                     .container-fluid
                         .row
                             .col-lg-12.d-flex.align-items-strech
-
-
                                 .card.w-100
                                     .card-header
                                         div.my-2.text-end
-                                            button#new_user.btn.btn-primary.mx-2
-                                                i.mx-1.bi.bi-person
-                                                | Nuevo usuario
+                                            h2 Página en Construcción
+                                            p Estamos trabajando en ello.
 
 
-
-                                    .card-body
-
-                                        div(style="overflow-y: auto;  height: 250px;")
-                                            table#tblUsers.table.table-hover
-                                                thead
-                                                    tr.my-5.text-center
-
-                                                        th Nombre
-                                                        th Status
-                                                        th Accciones
 
         include templates/scripts
         script(src=url_js_files + '/common.js?v=' + Math.random())

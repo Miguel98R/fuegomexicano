@@ -72,7 +72,7 @@ router.get("/panel", validateSession, (req, res) => {
 
 });
 
-router.get("/conf_web", validateSession, (req, res) => {
+/*router.get("/conf_web", validateSession, (req, res) => {
 
 
     let menu = req?.session?.menu
@@ -85,7 +85,7 @@ router.get("/conf_web", validateSession, (req, res) => {
 
     });
 
-});
+});*/
 
 router.get("/conf_blog", validateSession, (req, res) => {
 
