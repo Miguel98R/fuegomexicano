@@ -12,7 +12,7 @@ const client = new MercadoPagoConfig({accessToken: process.env.MERCADOPAGO_API_K
 const payment = new Payment(client);
 const preference = new Preference(client);
 let uuid = require('uuid')
-
+const moment = require('moment')
 
 module.exports = {
     createOrder: async (req, res) => {
@@ -23,6 +23,7 @@ module.exports = {
         try {
 
             let data_user = body.storedUser
+
             let conf_sale = body.storedConfSale
             let cart = body.storedCart
             let statusSale = body.statusSale
@@ -52,6 +53,8 @@ module.exports = {
 
             let searchShopping = await usersShoppingModel.findOne({userConf: searchUser._id})
             let searchAddress
+
+
 
             if (!searchShopping) {
 
@@ -96,13 +99,12 @@ module.exports = {
                 await searchAddress.save()
 
 
-                searchShopping.cellphone = data_user.phone
-
+                searchShopping.cellphone = data_user.cellphone
                 searchShopping.count_sale = Number(searchShopping.count_sale) + 1
-
                 await searchShopping.save()
 
             }
+
 
             let payer = {
                 name: data_user.name,
@@ -110,7 +112,7 @@ module.exports = {
                 email: data_user.email,
                 phone: {
                     area_code: "+52",
-                    number: data_user.phone
+                    number:  data_user.cellphone
                 },
 
                 address: {
@@ -140,7 +142,7 @@ module.exports = {
 
                 let newDetalle = await salesDetailsModel.create({
 
-                    product: item.idProd,
+                    product: searchProduct._id,
                     stockAlMomento: stockActual,
                     cant: Number(item.quantity),
                     priceProduct: Number(item.price),
@@ -191,7 +193,7 @@ module.exports = {
 
                     },
                     //notification_url:urlHost+"/api/payments/webhook"
-                    notification_url: "https://5db5-187-187-202-238.ngrok-free.app/api/payments/webhook"
+                    notification_url: "https://fc63-187-187-206-3.ngrok-free.app/api/payments/webhook"
                 }
             })
 
@@ -223,7 +225,8 @@ module.exports = {
 
             let newSale = await salesModel.create({
                 statusSale,
-                type_payout,
+                type_payout:"mercadoPago",
+                mercado_pago_status:"EN ESPERA DE SER ACREDITADO",
                 paymentInfo: newPayment._id,
                 user_data: searchShopping._id,
                 details_sale: array_products_details,
@@ -263,9 +266,9 @@ module.exports = {
                     id: payment_['data.id'],
                 })
 
-               /* const capture = await payment.capture({
-                     id: payment_['data.id'],
-                 })*/
+                /* const capture = await payment.capture({
+                      id: payment_['data.id'],
+                  })*/
 
                 let searchPayment = await paymentModel.findOne({unique_id: data.metadata.unique_id})
 
@@ -274,9 +277,14 @@ module.exports = {
                 searchPayment.total = data?.transaction_amount
                 await searchPayment.save()
 
+
                 let sale = await salesModel.findOne({paymentInfo: searchPayment._id})
                 sale.statusSale = 'OR_sale'
+                sale.mercado_pago_status="ACREDITADO",
+                sale.date_payment = moment().format()
                 await sale.save()
+
+                res.sendStatus(204);
 
                 let image_banner = 'http://ec2-3-143-55-82.us-east-2.compute.amazonaws.com:3080/public/images/fuego/logo_.png'
 
@@ -296,7 +304,6 @@ module.exports = {
             }
 
 
-            res.sendStatus(204);
         } catch (error) {
             console.error(error);
             return res.status(500).json({message: "Something goes wrong"});

@@ -4,7 +4,7 @@ const moment = require('moment')
 const {Schema} = mongoose;
 
 const saleDetailsModel = require('./salesDetails.model')
-const shippingModel = require('./users.model')
+const shippingModel = require('./userShipping.model')
 const paymentInfoModel = require('./payments.model')
 
 const salesModel = new Schema({
@@ -41,6 +41,10 @@ const salesModel = new Schema({
         type: String,
         required: false,
     },
+    mercado_pago_status: {
+        type: String,
+        required: false,
+    },
 
     cant_products: {
         type: Number,
@@ -71,6 +75,11 @@ const salesModel = new Schema({
         default: moment().format()
     },
     date_shipment: {
+        type: Date,
+        required: false,
+
+    },
+    date_payment: {
         type: Date,
         required: false,
 

@@ -32,26 +32,24 @@ const getProducts = async () => {
 
 
         for (let item of data_product) {
-            let stock = ""
-            let color = ""
-            if (item.stock > 0) {
-                stock = `Stock disponible`
-                color = "text-success"
-            } else {
-                stock = `Agotado`
-                color = "text-danger"
-            }
+            let stock = item.stock > 0 ? "Stock disponible" : "Agotado";
+            let color = item.stock > 0 ? "text-success" : "text-danger";
 
-            let element = drawProducts(item._id)
-            element.find('#image_product_' + item._id).attr('src', item.image)
-            element.find('#stock_aviable_' + item._id).text(stock).addClass(color)
-            element.find('#name_product_' + item._id).text(item.name)
-            element.find('#description_product_' + item._id).text(item.description)
-            element.find('#price_product_' + item._id).text("$" + item.price).attr("price",item.price)
-            element.find('#quantity_input_' + item._id).attr("min",1).attr("max",item.stock)
+            let element = drawProducts(item._id);
+            element.find('#image_product_' + item._id).attr('src', item.image);
+            element.find('#stock_aviable_' + item._id).text(stock).addClass(color);
+            element.find('#name_product_' + item._id).text(item.name);
+            element.find('#description_product_' + item._id).text(item.description);
+            element.find('#price_product_' + item._id).text("$" + item.price).attr("price", item.price);
+            element.find('#quantity_input_' + item._id).attr("min", 1).attr("max", item.stock);
 
-            $('#grid_products').append(element)
+            let isStockAvailable = item.stock > 0;
+            element.find("#add_cart_" + item._id).toggleClass("disabled", !isStockAvailable);
+            element.find("#shop_now_" + item._id).toggleClass("disabled", !isStockAvailable);
+
+            $('#grid_products').append(element);
         }
+
     })
 }
 

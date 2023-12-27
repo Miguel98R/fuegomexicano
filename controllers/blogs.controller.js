@@ -17,7 +17,25 @@ module.exports = {
 
     getOneWhere: ms.getOneWhere(blogsModel, populationObject, options),
     getOneById: ms.getOneById(blogsModel, populationObject, options),
-    getMany: ms.getMany(blogsModel, populationObject, options),
+    getMany: async (req, res) => {
+
+
+        try {
+
+            let dataB = await blogsModel.find({ isPublicate: true });
+
+            res.status(200).json({
+                success: true,
+                data: dataB
+            })
+        } catch (e) {
+            console.error(e)
+            res.status(500).json({
+                success: false,
+                error: e
+            })
+        }
+    },
 
     findUpdateOrCreate: ms.findUpdateOrCreate(blogsModel, validationObject, populationObject, options),
     findUpdate: ms.findUpdate(blogsModel, validationObject, populationObject, options),

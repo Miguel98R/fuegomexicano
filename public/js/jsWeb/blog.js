@@ -16,22 +16,30 @@ let drawBlogs = async (id_blog) => {
 const getBlogs = async () => {
     await api_conection("GET", apiBlogs + "/getMany", {}, async function (data) {
         let data_blog = data.data
-        for (let item of data_blog) {
-
-            console.log(item)
 
 
-            let element = await drawBlogs(item._id)
-            element.find('#img_blog_' + item._id).attr('src', item.image)
-            element.find('#title_blog_' + item._id).text(item.title)
-            element.find('#subtitle_blog_' + item._id).text(item.subtitle)
-            element.find('#date_blog_' + item._id).text((moment(item.publicationDate).format('DD-MM-YYYY')));
-            element.find('#read_blog_' + item._id).attr("id_blog", item._id).attr("title", item.title).attr("subtitle", item.subtitle).attr("content", item.content).attr("date", moment(item.publicationDate).format('DD-MM-YYYY'))
+        if (data_blog.length == 0) {
+            $('#blogs').append("<h4 class='py-4 display-5 text-center fw-lighter text-white'>Por el momento no hay entradas disponibles, !Esperalas pronto¡</h4>")
+        } else {
+            for (let item of data_blog) {
 
-            $('#blogs').append(element)
+                if (!item.isPublicate) {
+                    continue
+                } else {
+                    let element = await drawBlogs(item._id)
+                    element.find('#img_blog_' + item._id).attr('src', item.image)
+                    element.find('#title_blog_' + item._id).text(item.title)
+                    element.find('#subtitle_blog_' + item._id).text(item.subtitle)
+                    element.find('#date_blog_' + item._id).text((moment(item.publicationDate).format('DD-MM-YYYY')));
+                    element.find('#read_blog_' + item._id).attr("id_blog", item._id).attr("title", item.title).attr("subtitle", item.subtitle).attr("content", item.content).attr("date", moment(item.publicationDate).format('DD-MM-YYYY'))
+
+                    $('#blogs').append(element)
+                }
 
 
+            }
         }
+
     })
 }
 

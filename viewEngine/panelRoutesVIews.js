@@ -153,9 +153,11 @@ router.get("/presales", validateSession, (req, res) => {
 
     let menu = req?.session?.menu
 
-    res.render("panel/presales", {
+    res.render("panel/conf_presales", {
         title: 'Fuego Mexicano | Control Panel',
         conf_page:"Pre ventas",
+        table:"tbl_prv",
+        status_sale: 'PRV_sale',
         url_js_files,
         menu
 
@@ -163,14 +165,19 @@ router.get("/presales", validateSession, (req, res) => {
 
 });
 
-router.get("/orders", validateSession, (req, res) => {
+
+
+
+router.get("/sales", validateSession, (req, res) => {
 
 
     let menu = req?.session?.menu
 
-    res.render("panel/orders", {
+    res.render("panel/conf_sales", {
         title: 'Fuego Mexicano | Control Panel',
         conf_page:"Ordenes",
+        table:"tbl_ord",
+        status_sale: 'OR_sale',
         url_js_files,
         menu
 
@@ -183,9 +190,11 @@ router.get("/historic", validateSession, (req, res) => {
 
     let menu = req?.session?.menu
 
-    res.render("panel/historic", {
+    res.render("panel/conf_sales", {
         title: 'Fuego Mexicano | Control Panel',
         conf_page:"Historico ventas",
+        table:"tbl_historic",
+        status_sale: 'OR_historic',
         url_js_files,
         menu
 

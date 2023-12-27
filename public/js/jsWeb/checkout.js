@@ -85,10 +85,11 @@ const drawTableProducts = async (cart) => {
         $('#products_table').append(element)
 
 
-        total_a_pagar = total_a_pagar + Number(total_product)
+        total_a_pagar = Number(total_a_pagar) + Number(total_product)
     }
 
-    $('#total').text(total_a_pagar);
+
+    $('#total').text("$" + total_a_pagar).val(total_a_pagar);
     $('#no_products').text(no_product);
 
 
@@ -120,11 +121,11 @@ const updateStorageAndTotal = async (id_product, newQuantity) => {
 
     for (let item of cart2) {
         const total_product = Number(item.price) * Number(item.quantity);
-        total_a_pagar = total_a_pagar + Number(total_product)
+        total_a_pagar = Number(total_a_pagar) + Number(total_product)
     }
 
     no_product = cart2.length
-    $('#total').text(total_a_pagar);
+    $('#total').text(total_a_pagar).val(total_a_pagar);
     $('#no_products').text(no_product);
 };
 
@@ -181,7 +182,7 @@ const getStorageUser = () => {
 
 const createConfgSale = async () => {
     let no_products = Number($("#no_products").text())
-    let total_Sale = Number($("#total").text())
+    let total_Sale = Number($("#total").val())
     let type_payout = $("input[name='listGroupRadio']:checked").val();
 
     let conf = {
@@ -243,6 +244,10 @@ const createNewSaleTransfer = async (body) => {
             await drawTableProducts(cart2)
 
         }
+
+        localStorage.removeItem('sale_conf');
+        localStorage.removeItem('cart');
+        localStorage.removeItem('user');
     })
 }
 
@@ -254,8 +259,9 @@ const createNewSaleMP = async (body) => {
 
         localStorage.removeItem('sale_conf');
         localStorage.removeItem('cart');
+        localStorage.removeItem('user');
 
-       location.href = uri
+        location.href = uri
 
     })
 }

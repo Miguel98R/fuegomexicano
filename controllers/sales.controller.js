@@ -8,6 +8,7 @@ let productModel = require('../models/products.model')
 
 const {sendMail, template} = require('./../helpers/mail.helper')
 const mongoose = require("mongoose");
+const moment = require('moment')
 
 //APIATO CONFIGURE
 let validationObject = {}
@@ -183,11 +184,157 @@ module.exports = {
             })
         }
     },
-    createMany: ms.createMany(salesModel, validationObject, populationObject, options),
+    updatePayementTransfer: async (req, res) => {
+        let {id} = req.params;
+        let {url_img} = req.body;
+        try {
 
-    getOneWhere: ms.getOneWhere(salesModel, populationObject, options),
+
+            let searchSale = await salesModel.findById(id)
+            searchSale.statusSale = 'OR_sale'
+            searchSale.date_payment = moment().format()
+            searchSale.payment_img = url_img
+
+            await searchSale.save()
+
+            res.status(200).json({
+                success: true,
+
+            });
+
+            let searchShopping = await usersShoppingModel.findById(searchSale.user_data)
+            let searchConfUser = await usersModel.findById(searchShopping.userConf)
+
+            let fullUrl = req.protocol + '://' + req.get('host')
+
+            let URI = fullUrl + '/'
+
+
+            let fullName = searchShopping.name + ' ' + searchShopping.lastName + ' '
+
+            let image_banner = 'http://ec2-3-143-55-82.us-east-2.compute.amazonaws.com:3080/public/images/fuego/logo_.png'
+
+            let mail = await template.generic(image_banner, 'Notificación de compra', 'Hemos recibido tu comprobante de pago', `Hola ${fullName}, hemos recibido tu comprobante de pago. El equipo de Fuego Mexicano revisará la información para asegurarse de que todo esté en orden. En caso de que haya algún problema, nos pondremos en contacto contigo.`, URI, 'Ir a la Página')
+
+            await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', searchConfUser.email, 'Notificación de Recepción de Comprobante de Pago.', mail)
+
+
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e,
+            });
+        }
+    },
+    getDetailsSale: async (req, res) => {
+        let {id} = req.params;
+
+        try {
+            let sale = await salesModel.aggregate([
+                {
+                    $match: {
+                        _id: mongoose.Types.ObjectId(id)
+                    }
+                },
+                {
+                    $lookup: {
+                        from: salesDetailsModel.collection.name,
+                        localField: 'details_sale',
+                        foreignField: '_id',
+                        as: 'salesDetails'
+                    }
+                },
+                {
+                    $unwind: '$salesDetails'
+                },
+                {
+                    $lookup: {
+                        from: productModel.collection.name,
+                        localField: 'salesDetails.product',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: usersShoppingModel.collection.name,
+                        localField: 'user_data',
+                        foreignField: '_id',
+                        as: 'userShipping'
+                    }
+                },
+                {
+                    $unwind: '$userShipping'
+                },
+                {
+                    $lookup: {
+                        from: usersModel.collection.name,
+                        localField: 'userShipping.userConf',
+                        foreignField: '_id',
+                        as: 'userConf'
+                    }
+                },
+                {
+                    $unwind: '$userConf'
+                },
+                {
+                    $lookup: {
+                        from: usersAddresModel.collection.name,
+                        localField: 'userShipping.userAddress',
+                        foreignField: '_id',
+                        as: 'userAddress'
+                    }
+                },
+                {
+                    $unwind: '$userAddress'
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        cant_products: {$first: '$cant_products'},
+                        date_sale: {$first: '$date_sale'},
+                        subtotal_sale: {$first: '$subtotal_sale'},
+                        total_envio: {$first: '$total_envio'},
+                        total_sale: {$first: '$total_sale'},
+                        type_payout: {$first: '$type_payout'},
+                        payment_img: {$first: '$payment_img'},
+                        email: {$first: '$userConf.email'},
+                        name_user: {$first: '$userConf.name'},
+                        cellphone: {$first: '$userShipping.cellphone'},
+                        userAddress: {$first: '$userAddress'},
+                        mercado_pago_status: {$first: '$mercado_pago_status'},
+                        details_sale: {
+                            $push: {
+                                _id: '$salesDetails._id',
+                                product: '$product',
+                                cant: '$salesDetails.cant',
+                                priceProduct: '$salesDetails.priceProduct',
+                                total_detalle: '$salesDetails.total_detalle',
+
+                            }
+                        }
+                    }
+                },
+
+
+
+            ]);
+
+            res.status(200).json({
+                success: true,
+                sale:sale[0]
+            });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e
+            });
+        }
+    },
     getOneById: async (req, res) => {
-        let { id } = req.params;
+        let {id} = req.params;
 
         try {
             let sale = await salesModel.aggregate([
@@ -218,11 +365,11 @@ module.exports = {
                 {
                     $group: {
                         _id: '$_id',
-                        cant_products: { $first: '$cant_products' },
-                        date_sale: { $first: '$date_sale' },
-                        subtotal_sale: { $first: '$subtotal_sale' },
-                        total_envio: { $first: '$total_envio' },
-                        total_sale: { $first: '$total_sale' },
+                        cant_products: {$first: '$cant_products'},
+                        date_sale: {$first: '$date_sale'},
+                        subtotal_sale: {$first: '$subtotal_sale'},
+                        total_envio: {$first: '$total_envio'},
+                        total_sale: {$first: '$total_sale'},
                         details_sale: {
                             $push: {
                                 _id: '$salesDetails._id',
@@ -260,6 +407,67 @@ module.exports = {
             });
         }
     },
+    datatable_aggregate: async (req, res) => {
+        try {
+            const {status_sale} = req.body;
+            console.log("status_sale------------", status_sale);
+
+            const data = await salesModel.aggregate([
+                {
+                    $match: {
+                        statusSale: status_sale,
+                    },
+                },
+                {
+                    $lookup: {
+                        from: usersShoppingModel.collection.name,
+                        localField: 'user_data',
+                        foreignField: '_id',
+                        as: 'user_info',
+                    },
+                },
+                {
+                    $replaceRoot: {
+                        newRoot: {
+                            _id: '$_id',
+                            user_name: {
+                                $concat: [
+                                    {$arrayElemAt: ['$user_info.name', 0]},
+                                    ' ',
+                                    {$arrayElemAt: ['$user_info.lastName', 0]},
+                                ],
+                            },
+                            dates_sale: {
+                                date_shipment: "$date_shipment",
+                                date_payment: "$date_payment",
+                            },
+                            cant_products: "$cant_products",
+                            total_sale: "$total_sale",
+                            date_sale: "$date_sale",
+                        },
+                    },
+                },
+            ]);
+
+            console.log("data------------", data);
+
+            res.status(200).json({
+                success: true,
+                data: data,
+            });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e,
+            });
+        }
+    },
+
+
+    createMany: ms.createMany(salesModel, validationObject, populationObject, options),
+
+    getOneWhere: ms.getOneWhere(salesModel, populationObject, options),
 
 
     getMany: ms.getMany(salesModel, populationObject, options),
@@ -270,6 +478,6 @@ module.exports = {
 
     findIdAndDelete: ms.findIdAndDelete(salesModel, options),
 
-    datatable_aggregate: ms.datatable_aggregate(salesModel, aggregate_pipeline_dt, ''),
+
     aggregate: ms.aggregate(salesModel, aggregate_pipeline, options),
 }

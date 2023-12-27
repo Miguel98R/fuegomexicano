@@ -89,12 +89,18 @@ router.get("/checkout-payments/:id", async (req, res) => {
 
     let {id} = req.params
 
-    res.render("checkout_payments", {
-        title: 'Fuego Mexicano | Checkout payments',
-        id
+    let validatePreSale = await salesModel.findById(id)
+    if (validatePreSale.statusSale == 'PRV_sale') {
+        res.render("checkout_payments", {
+            title: 'Fuego Mexicano | Checkout payments',
+            id
+
+        });
+    } else {
+        res.render("404");
+    }
 
 
-    });
 });
 
 //RENDER IF DOES NOT EXIST THE PAGE

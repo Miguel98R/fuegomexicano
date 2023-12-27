@@ -17,8 +17,8 @@ html(lang='es')
             seccion
                 .container
 
-                    div.my-4.py-3
-                        h5.text-white.fw-lighter
+                    div.my-4.py-2
+                        h5.text-white.fw-lighter.py-3
                             | Detalle de la venta
                         .row
                             .col-12.col-md-8
@@ -54,35 +54,27 @@ html(lang='es')
 
 
 
-
-
-
-
-
-
-
-
-
-        div#template_products_check_.col-12.my-1(style="display:none;")
+        div#template_products_check_.col-12.my-2(style="display:none;")
             .row
-                .col-8.text-center
+                .col-4.text-center
                     img#img_product_(style="max-height:180px;border-radius:10px;").img-fluid
                     div
                         p.my-2#name_product_
                         p $
                             span#price_unit_
 
-                .col-2
-                    .form-group(style='background-color: black;')
+                .col-4
+                    .form-group(style='background-color: black;').text-center
                         label.text-danger(style='color: white;') Cantidad:
-                        p.text-center.w-75.my-1#quantity_(type="number" min="1" style='background-color: black; color: white;')
+                        p.text-center.my-1#quantity_(type="text" style='background-color: black; color: white;')
 
-                .col-2
+                .col-4.text-center
                     label.text-danger(style='color: white;')  Total del producto:
                     p $
                         span#total_product_
 
 
+        include modals/confirmacionPagoModal
         include templates/footer
         include templates/scripts
         script.

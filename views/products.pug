@@ -37,11 +37,12 @@ html(lang='es')
 
             div#template_products_.col-lg-4.col-12.mb-3.mx-1(style="display:none;")
 
-                .product-thumb
-                    img#image_product_.img-fluid.product-image()
+                .product-thumb(style="border-radius:10px;")
+                    div.text-center.py-5
+                        img#image_product_.img-fluid.product-image(style="max-height:360px;")
 
                     .product-top.d-flex
-                        span.product-alert.me-auto#stock_aviable_
+                        span.product-alert.me-auto#stock_aviable_(style="font-size:18px;").bg-transparent
                         |
                         //a.bi-heart-fill.product-icon(href='#')
 
