@@ -7,6 +7,7 @@ let menu = [
     {href: '/conf_products', icon: 'bi-shop', label: 'Productos', access: ['admin']},
     {href: '/presales', icon: 'bi-bag', label: 'Pre ventas', access: ['admin']},
     {href: '/sales', icon: 'bi-bag-check', label: 'Ventas', access: ['admin']},
+    {href: '/sendts', icon: 'bi-truck', label: 'Ordenes enviadas', access: ['admin']},
     {href: '/historic', icon: 'bi-bag-check', label: 'Historico ventas', access: ['admin']},
 
 ]

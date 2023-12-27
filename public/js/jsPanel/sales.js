@@ -35,15 +35,11 @@ const deleteProduct = async (id_Product) => {
 }
 
 const getDataSale = async (id_Product) => {
-
-    console.log("id_Product", id_Product)
-
     HoldOn.open(HoldOptions)
     api_conection("GET", `${apiUrl}/getDetailsSale/${id_Product}`, {}, async function (data) {
         HoldOn.close()
 
         let sale_data = data.sale
-
 
 
         let details_sale = sale_data.details_sale
@@ -79,18 +75,18 @@ const getDataSale = async (id_Product) => {
         $('#type_payout').text(type_payout);
 
         if (payment_img == '') {
-            if(type_payout=="mercadoPago"){
+            if (type_payout == "mercadoPago") {
                 $('#sinComprobante').hide();
                 $('#ConComprobante').hide();
                 let color_text = ''
-                if(mercado_pago_status=='ACREDITADO'){
+                if (mercado_pago_status == 'ACREDITADO') {
                     color_text = 'text-success'
-                }else{
+                } else {
                     color_text = 'text-warning'
                 }
                 $('#mercadoPagoStatus').show()
                 $('#status_mp').text(mercado_pago_status).addClass(color_text);
-            }else{
+            } else {
                 $('#sinComprobante').show();
                 $('#ConComprobante').hide();
                 $('#mercadoPagoStatus').hide();
@@ -112,15 +108,14 @@ const getDataSale = async (id_Product) => {
         $('#subtotal_sale').text("$ " + subtotal_sale);
         $('#total_sale').text("$ " + total_sale);
 
-        for(let details of details_sale){
+        for (let details of details_sale) {
 
             let cant_product = details.cant
             let product = details.product
             let total_detalle = details.total_detalle
 
 
-
-            for(let products of product){
+            for (let products of product) {
                 let element = await drawProductosDetails(products._id)
 
 
@@ -128,12 +123,10 @@ const getDataSale = async (id_Product) => {
                 element.find('#name_product_' + products._id).text(products.name)
                 element.find('#price_product_' + products._id).text("$ " + products.price + " c/u")
                 element.find('#cant_product_detail_' + products._id).text(cant_product + " pzs")
-                element.find('#total_product_' + products._id).text("$ " +total_detalle)
+                element.find('#total_product_' + products._id).text("$ " + total_detalle)
 
                 $('#products').append(element);
             }
-
-
 
 
         }
@@ -142,97 +135,434 @@ const getDataSale = async (id_Product) => {
     })
 }
 
-const columns = [
+const sendNotification = async (id_sale) => {
+    {
+        HoldOn.open(HoldOptions)
+        api_conection("POST", `${apiUrl}/sendNotification`, {id_sale}, function () {
+            HoldOn.close()
+            notyf.success("Notificación enviada")
+            drawDataTable(dt)
+        })
+    }
+}
+
+const updateStatusSendSale = async (id_sale) => {
 
     {
-        data: 'user_name',
-        render: function (data, type, row) {
-            let html = `<div class="text-center"><h6 style="font-size:20px;">${data}</h6>
+        HoldOn.open(HoldOptions)
+        api_conection("PUT", `${apiUrl}/updateStatusSendSale/${id_sale}`, {}, function () {
+            HoldOn.close()
+            notyf.success("Orden actualizada")
+            drawDataTable(dt)
+        })
+    }
+}
+
+const upateSaleToHistoricStatus = async (id_sale) => {
+    {
+        HoldOn.open(HoldOptions)
+        api_conection("PUT", `${apiUrl}/upateSaleToHistoricStatus/${id_sale}`, {}, function () {
+            HoldOn.close()
+            notyf.success("Orden actualizada")
+            drawDataTable(dt)
+        })
+    }
+}
+
+const upateSendToSaleStatus = async (id_sale) => {
+    {
+        HoldOn.open(HoldOptions)
+        api_conection("PUT", `${apiUrl}/upateSendToSaleStatus/${id_sale}`, {}, function () {
+            HoldOn.close()
+            notyf.success("Orden actualizada")
+            drawDataTable(dt)
+        })
+    }
+}
+
+let columns
+
+if (STATUS == 'PRV_sale') {
+    columns = [
+
+        {
+            data: 'user_name',
+            render: function (data, type, row) {
+                let html = `<div class="text-center"><h6 style="font-size:20px;">${data}</h6>
                     <div>
                         <p style="font-size:10px;">ID VENTA:${row._id}</p>
                     </div>
                 </div>`
 
-            return html
-        }
-    },
-    {
-        data: 'cant_products',
-        render: function (data, type, row) {
-            let html = `<div class="text-center"><h6 style="font-size:16px;">${data}</h6>
+                return html
+            }
+        },
+        {
+            data: 'cant_products',
+            render: function (data, type, row) {
+                let html = `<div class="text-center"><h6 style="font-size:16px;">${data}</h6>
                    
                 </div>`
 
-            return html
-        }
-
-
-    }, {
-        data: 'date_sale',
-        render: function (data, type, row) {
-            // Formatear la fecha con Moment.js
-            const formattedDate = moment(data).format('DD/MM/YYYY HH:mm:ss');
-
-            let html = `<div class="text-center"><h6 style="font-size:13px;">${formattedDate}</h6></div>`;
-
-            return html;
-        }
-    },
-    {
-        data: 'dates_sale',
-        render: function (data, type, row) {
-            // Validar si dates_sale es un objeto vacío
-            if (!data || Object.keys(data).length === 0) {
-                return '<div class="text-center"><h6 style="font-size:15px;">Aún no se registra fecha de pago ni de envío</h6></div>';
+                return html
             }
 
-            // Formatear las fechas con Moment.js
-            const formattedDateShipment = data.date_shipment ? moment(data.date_shipment).format('DD/MM/YYYY HH:mm:ss') : 'Aún no se envia el producto'
-            const formattedDatePayment = data.date_payment ? moment(data.date_payment).format('DD/MM/YYYY HH:mm:ss') : 'Sin fecha de pago'
+
+        },
+        {
+            data: 'date_sale',
+            render: function (data, type, row) {
+                // Formatear la fecha con Moment.js
+                const formattedDate = moment(data).format('DD/MM/YYYY HH:mm:ss');
+
+                let html = `<div class="text-center"><h6 style="font-size:13px;">${formattedDate}</h6></div>`;
+
+                return html;
+            }
+        },
+        {
+            data: 'date_sale',
+            render: function (data, type, row) {
+
+                const dateSale = moment(data);
+                const daysPassed = moment().diff(dateSale, 'days');
+
+                let textColor = 'text-success'; // Verde por defecto
+                let additionalNote = '0 días transcurridos';
+
+                if (daysPassed > 0) {
+                    additionalNote = daysPassed === 1 ? '1 día transcurrido' : `${daysPassed} días transcurridos`;
+
+                    if (daysPassed === 2) {
+                        textColor = 'text-warning'; // Amarillo
+                    } else if (daysPassed >= 3) {
+                        textColor = 'text-danger'; // Rojo
+                        additionalNote += '. Al finalizar el día, la orden será cancelada.';
+                    }
+                }
+
+                let html = `<div class="text-start ${textColor}">
+                        <p>${additionalNote}</p>
+                    </div>`;
+
+                return html;
+            }
+        }
+
+        ,
+
+        {
+            data: 'total_sale',
+            render: function (data, type, row) {
+                // Formatear la fecha con Moment.js
 
 
-            let html = `<div class="text-start">
+                let html = `<div class="text-center"><h6 style="font-size:15px;">$ ${data}</h6></div>`;
+
+                return html;
+            }
+
+        },
+
+
+        {
+
+            width: "25%",
+            data: '_id',
+            render: function (data, type, row) {
+                if (type === 'display') {
+
+                    return `<button class="my-1 w-100 see-details-button btn btn-warning" data-id="${data}">Ver Detalles</button>
+                    <button class="my-1 w-100  send-notification-button btn btn-info" data-id="${data}">Enviar notificación de  pago</button>
+                    <button class="my-1 w-100 delete-button btn btn-danger" data-id="${data}">Cancelar</button>`;
+                }
+                return data;
+            }
+        }
+
+
+    ]
+}
+
+if (STATUS == 'OR_sale') {
+    columns = [
+
+        {
+            data: 'user_name',
+            render: function (data, type, row) {
+                let html = `<div class="text-center"><h6 style="font-size:20px;">${data}</h6>
+                    <div>
+                        <p style="font-size:10px;">ID VENTA:${row._id}</p>
+                    </div>
+                </div>`
+
+                return html
+            }
+        },
+        {
+            data: 'cant_products',
+            render: function (data, type, row) {
+                let html = `<div class="text-center"><h6 style="font-size:16px;">${data}</h6>
+                   
+                </div>`
+
+                return html
+            }
+
+
+        }, {
+            data: 'date_sale',
+            render: function (data, type, row) {
+                // Formatear la fecha con Moment.js
+                const formattedDate = moment(data).format('DD/MM/YYYY HH:mm:ss');
+
+                let html = `<div class="text-center"><h6 style="font-size:13px;">${formattedDate}</h6></div>`;
+
+                return html;
+            }
+        },
+        {
+            data: 'dates_sale',
+            render: function (data, type, row) {
+                // Validar si dates_sale es un objeto vacío
+                if (!data || Object.keys(data).length === 0) {
+                    return '<div class="text-center"><h6 style="font-size:15px;">Aún no se registra fecha de pago ni de envío</h6></div>';
+                }
+
+                // Formatear las fechas con Moment.js
+                const formattedDateShipment = data.date_shipment ? moment(data.date_shipment).format('DD/MM/YYYY HH:mm:ss') : 'Aún no se envia el producto'
+                const formattedDatePayment = data.date_payment ? moment(data.date_payment).format('DD/MM/YYYY HH:mm:ss') : 'Sin fecha de pago'
+
+
+                let html = `<div class="text-start">
                         <h6 style="font-size:15px;">Fecha de Pago: ${formattedDatePayment}</h6>   
                         <h6 style="font-size:15px;">Fecha de Envío: ${formattedDateShipment}</h6>
                        
                     </div>`;
 
-            return html;
-        }
-    }
-    ,
-
-    {
-        data: 'total_sale',
-        render: function (data, type, row) {
-            // Formatear la fecha con Moment.js
-
-
-            let html = `<div class="text-center"><h6 style="font-size:15px;">$ ${data}</h6></div>`;
-
-            return html;
-        }
-
-    },
-
-
-    {
-
-        width: "25%",
-        data: '_id',
-        render: function (data, type, row) {
-            if (type === 'display') {
-                // Botones de editar y eliminar con atributo data-id
-                return `<button class="my-1 w-100 see-details-button btn btn-warning" data-id="${data}">Ver Detalles</button>
-                    <button class="my-1 w-100  send-button btn btn-info" data-id="${data}">Listo para enviar</button>
-                    <button class="my-1 w-100 delete-button btn btn-danger" data-id="${data}">Cancelar</button>`;
+                return html;
             }
-            return data;
         }
-    }
+        ,
+
+        {
+            data: 'total_sale',
+            render: function (data, type, row) {
+                // Formatear la fecha con Moment.js
 
 
-]
+                let html = `<div class="text-center"><h6 style="font-size:15px;">$ ${data}</h6></div>`;
+
+                return html;
+            }
+
+        },
+
+
+        {
+
+            width: "25%",
+            data: '_id',
+            render: function (data, type, row) {
+                if (type === 'display') {
+
+                    return `<button class="my-1 w-100 see-details-button btn btn-warning" data-id="${data}">Ver Detalles</button>
+                    <button class="my-1 w-100  send-button btn btn-info" data-id="${data}">Listo para enviar</button>
+                    <button class="my-1 w-100  send-historic-button btn btn-success" data-id="${data}">Enviar a Histórico</button>
+                    <button class="my-1 w-100 delete-button btn btn-danger" data-id="${data}">Cancelar</button>`;
+                }
+                return data;
+            }
+        }
+
+
+    ]
+}
+
+if (STATUS == 'OR_send') {
+    columns = [
+
+        {
+            data: 'user_name',
+            render: function (data, type, row) {
+                let html = `<div class="text-center"><h6 style="font-size:20px;">${data}</h6>
+                    <div>
+                        <p style="font-size:10px;">ID VENTA:${row._id}</p>
+                    </div>
+                </div>`
+
+                return html
+            }
+        },
+        {
+            data: 'cant_products',
+            render: function (data, type, row) {
+                let html = `<div class="text-center"><h6 style="font-size:16px;">${data}</h6>
+                   
+                </div>`
+
+                return html
+            }
+
+
+        },
+        {
+            data: 'date_sale',
+            render: function (data, type, row) {
+                // Formatear la fecha con Moment.js
+                const formattedDate = moment(data).format('DD/MM/YYYY HH:mm:ss');
+
+                let html = `<div class="text-center"><h6 style="font-size:13px;">${formattedDate}</h6></div>`;
+
+                return html;
+            }
+        },
+        {
+            data: 'dates_sale',
+            render: function (data, type, row) {
+                // Validar si dates_sale es un objeto vacío
+                if (!data || Object.keys(data).length === 0) {
+                    return '<div class="text-center"><h6 style="font-size:15px;">Aún no se registra fecha de pago ni de envío</h6></div>';
+                }
+
+                // Formatear las fechas con Moment.js
+                const formattedDateShipment = data.date_shipment ? moment(data.date_shipment).format('DD/MM/YYYY HH:mm:ss') : 'Aún no se envia el producto'
+                const formattedDatePayment = data.date_payment ? moment(data.date_payment).format('DD/MM/YYYY HH:mm:ss') : 'Sin fecha de pago'
+
+
+                let html = `<div class="text-start">
+                        <h6 style="font-size:15px;">Fecha de Pago: ${formattedDatePayment}</h6>   
+                        <h6 style="font-size:15px;">Fecha de Envío: ${formattedDateShipment}</h6>
+                       
+                    </div>`;
+
+                return html;
+            }
+        }
+        ,
+
+        {
+            data: 'total_sale',
+            render: function (data, type, row) {
+                // Formatear la fecha con Moment.js
+
+
+                let html = `<div class="text-center"><h6 style="font-size:15px;">$ ${data}</h6></div>`;
+
+                return html;
+            }
+
+        },
+
+
+        {
+
+            width: "25%",
+            data: '_id',
+            render: function (data, type, row) {
+                if (type === 'display') {
+
+                    return `<button class="my-1 w-100 see-details-button btn btn-warning" data-id="${data}">Ver Detalles</button>
+                            <button class="my-1 w-100 return-sale-button btn btn-secondary" data-id="${data}">Regresar a ordenes</button>
+                            <button class="my-1 w-100  send-button btn btn-success" data-id="${data}">Enviar a Histórico</button>
+                            `;
+                }
+                return data;
+            }
+        }
+
+
+    ]
+}
+
+if (STATUS == 'OR_historic') {
+    columns = [
+
+        {
+            data: 'user_name',
+            render: function (data, type, row) {
+                let html = `<div class="text-center"><h6 style="font-size:20px;">${data}</h6>
+                    <div>
+                        <p style="font-size:10px;">ID VENTA:${row._id}</p>
+                    </div>
+                </div>`
+
+                return html
+            }
+        },
+        {
+            data: 'cant_products',
+            render: function (data, type, row) {
+                let html = `<div class="text-center"><h6 style="font-size:16px;">${data}</h6>
+                   
+                </div>`
+
+                return html
+            }
+
+
+        },
+        {
+            data: 'date_sale',
+            render: function (data, type, row) {
+                // Formatear la fecha con Moment.js
+                const formattedDate = moment(data).format('DD/MM/YYYY HH:mm:ss');
+
+                let html = `<div class="text-center"><h6 style="font-size:13px;">${formattedDate}</h6></div>`;
+
+                return html;
+            }
+        },
+        {
+            data: 'dates_sale',
+            render: function (data, type, row) {
+                // Validar si dates_sale es un objeto vacío
+                if (!data || Object.keys(data).length === 0) {
+                    return '<div class="text-center"><h6 style="font-size:15px;">Aún no se registra fecha de pago ni de envío</h6></div>';
+                }
+
+                // Formatear las fechas con Moment.js
+                const formattedDateShipment = data.date_shipment ? moment(data.date_shipment).format('DD/MM/YYYY HH:mm:ss') : 'Aún no se envia el producto'
+                const formattedDatePayment = data.date_payment ? moment(data.date_payment).format('DD/MM/YYYY HH:mm:ss') : 'Sin fecha de pago'
+
+
+                let html = `<div class="text-start">
+                        <h6 style="font-size:15px;">Fecha de Pago: ${formattedDatePayment}</h6>   
+                        <h6 style="font-size:15px;">Fecha de Envío: ${formattedDateShipment}</h6>
+                       
+                    </div>`;
+
+                return html;
+            }
+        },
+        {
+            data: 'total_sale',
+            render: function (data, type, row) {
+                // Formatear la fecha con Moment.js
+
+
+                let html = `<div class="text-center"><h6 style="font-size:15px;">$ ${data}</h6></div>`;
+
+                return html;
+            }
+
+        },
+        {
+
+            width: "25%",
+            data: '_id',
+            render: function (data, type, row) {
+                if (type === 'display') {
+
+                    return `<button class="my-1 w-100 see-details-button btn btn-warning" data-id="${data}">Ver Detalles</button>`;
+                }
+                return data;
+            }
+        }
+
+
+    ]
+}
 
 const dt = $(`#${TABLE}`).DataTable({
     responsive: true,
@@ -268,7 +598,9 @@ const dt = $(`#${TABLE}`).DataTable({
 $(async function () {
 
 
-    $(document.body).on("click", ".delete-button", function () {
+///////// ----------------------------------------------------- SALES FUNCTIONS -------------------------------------------- /////
+
+   /* $(document.body).on("click", ".delete-button", function () {
         let id_Product = $(this).attr("data-id");
 
         Swal.fire({
@@ -287,15 +619,100 @@ $(async function () {
 
                 }
             });
+    });*/
+
+    $(document.body).on("click", ".send-button", async function () {
+        let id_sale = $(this).attr("data-id");
+
+        Swal.fire({
+            title: "¿Estás seguro de empezar el envío para esta venta?",
+            text: "Esta acción no tiene retorno.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, adelante"
+        })
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    await updateStatusSendSale(id_sale);
+
+                }
+            });
     });
 
+    $(document.body).on("click", ".send-historic-button", async function () {
+        let id_sale = $(this).attr("data-id");
+
+        Swal.fire({
+            title: "¿Estás seguro de enviar esta venta al histórico?",
+            text: "Esta acción no tiene retorno.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, adelante"
+        })
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    await upateSaleToHistoricStatus(id_sale);
+
+                }
+            });
+    });
 
     $(document.body).on("click", ".see-details-button", function () {
-        let id_Product = $(this).attr("data-id");
+        let id_sale = $(this).attr("data-id");
         $("#detailsSaleModal").modal("show")
-        getDataSale(id_Product)
+        getDataSale(id_sale)
     });
 
+
+///////// ----------------------------------------------------- PRESALES FUNCTIONS -------------------------------------------- /////
+
+
+    $(document.body).on("click", ".send-notification-button", function () {
+        let id_sale = $(this).attr("data-id");
+        Swal.fire({
+            title: "¿Estás seguro de enviar la notificación de pago?",
+            text: "Se enviara un email al cliente",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, adelante"
+        })
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    await sendNotification(id_sale);
+
+                }
+            });
+    });
+
+
+/////// ----------------------------------------------------- SENDTS STATUS FUNCTIONS -------------------------------------------- /////
+
+    $(document.body).on("click", ".return-sale-button", function () {
+        let id_sale = $(this).attr("data-id");
+        Swal.fire({
+            title: "¿Estás seguro de regresar a ordenes esta venta?",
+            text: "Esta acción no tiene retorno.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, adelante"
+        })
+            .then(async (result) => {
+                if (result.isConfirmed) {
+                    await upateSendToSaleStatus(id_sale);
+
+                }
+            });
+    });
+
+/////// ----------------------------------------------------- OTHER FUNCTIONS -------------------------------------------- /////
 
     $('.image').change(function () {
         const fileInput = $(this)[0];

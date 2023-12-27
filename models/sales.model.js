@@ -11,7 +11,7 @@ const salesModel = new Schema({
 
     statusSale: { // PRV = PREVENTA , OR= ORDEN
         type: String,
-        enum: ['PRV_sale', 'PRV_canceled', 'OR_sale', 'OR_historic', 'OR_canceled'],
+        enum: ['PRV_sale', 'PRV_canceled', 'OR_sale','OR_send' ,'OR_historic', 'OR_canceled'],
         default: 'PRV_sale'
     },
     type_payout: { // PRV = PREVENTA , OR= ORDEN

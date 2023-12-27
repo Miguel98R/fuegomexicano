@@ -145,7 +145,7 @@ module.exports = {
 
 
             let newSale = await salesModel.create({
-                statusSale,
+                statusSale : 'PRV_sale',
                 type_payout,
                 user_data: searchShopping._id,
                 details_sale: array_products_details,
@@ -158,8 +158,14 @@ module.exports = {
             })
 
             let fullUrl = req.protocol + '://' + req.get('host')
-
             let URI = fullUrl + '/checkout-payments/' + newSale._id
+
+            res.status(200).json({
+                success: true,
+                data: URI
+
+            })
+
 
 
             let fullName = searchShopping.name + ' ' + searchShopping.lastName + ' '
@@ -171,11 +177,7 @@ module.exports = {
             await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', data_user.email, 'Finaliza tu pago.', mail)
 
 
-            res.status(200).json({
-                success: true,
-                data: URI
 
-            })
         } catch (e) {
             console.error(e)
             res.status(500).json({
@@ -318,12 +320,11 @@ module.exports = {
                 },
 
 
-
             ]);
 
             res.status(200).json({
                 success: true,
-                sale:sale[0]
+                sale: sale[0]
             });
         } catch (e) {
             console.error(e);
@@ -463,21 +464,132 @@ module.exports = {
             });
         }
     },
+    updateStatusSendSale: async (req, res) => {
+        try {
+            const {id} = req.params;
 
+            let searchSale = await salesModel.findById(id)
+            searchSale.statusSale = 'OR_send'
+            searchSale.date_shipment = moment().format()
+
+            await searchSale.save()
+
+            res.status(200).json({
+                success: true,
+            });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e,
+            });
+        }
+    },
+    upateSaleToHistoricStatus: async (req, res) => {
+        try {
+            const {id} = req.params;
+
+            let searchSale = await salesModel.findById(id)
+            searchSale.statusSale = 'OR_historic'
+            searchSale.date_shipment = moment().format()
+
+            await searchSale.save()
+
+            res.status(200).json({
+                success: true,
+            });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e,
+            });
+        }
+    },
+    upateSendToSaleStatus: async (req, res) => {
+        try {
+            const {id} = req.params;
+
+            let searchSale = await salesModel.findById(id)
+            searchSale.statusSale = 'OR_sale'
+            searchSale.date_shipment = ''
+
+            await searchSale.save()
+
+            res.status(200).json({
+                success: true,
+            });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e,
+            });
+        }
+    },
+    sendNotification: async (req, res) => {
+        try {
+            const {id_sale} = req.body;
+
+            let searchSale = await salesModel.findById(id_sale)
+            let searchShopping = await usersShoppingModel.findById(searchSale.user_data)
+            let userConf = await usersModel.findById(searchShopping.userConf)
+
+            let fullUrl = req.protocol + '://' + req.get('host')
+
+            let URI = fullUrl + '/checkout-payments/' + id_sale
+
+
+            let fullName = searchShopping.name + ' ' + searchShopping.lastName + ' '
+
+            let image_banner = 'http://ec2-3-143-55-82.us-east-2.compute.amazonaws.com:3080/public/images/fuego/logo_.png'
+
+            let mail = await template.generic(image_banner, 'Recordatorio de pago', 'Finaliza tu pago', `Hola ${fullName}  es un recordatorio para finalizar tu compra por la cantidad de $ ${searchSale.total_sale}, dale click al siguiente boton para finalizarla`, URI, 'Click Aqui')
+
+            await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', userConf.email, 'Finaliza tu pago.', mail)
+
+
+            await searchSale.save()
+
+            res.status(200).json({
+                success: true,
+            });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e,
+            });
+        }
+    },
+    cancelSale: async (req, res) => {
+        try {
+            const {id} = req.params;
+
+            let searchSale = await salesModel.findById(id)
+            searchSale.statusSale = 'OR_canceled'
+            searchSale.date_shipment = moment().format()
+
+            await searchSale.save()
+
+            res.status(200).json({
+                success: true,
+            });
+        } catch (e) {
+            console.error(e);
+            res.status(500).json({
+                success: false,
+                error: e,
+            });
+        }
+    },
 
     createMany: ms.createMany(salesModel, validationObject, populationObject, options),
-
     getOneWhere: ms.getOneWhere(salesModel, populationObject, options),
-
-
     getMany: ms.getMany(salesModel, populationObject, options),
-
     findUpdateOrCreate: ms.findUpdateOrCreate(salesModel, validationObject, populationObject, options),
     findUpdate: ms.findUpdate(salesModel, validationObject, populationObject, options),
     updateById: ms.updateById(salesModel, validationObject, populationObject, options),
-
     findIdAndDelete: ms.findIdAndDelete(salesModel, options),
-
-
     aggregate: ms.aggregate(salesModel, aggregate_pipeline, options),
 }

@@ -229,7 +229,11 @@ const createNewSaleTransfer = async (body) => {
     api_conection('POST', `${apiSales}/createSaleTransfer`, body, async function (data) {
         HoldOn.close()
         let uri = data.data
-        console.log("data_sale----------------", uri)
+
+        if (body.statusSale == 'OR_sale') {
+            localStorage.clear();
+            location.href = uri
+        }
 
         if (body.statusSale == 'PRV_sale') {
 
@@ -245,9 +249,6 @@ const createNewSaleTransfer = async (body) => {
 
         }
 
-        localStorage.removeItem('sale_conf');
-        localStorage.removeItem('cart');
-        localStorage.removeItem('user');
     })
 }
 
@@ -354,6 +355,22 @@ $(async function () {
 
         }
         await createNewSaleMP(body)
+
+
+    })
+
+
+    $("#continue_payout").click(async function () {
+
+        let body = {
+            storedUser: getStorageUser(),
+            storedConfSale: getStorageConf(),
+            storedCart: getStorageCart(),
+            statusSale: 'OR_sale',
+            img_payment: ''
+
+        }
+        await createNewSaleTransfer(body)
 
 
     })

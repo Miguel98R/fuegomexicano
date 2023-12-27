@@ -202,6 +202,23 @@ router.get("/historic", validateSession, (req, res) => {
 
 });
 
+router.get("/sendts", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/conf_sales", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Órdenes en envío",
+        table:"tbl_send",
+        status_sale: 'OR_send',
+        url_js_files,
+        menu
+
+    });
+
+});
+
 router.get("/conf_users", validateSession, (req, res) => {
 
 
