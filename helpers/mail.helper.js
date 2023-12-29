@@ -37,7 +37,7 @@ module.exports = {
     template: {
         generic: async function (image_banner, small_title, big_title, description, button_link, button_text) {
             if (!image_banner || image_banner.trim() == '') {
-                image_banner = 'http://ec2-3-143-55-82.us-east-2.compute.amazonaws.com:3080/public/images/fuego/logo_.png'
+                image_banner = 'https://www.fuegomexicano.com/public/images/fuego/logo_.png'
             }
 
             let html = fs.readFileSync(path.join(__dirname, 'mailTemplates', 'generico.html'), {

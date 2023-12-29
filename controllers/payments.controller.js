@@ -241,7 +241,7 @@ module.exports = {
 
             let fullName = searchShopping.name + ' ' + searchShopping.lastName + ' '
 
-            let image_banner = 'http://ec2-3-143-55-82.us-east-2.compute.amazonaws.com:3080/public/images/fuego/logo_.png'
+            let image_banner = 'https://www.fuegomexicano.com/public/images/fuego/logo_.png'
 
             let mail = await template.generic(image_banner, 'Notificación de pago', 'Finaliza tu pago', `Hola ${fullName}  es un recordatorio para finalizar tu compra por la cantidad de $ ${total_sale}, dale click al siguiente boton para finalizarla`, URI, 'Click Aqui')
 
@@ -286,7 +286,7 @@ module.exports = {
 
                 res.sendStatus(204);
 
-                let image_banner = 'http://ec2-3-143-55-82.us-east-2.compute.amazonaws.com:3080/public/images/fuego/logo_.png'
+                let image_banner = 'https://www.fuegomexicano.com/public/images/fuego/logo_.png'
 
                 let URI = 'https://fuegomexicano.com'
 
