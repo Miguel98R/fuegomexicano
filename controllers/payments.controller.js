@@ -193,7 +193,7 @@ module.exports = {
 
                     },
                     //notification_url:urlHost+"/api/payments/webhook"
-                    notification_url: "https://fc63-187-187-206-3.ngrok-free.app/api/payments/webhook"
+                    notification_url: "https://wwww.fuegomexicano.com/api/payments/webhook"
                 }
             })
 
