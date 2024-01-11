@@ -32,7 +32,7 @@ const getProducts = async () => {
 
 
         for (let item of data_product) {
-            let stock = item.stock > 0 ? "Stock disponible" : "Agotado";
+            let stock = item.stock > 0 ? "En stock" : "Agotado";
             let color = item.stock > 0 ? "text-success" : "text-danger";
 
             let element = drawProducts(item._id);
