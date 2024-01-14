@@ -117,6 +117,21 @@ router.get("/conf_invitations", validateSession, (req, res) => {
 
 });
 
+router.get("/conf_congresos", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/conf_congresos", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page:"Congresos",
+        url_js_files,
+        menu
+
+    });
+
+});
+
 
 router.get("/conf_agenda", validateSession, (req, res) => {
 

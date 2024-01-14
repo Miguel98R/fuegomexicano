@@ -1,4 +1,5 @@
 const apiAgenda = "/api/agendas"
+const apiCongresos = "/api/congresos"
 
 const drawMonths = async (id_month) => {
 
