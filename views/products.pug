@@ -35,11 +35,11 @@ html(lang='es')
                     .row#grid_products
 
 
-            div#template_products_.col-md-4.col-12.mb-3(style="display:none;")
+            div#template_products_.col-md-4.col-12.mb-3(style="display:none;background:#000;")
 
-                .product-thumb(style="border-radius:10px;")
+                .product-thumb(style="border-radius:10px;background:#000;")
                     div.text-center.py-5
-                        img#image_product_.img-fluid.product-image(style="max-height:380px;")
+                        img#image_product_.img-fluid.product-image(style="max-height:450px;border-radius:10px;")
 
                     .product-top.d-flex
                         span.product-alert.me-auto#stock_aviable_(style="font-size:18px;").bg-transparent
@@ -48,8 +48,8 @@ html(lang='es')
 
                     .product-info.d-flex
                         div
-                            h5.product-title.mb-0
-                                a.product-title-link(href='')#name_product_
+                            h5.product-title.mb-0.text-white
+                                a.product-title-link.text-white(href='')#name_product_
                             p.product-p#description_product_
                         small.product-price.text-muted.ms-auto#price_product_
 

@@ -227,9 +227,10 @@ strong {
 }
 
 .custom-btn_store {
-  background: var(--white-color); var(--dark-color);
-  border-radius: 1px;
-  color: var(--dark-color);
+  background: var(--dark-color);
+  border-radius: 9px;
+  border-color: var(--white-color);
+  color: var(--white-color);
   font-size: var(--copyright-text-font-size);
   padding: 14px 20px;
 }
