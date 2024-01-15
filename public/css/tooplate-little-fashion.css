@@ -228,11 +228,9 @@ strong {
 
 .custom-btn_store {
   background: var(--dark-color);
-  border-radius: 9px;
-  border-color: var(--white-color);
-  color: var(--white-color);
+  color: #FFFFFF;
   font-size: var(--copyright-text-font-size);
-  padding: 14px 20px;
+  
 }
 
 .social-btn {
@@ -267,7 +265,8 @@ strong {
 .custom-btn_store:hover,
 .slick-slideshow .custom-btn:hover {
   background: var(--primary-color);
-  color: var(--white-color);
+  color: #fff;
+ 
 }
 
 .custom-icon {

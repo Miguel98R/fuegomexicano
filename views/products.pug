@@ -24,7 +24,7 @@ html(lang='es')
                                     span.text-danger Andrade
 
                 .text-center
-                    img.img-fluid(src='/public/images/fuego/logo_.png' style="max-height:850px;border-radius:10px;")
+                    img.img-fluid(src='/public/images/fuego/logo_.png' style="max-height:850px;")
             section.products
                 .container
                     div.mb-5
@@ -36,7 +36,7 @@ html(lang='es')
                     .row#grid_products
 
 
-            div#template_products_.col-md-4.col-12.mb-3(style="display:none;background:#000;")
+            div#template_products_.col-md-6.col-12.mb-3(style="display:none;background:#000;")
 
                 .product-thumb(style="border-radius:10px;background:#000;")
                     div.text-center.py-5
@@ -61,14 +61,14 @@ html(lang='es')
                                     i.mx-2.bi.bi-dash-circle(style="font-size")
 
                             .col-4
-                                input#quantity_input_.form-control.w-100.text-center.quantity_input(type='number', min='1', value='1', style='width: 50px; margin-right: 10px;', oninput='this.value = Math.max(1, this.value)')
+                                input#quantity_input_.form-control.w-100.text-center.quantity_input(type='number', min='1', value='1', style='width: 50px; margin-right: 10px; color: white; background-color: black;', oninput='this.value = Math.max(1, this.value)')
 
                             .col-4
                                 button#add_product_.add_product.w-100.btn.custom-btn_store.product-p(type='button')
                                     i.mx-2.bi.bi-plus-circle
 
                     div.p-0.m-0
-                        button#add_cart_.add_cart.w-100.btn.custom-btn_store.product-p
+                        button#add_cart_.my-2.add_cart.w-100.btn.custom-btn_store.product-p
                             i.mx-2.bi.bi-cart-plus
                             | Agregar al carrito
                         button#shop_now_.shop_now.w-100.btn.custom-btn_store.product-p
