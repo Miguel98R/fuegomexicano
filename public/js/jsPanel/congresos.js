@@ -1,192 +1,263 @@
-let apiUrl = "/api/congresos"
+const apiUrl = "/api/congresos"
 
+const columns = [
 
-const drawMonths = async (id_month) => {
+    {
+        data: 'name',
+        render: function (data, type, row) {
+            let html = `<div class="text-center"><h6>${data}</h6>
+                    <div>
+                        <img class="img-fluid" style="max-height: 130px;border-radius: 9px;"  src="${row.image}">
+                    </div>
+                </div>`
 
-    let template = $("#template_month_").clone();
+            return html
+        }
 
-    template.attr('id', 'template_month_' + id_month).css('display', 'block');
-    template.find('#name_month_').attr('id', 'name_month_' + id_month)
-    template.find('#active_month_').attr('id', 'active_month_' + id_month)
-    template.find('#events_').attr('id', 'events_' + id_month)
-    template.find('#add_events_').attr('id', 'add_events_' + id_month).addClass('add_event_')
+    },
+    {
+        data: 'description',
 
+    }, {
+        data: 'price',
 
-    return template
-}
+    },
+    {
+        data: 'stock',
 
-const drawEvents = async (id_event) => {
+    },
 
-    let template = $("#template_event_").clone();
+    {
+        data: 'active',
+        render: function (data, type, row) {
+            let status = ''
+            if (type === 'display') {
 
-    template.attr('id', 'template_event_' + id_event).css('display', 'block');
-    template.find('#date_event_').attr('id', 'date_event_' + id_event)
-    template.find('#location_event_').attr('id', 'location_event_' + id_event)
-    template.find('#delete_event_').attr('id', 'delete_event_' + id_event)
-
-
-    return template
-}
-
-const deleteDate = (id_event) => {
-    HoldOn.open(HoldOptions)
-    api_conection("DELETE", `${apiUrl}/findIdAndDelete/${id_event}`, {}, async function () {
-        HoldOn.close()
-        notyf.success("Fecha eliminada")
-        await getMonths()
-    })
-}
-
-const getMonths = async () => {
-    HoldOn.open(HoldOptions)
-    $("#months").html('')
-    await api_conection("GET", `${apiUrl}/getMany`, {}, async function (data) {
-
-        let months = data.data
-
-        for (let item of months) {
-            let div_month = await drawMonths(item._id)
-            div_month.find('#name_month_' + item._id).text(item.mes)
-            div_month.find('#active_month_' + item._id).prop("checked", item.active).attr("id_month", item._id).attr("name_month", item.mes)
-            div_month.find('#add_events_' + item._id).attr("id_month", item._id).attr("name_month", item.mes)
-
-
-            let events = item.events;
-
-            events.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            $("#months").append(div_month)
-
-            if (events.length > 0) {
-                for (let jtem of events) {
-                    let div_event = await drawEvents(jtem._id);
-                    div_event.find('#date_event_' + jtem._id).text(moment(jtem.date).format("DD/MM/YYYY"));
-                    div_event.find('#location_event_' + jtem._id).text(jtem.location)
-                    div_event.find('#delete_event_' + jtem._id).attr("id_event", jtem._id)
-
-                    div_month.find('#events_' + item._id).append(div_event)
+                if (data) {
+                    status = `<p class="fw-bold text-success">Activo</p>`
+                } else {
+                    status = `<p class="fw-bold text-danger">Desactivado</p>`
                 }
 
-            } else {
-                div_month.find('#events_' + item._id).append(`<h6 class="text-center my-2 text-danger fw-lighter">No hay fechas establecidas para este mes</h6>`)
             }
+            return status;
         }
-        HoldOn.close()
-    })
-}
 
-const saveDate = async (body) => {
-    HoldOn.open(HoldOptions)
-    await api_conection("POST", `${apiUrl}/createOne`, {body}, async function () {
-        HoldOn.close()
-        notyf.success("Fecha agregada")
-        await getMonths()
-    })
-}
-
-const valueMonth = (name_month) => {
-
-    let fechaActual = new Date();
-    let anoActual = fechaActual.getFullYear();
-    let fechaInput = $("#date")
-
-    console.log("fechaActual", fechaActual)
-    console.log("anoActual", anoActual)
-
-    switch (name_month.toLowerCase()) {
-        case 'enero':
-            fechaInput.val(`${anoActual}-01-01`);
-            break;
-        case 'febrero':
-            fechaInput.val(`${anoActual}-02-01`);
-            break;
-        case 'marzo':
-            fechaInput.val(`${anoActual}-03-01`);
-            break;
-        case 'abril':
-            fechaInput.val(`${anoActual}-04-01`);
-            break;
-        case 'mayo':
-            fechaInput.val(`${anoActual}-05-01`);
-            break;
-        case 'junio':
-            fechaInput.val(`${anoActual}-06-01`);
-            break;
-        case 'julio':
-            fechaInput.val(`${anoActual}-07-01`);
-            break;
-        case 'agosto':
-            fechaInput.val(`${anoActual}-08-01`);
-            break;
-        case 'septiembre':
-            fechaInput.val(`${anoActual}-09-01`);
-            break;
-        case 'octubre':
-            fechaInput.val(`${anoActual}-10-01`);
-            break;
-        case 'noviembre':
-            fechaInput.val(`${anoActual}-11-01`);
-            break;
-        case 'diciembre':
-            fechaInput.val(`${anoActual}-12-01`);
-            break;
-        default:
-            console.error('Mes no reconocido');
-            break;
+    },
+    {
+        data: '_id',
+        render: function (data, type, row) {
+            if (type === 'display') {
+                // Botones de editar y eliminar con atributo data-id
+                return `<button class="edit-button btn btn-warning" data-id="${data}">Editar</button>
+                    <button class="delete-button btn btn-danger" data-id="${data}">Eliminar</button>`;
+            }
+            return data;
+        }
     }
 
 
+]
+
+const dt = $("#tblProducts").DataTable({
+    responsive: true,
+    language: language,
+    data: [],
+    lengthMenu: [
+        [5, 10, 15, 25, 50, 100, 1000],
+        ["5 rows", "10 rows", "15 rows", "25 rows", "50 rows", "100 rows", "1000 rows"],
+    ],
+    order: [
+        [0, "asc"],
+    ],
+    pageLength: 10,
+    columns: columns,
+    paging: true,
+
+    searching: true,
+    fixedHeader: true,
+    bAutoWidth: false,
+
+    initComplete: function () {
+        $(this.api().table().container())
+            .find("input")
+            .parent()
+            .wrap("<form>")
+            .parent()
+            .attr("autocomplete", "off");
+    },
+
+});
+const createNewProducts = (body) => {
+    HoldOn.open(HoldOptions)
+    api_conection("POST", `${apiUrl}/createOne`, body, function () {
+        HoldOn.close()
+        drawDataTable(dt)
+        $("#newProductModal").modal("hide")
+    }, function (response) {
+        notyf.error(response.message)
+        HoldOn.close()
+    })
+}
+const deleteProduct = (id_Product) => {
+    HoldOn.open(HoldOptions)
+    api_conection("DELETE", `${apiUrl}/findIdAndDelete/${id_Product}`, {}, function () {
+        HoldOn.close()
+        notyf.success("Producto eliminado")
+        drawDataTable(dt)
+    })
+}
+const drawDataTable = (data_table) => {
+    HoldOn.open(HoldOptions)
+    api_conection("POST", apiUrl + "/datatable_aggregate", {}, function (data) {
+        HoldOn.close()
+        let data_query = data.data;
+
+        data_table.clear();
+        data_table.rows.add(data_query).draw();
+    });
 }
 
-const activeMonths = (body, id) => {
+const editProduct = (id) => {
+
+    const body = {
+        name: $("#name_product_edit").val(),
+        description: $("#description_edit").val(),
+        price: $("#price_edit").val(),
+        stock: $("#stock_edit").val(),
+        image: $("#image_save_edit").val(),
+        active: $('#active_edit').prop('checked'),
+    };
+
+    console.log("body----------", body)
+
+
     api_conection("PUT", `${apiUrl}/updateById/${id}`, body, function () {
         HoldOn.close()
-        notyf.success("Mes actualizado")
+        $("#editProductModal").modal("hide")
+        notyf.success("Usuario actualizado")
+        drawDataTable(dt)
     })
 }
 
+const getDataProduct = (id_Product) => {
+    HoldOn.open(HoldOptions)
+    api_conection("GET", `${apiUrl}/getOneById/${id_Product}`, {}, function (data) {
+        HoldOn.close()
+        let ProductData = data.data
+
+        $('#name_product_edit').val(ProductData.name);
+        $('#description_edit').val(ProductData.description);
+        $('#price_edit').val(ProductData.price);
+        $('#stock_edit').val(ProductData.stock);
+        $('#image_save_edit').val(ProductData.image);
+        $('#active_edit').prop('checked', ProductData.active);
+
+
+    })
+}
+
+
 $(async function () {
-    await getMonths()
 
 
-    $("#saveDate").click(async function () {
-        let id_month = $(this).attr("id_month")
-        let body = {
-            location: $("#location").val(),
-            date: moment($("#date").val()).format(),
-            id_month,
-        }
-        await saveDate(body)
+    $(".new_product").click(async function () {
+        $("#newProductModal").modal("show")
     })
 
-    $(document.body).on("click", ".add_event_", async function () {
+    $("#saveProduct").click(async function () {
+        const fields = ["#name_product", "#description", "#image_save", "#active"];
 
-        let id_month = $(this).attr("id_month")
-        let name_month = $(this).attr("name_month")
-        await valueMonth(name_month)
-
-        $("#addEventModal").modal("show")
-        $("#month_modal_name").text(name_month)
-        $("#saveDate").attr("id_month", id_month)
-
-
-    })
-    $(document.body).on("click", ".delete_event", async function () {
-
-        let id_event = $(this).attr("id_event")
-        await deleteDate(id_event)
-    })
-
-    $(document.body).on("change", ".active_month", async function () {
-
-        let id = $(this).attr("id_month")
-
-        let body = {
-            mes: $(this).attr("name_month"),
-            active: $(this).prop("checked")
+        if (fields.some(field => !$(field).val())) {
+            notyf.open({type: "warning", message: "Llena todos los campos para continuar"});
+            return;
         }
 
-        await activeMonths(body, id)
+
+        const body = {
+            name: $("#name_product").val(),
+            description: $("#description").val(),
+            price: $("#price").val(),
+            stock: $("#stock").val(),
+            image: $("#image_save").val(),
+            active: $('#active').prop('checked'),
+        };
+
+        await createNewProducts(body);
+    });
+
+
+    $("#editProduct").click(async function () {
+        let id_product = $(this).attr("id_product");
+        editProduct(id_product)
+
     })
+    $(document.body).on("click", ".delete-button", function () {
+        let id_Product = $(this).attr("data-id");
+
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminado, no podrás recuperar este usuario.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sí, eliminarlo"
+        })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    // Usuario confirmó la eliminación, ejecutar deleteProduct
+                    deleteProduct(id_Product);
+
+                }
+            });
+    });
+
+
+    $(document.body).on("click", ".edit-button", function () {
+        let id_Product = $(this).attr("data-id");
+        $("#editProductModal").modal("show")
+        $("#editProduct").attr("id_product", id_Product)
+        getDataProduct(id_Product)
+    });
+
+
+    $('.image').change(function () {
+        const fileInput = $(this)[0];
+        const formData = new FormData();
+        const isEdit = $(this).attr("isEdit")
+
+        formData.append('image', fileInput.files[0]);
+
+        $.ajax({
+            type: 'POST',
+            url: 'api/upload/single_image',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log(data);
+                if (data.success) {
+
+                    const imagePath = data.imagePath;
+
+                    if (isEdit == "false") {
+                        $('#image_save').val(`/${imagePath}`);
+                    } else {
+                        $('#image_save_edit').val(`/${imagePath}`);
+                    }
+
+                } else {
+                    console.error('Error al subir la imagen:', data.message);
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    });
+
+
+    drawDataTable(dt)
 
 })

@@ -37,38 +37,39 @@ html(lang='es')
                                     .row#products_table
 
                             .col-12.col-md-4
-                                .row
-                                    .col-6
-                                        p No.Productos
-                                    .col-6
-                                        p#no_products 2
-                                .row
-                                    .col-6
-                                        p Envió
-                                    .col-6
-                                        p.text-success Gratis
-                                .row
-                                    .col-6
-                                        p Total a pagar
-                                    .col-6
-                                        p#total 2
-                                div
-                                    h6.text-white.fw-lighter
-                                        | Selecciona el tipo de pago
-                                    ul.list-group
-                                        li.list-group-item(style='background-color: black; padding: 10px;')
-                                            input#transferenciaRadio.form-check-input.me-1(type='radio' name='listGroupRadio' value='transferencia' checked='')
-                                            label.form-check-label(for='transferenciaRadio' style='color: white;')
-                                                i.bi.bi-bank.mx-2
-                                                | Pago por Transferencia
+                                div.my-4
+                                    .row.text-center
+                                        .col-6
+                                            p No.Productos
+                                        .col-6
+                                            p#no_products 2
+                                    .row.text-center
+                                        .col-6
+                                            p Envió
+                                        .col-6
+                                            p.text-success Gratis
+                                    .row.text-center
+                                        .col-6
+                                            p Total a pagar
+                                        .col-6
+                                            p#total 2
+                                    div.text-center
+                                        h6.text-white.fw-lighter
+                                            | Selecciona el tipo de pago
+                                        ul.list-group
+                                            li.list-group-item(style='background-color: black; padding: 10px;')
+                                                input#transferenciaRadio.form-check-input.me-1(type='radio' name='listGroupRadio' value='transferencia' checked='')
+                                                label.form-check-label(for='transferenciaRadio' style='color: white;')
+                                                    i.bi.bi-bank.mx-2
+                                                    | Pago por Transferencia
 
-                                        li.list-group-item(style='background-color: black; padding: 10px;')
-                                            input#mercadoPagoRadio.form-check-input.me-1(type='radio' name='listGroupRadio' value='mercadoPago')
-                                            label.form-check-label(for='mercadoPagoRadio' style='color: white;')
-                                                i.bi.bi-credit-card.mx-2
-                                                | Pago por Mercado Pago
-                                    button.my-5.btn.btn-success#savePayment
-                                        | Proceder al pago
+                                            li.list-group-item(style='background-color: black; padding: 10px;')
+                                                input#mercadoPagoRadio.form-check-input.me-1(type='radio' name='listGroupRadio' value='mercadoPago')
+                                                label.form-check-label(for='mercadoPagoRadio' style='color: white;')
+                                                    i.bi.bi-credit-card.mx-2
+                                                    | Pago por Mercado Pago
+                                        button.my-5.btn.btn-success#savePayment
+                                            | Proceder al pago
 
 
 

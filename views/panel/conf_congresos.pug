@@ -5,7 +5,7 @@ html(lang='es')
         include templates/styles
     body
         main
-            .page-wrapper#main-wrapper(data-layout='vertical', data-navbarbg='skin6', data-sidebartype='full', data-sidebar-position='fixed', data-header-position='fixed')
+            .page-wrapper#main-wrapper(data-layout='vertical' data-navbarbg='skin6' data-sidebartype='full' data-sidebar-position='fixed' data-header-position='fixed')
                 aside.left-sidebar
                     include templates/menu
                 .body-wrapper
@@ -19,14 +19,14 @@ html(lang='es')
 
                                 .card.w-100
                                     .card-header
-                                        //div.my-2.text-end
+                                        div.my-2.text-end
                                             // En pantallas grandes (no celular), muestra solo el texto
-                                            button.new_product.btn.btn-primary.mx-2.d-none.d-lg-inline
-                                                i.mx-2.bi.bi-shop-window
-                                                | Nuevo producto
+                                            button.new_congreso.btn.btn-primary.mx-2.d-none.d-lg-inline
+                                                i.mx-2.bi.bi-person-video3
+                                                | Nuevo congreso
                                             // En pantallas pequeñas (celulares), muestra solo el icono
-                                            button.new_user.btn.btn-primary.mx-2.d-inline.d-lg-none
-                                                i.bi.bi-person
+                                            button.new_congreso.btn.btn-primary.mx-2.d-inline.d-lg-none
+                                                i.bi.bi-person-video3
 
 
 
@@ -45,8 +45,8 @@ html(lang='es')
                                                         th Acciones
 
 
-        include modals/newProductModal
-        include modals/editProductModal
+        include modals/newCongresoModal
+        include modals/editCongresoModal
 
 
         include templates/scripts

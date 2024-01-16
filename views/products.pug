@@ -47,33 +47,42 @@ html(lang='es')
                         |
                         //a.bi-heart-fill.product-icon(href='#')
 
-                    .product-info.d-flex
-                        div
-                            h5.product-title.mb-0.text-white
-                                a.product-title-link.text-white(href='')#name_product_
-                            p.product-p#description_product_
-                        small.product-price.text-muted.ms-auto#price_product_
 
-                    div.p-0.m-0
-                        .row
-                            .col-4
-                                button#remove_product_.remove_product.w-100.btn.custom-btn_store.product-p(type='button')
-                                    i.mx-2.bi.bi-dash-circle(style="font-size")
+                    div 
+                        .row 
+                            
+                            .col-12
+                                div.p-0.m-0
+                                    .row
+                                        .col-4
+                                            button#remove_product_.remove_product.w-100.btn.custom-btn_store.product-p(type='button')
+                                                i.mx-2.bi.bi-dash-circle(style="font-size")
 
-                            .col-4
-                                input#quantity_input_.form-control.w-100.text-center.quantity_input(type='number', min='1', value='1', style='width: 50px; margin-right: 10px; color: white; background-color: black;', oninput='this.value = Math.max(1, this.value)')
+                                        .col-4
+                                            input#quantity_input_.form-control.w-100.text-center.quantity_input(type='number' min='1' value='1' style='width: 50px; margin-right: 10px; color: white; background-color: black;' oninput='this.value = Math.max(1, this.value)')
 
-                            .col-4
-                                button#add_product_.add_product.w-100.btn.custom-btn_store.product-p(type='button')
-                                    i.mx-2.bi.bi-plus-circle
+                                        .col-4
+                                            button#add_product_.add_product.w-100.btn.custom-btn_store.product-p(type='button')
+                                                i.mx-2.bi.bi-plus-circle
 
-                    div.p-0.m-0
-                        button#add_cart_.my-2.add_cart.w-100.btn.custom-btn_store.product-p
-                            i.mx-2.bi.bi-cart-plus
-                            | Agregar al carrito
-                        button#shop_now_.shop_now.w-100.btn.custom-btn_store.product-p
-                            i.mx-2.bi.bi-cart-check-fill
-                            | Comprar ahora
+                                div.p-0.m-0
+                                    button#add_cart_.my-2.add_cart.w-100.btn.custom-btn_store.product-p
+                                        i.mx-2.bi.bi-cart-plus
+                                        | Agregar al carrito
+                                    button#shop_now_.shop_now.w-100.btn.custom-btn_store.product-p
+                                        i.mx-2.bi.bi-cart-check-fill
+                                        | Comprar ahora
+                            .col-12
+                                .product-info.d-flex
+                                    div
+                                        h6.product-title.mb-0.text-white
+                                            a.product-title-link.text-white(href='')#name_product_
+                                        p.product-p#description_product_
+                                    span.product-price.text-muted.ms-auto#price_product_
+
+
+
+
 
 
 
