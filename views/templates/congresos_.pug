@@ -1,0 +1,25 @@
+section.section-padding
+    .row
+        .col-12.text-center
+            h2.text-white.mb-5
+                | Próximos
+                span.text-danger.mx-1 Congresos
+
+    .container
+        .row#congresos
+
+
+
+
+div#template_congresos_.col-lg-4.col-md-6.col-12.my-3(style="display:none;")
+
+    .card.d-flex.flex-column(style="height: 100%;background:#000;")
+        .card-body(style="background:#000;")
+            h5.my-3.display-6.text-center.card-title.text-danger#name_congreso_
+            .row#date_congreso_
+            div.my-2#btn_enlace_congreso_ 
+                button#btnBoletos_(type="button").btn.custom-btn
+            div.my-2#lugar_congreso_ 
+                p.fw-bolder#location_congreso_ 
+            div.my-2#portada_congreso_
+                img.img-fluid#im_congreso_(style="height:358px;max-height:358px;border-radius:9px;")
