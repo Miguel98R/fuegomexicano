@@ -40,7 +40,7 @@ const getProducts = async () => {
             element.find('#stock_aviable_' + item._id).text(stock).addClass(color);
             element.find('#name_product_' + item._id).text(item.name);
             element.find('#description_product_' + item._id).text(item.description);
-            element.find('#price_product_' + item._id).text("$" + item.price).attr("price", item.price);
+            element.find('#price_product_' + item._id).text("$ " + item.price + " MXN").attr("price", item.price);
             element.find('#quantity_input_' + item._id).attr("min", 1).attr("max", item.stock);
 
             let isStockAvailable = item.stock > 0;

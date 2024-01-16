@@ -36,7 +36,7 @@ html(lang='es')
                     .row#grid_products
 
 
-            div#template_products_.col-md-6.col-12.mb-3(style="display:none;background:#000;")
+            div#template_products_.col-md-4.col-12.mb-3(style="display:none;background:#000;")
 
                 .product-thumb(style="border-radius:10px;background:#000;")
                     div.text-center.py-5
@@ -50,7 +50,7 @@ html(lang='es')
 
                     div 
                         .row 
-                            
+
                             .col-12
                                 div.p-0.m-0
                                     .row
@@ -73,12 +73,16 @@ html(lang='es')
                                         i.mx-2.bi.bi-cart-check-fill
                                         | Comprar ahora
                             .col-12
-                                .product-info.d-flex
+                                .product-info.d-flex.text-center
                                     div
-                                        h6.product-title.mb-0.text-white
+                                        h6.product-title.mb-1.text-white
+
                                             a.product-title-link.text-white(href='')#name_product_
+                                        p
+                                            span.product-price.text-muted.ms-auto.my-3#price_product_
+
                                         p.product-p#description_product_
-                                    span.product-price.text-muted.ms-auto#price_product_
+
 
 
 
