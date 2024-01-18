@@ -5,30 +5,57 @@ const columns = [
     {
         data: 'name',
         render: function (data, type, row) {
-            let html = `<div class="text-center"><h6>${data}</h6>
-                    <div>
-                        <img class="img-fluid" style="max-height: 130px;border-radius: 9px;"  src="${row.image}">
-                    </div>
-                </div>`
+            let html = `<div class="text-center"><h6>${data}</h6></div>`
 
             return html
         }
 
     },
     {
-        data: 'description',
+        data: 'date_initial',
+        render: function (data, type, row) {
 
-    }, {
-        data: 'price',
+            console.log("row",row)
+
+            let date_initial = moment(data).format('dddd, MMMM Do YYYY');
+            let date_finish = moment(row.date_finish).format('dddd, MMMM Do YYYY');
+
+            let html = `
+                    <div>
+                        <h6 class="fw-bolder">Fecha inicial: <span class="fw-normal">${date_initial}</span></h6>
+                        <h6 class="fw-bolder">Fecha Final: <span class="fw-normal">${date_finish}</span></h6>
+                        <h6 class="fw-bolder">Hora inicial: <span class="fw-normal">${row.hour_initial}</span></h6>
+                    </div>`
+
+
+            return html
+
+        }
+    },
+    {
+        data: 'location',
 
     },
     {
-        data: 'stock',
+        data: 'link_boletos',
+
+    },
+    {
+        data: 'image',
+        render: function (data, type, row) {
+            let html = `
+                    <div>
+                        <img class="img-fluid" style="max-height: 350px;border-radius: 9px;"  src="${row.image}">
+                    </div>`
+
+
+            return html
+        }
 
     },
 
     {
-        data: 'active',
+        data: 'activo',
         render: function (data, type, row) {
             let status = ''
             if (type === 'display') {
@@ -59,7 +86,7 @@ const columns = [
 
 ]
 
-const dt = $("#tblProducts").DataTable({
+const dt = $("#tbl_congresos").DataTable({
     responsive: true,
     language: language,
     data: [],
@@ -88,28 +115,31 @@ const dt = $("#tblProducts").DataTable({
     },
 
 });
-const createNewProducts = (body) => {
+
+const createNewCongresos = (body) => {
     HoldOn.open(HoldOptions)
     api_conection("POST", `${apiUrl}/createOne`, body, function () {
         HoldOn.close()
         drawDataTable(dt)
-        $("#newProductModal").modal("hide")
+        $("#newCongresoModal").modal("hide")
     }, function (response) {
         notyf.error(response.message)
         HoldOn.close()
     })
 }
-const deleteProduct = (id_Product) => {
+
+const deleteCongreso = (id_congreso) => {
     HoldOn.open(HoldOptions)
-    api_conection("DELETE", `${apiUrl}/findIdAndDelete/${id_Product}`, {}, function () {
+    api_conection("DELETE", `${apiUrl}/findIdAndDelete/${id_congreso}`, {}, function () {
         HoldOn.close()
-        notyf.success("Producto eliminado")
+        notyf.success("Congreso eliminado")
         drawDataTable(dt)
     })
 }
+
 const drawDataTable = (data_table) => {
     HoldOn.open(HoldOptions)
-    api_conection("POST", apiUrl + "/datatable_aggregate", {}, function (data) {
+    api_conection("POST", `${apiUrl}/datatable_aggregate`, {}, function (data) {
         HoldOn.close()
         let data_query = data.data;
 
@@ -118,40 +148,50 @@ const drawDataTable = (data_table) => {
     });
 }
 
-const editProduct = (id) => {
+const editCongreso = (id) => {
 
     const body = {
-        name: $("#name_product_edit").val(),
-        description: $("#description_edit").val(),
-        price: $("#price_edit").val(),
-        stock: $("#stock_edit").val(),
+        name: $("#name_Congreso_edit").val(),
+        location: $("#location_edit").val(),
         image: $("#image_save_edit").val(),
+        date_initial: moment($("#date_initial_edit").val()).format(),
+        date_finish: moment($("#date_finish_edit").val()).format(),
+        hour_initial: $("#hour_initial_edit").val(),
+        link_boletos: $("#link_boletos_edit").val(),
         active: $('#active_edit').prop('checked'),
     };
-
-    console.log("body----------", body)
 
 
     api_conection("PUT", `${apiUrl}/updateById/${id}`, body, function () {
         HoldOn.close()
-        $("#editProductModal").modal("hide")
-        notyf.success("Usuario actualizado")
+        $("#editCongresoModal").modal("hide")
+        notyf.success("Congreso actualizado")
         drawDataTable(dt)
     })
 }
 
-const getDataProduct = (id_Product) => {
+const getDataCongreso = (id_congreso) => {
     HoldOn.open(HoldOptions)
-    api_conection("GET", `${apiUrl}/getOneById/${id_Product}`, {}, function (data) {
+    api_conection("GET", `${apiUrl}/getOneById/${id_congreso}`, {}, function (data) {
         HoldOn.close()
-        let ProductData = data.data
+        let CongresoData = data.data
 
-        $('#name_product_edit').val(ProductData.name);
-        $('#description_edit').val(ProductData.description);
-        $('#price_edit').val(ProductData.price);
-        $('#stock_edit').val(ProductData.stock);
-        $('#image_save_edit').val(ProductData.image);
-        $('#active_edit').prop('checked', ProductData.active);
+        console.log("CongresoData", CongresoData)
+
+        $('#name_Congreso_edit').val(CongresoData.name);
+        $('#location_edit').val(CongresoData.location);
+
+        let formattedDateInitial = moment(CongresoData.date_initial).format('YYYY-MM-DD');
+        let formattedDateFinish = moment(CongresoData.date_finish).format('YYYY-MM-DD');
+
+        $('#date_initial_edit').val(formattedDateInitial);
+        $('#date_finish_edit').val(formattedDateFinish);
+
+        $("#hour_initial_edit").val(CongresoData.hour_initial);
+
+        $('#link_boletos_edit').val(CongresoData.link_boletos);
+        $('#image_save_edit').val(CongresoData.image);
+        $('#active_edit').prop('checked', CongresoData.activo);
 
 
     })
@@ -161,64 +201,65 @@ const getDataProduct = (id_Product) => {
 $(async function () {
 
 
-    $(".new_product").click(async function () {
-        $("#newProductModal").modal("show")
+    $(".new_congreso").click(async function () {
+        $("#newCongresoModal").modal("show")
     })
 
-    $("#saveProduct").click(async function () {
-        const fields = ["#name_product", "#description", "#image_save", "#active"];
+    $("#saveCongreso").click(async function () {
+        const fields = ["#name_Congreso", "#location", "#image_save", "#date_initial", "#date_finish", "#link_boletos", "#active"];
 
         if (fields.some(field => !$(field).val())) {
-            notyf.open({type: "warning", message: "Llena todos los campos para continuar"});
+            notyf.open({ type: "warning", message: "Llena todos los campos para continuar" });
             return;
         }
 
 
         const body = {
-            name: $("#name_product").val(),
-            description: $("#description").val(),
-            price: $("#price").val(),
-            stock: $("#stock").val(),
+            name: $("#name_Congreso").val(),
+            date_initial: moment($("#date_initial").val()).format(),
+            date_finish: moment($("#date_finish").val()).format(),
+            hour_initial: $("#hour_initial").val(),
+            location: $("#location").val(),
+            link_boletos: $("#link_boletos").val(),
             image: $("#image_save").val(),
-            active: $('#active').prop('checked'),
+            activo: $('#active').prop('checked'),
         };
 
-        await createNewProducts(body);
+        await createNewCongresos(body);
     });
 
 
-    $("#editProduct").click(async function () {
-        let id_product = $(this).attr("id_product");
-        editProduct(id_product)
+    $("#editCongreso").click(async function () {
+        let id_congreso = $(this).attr("id_congreso");
+        editCongreso(id_congreso)
 
     })
     $(document.body).on("click", ".delete-button", function () {
-        let id_Product = $(this).attr("data-id");
+        let id_congreso = $(this).attr("data-id");
 
         Swal.fire({
             title: "¿Estás seguro?",
-            text: "Una vez eliminado, no podrás recuperar este usuario.",
+            text: "Una vez eliminado, no podrás recuperar este congreso.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Sí, eliminarlo"
-        })
-            .then((result) => {
-                if (result.isConfirmed) {
-                    // Usuario confirmó la eliminación, ejecutar deleteProduct
-                    deleteProduct(id_Product);
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Usuario confirmó la eliminación, ejecutar deleteCongreso
+                deleteCongreso(id_congreso);
 
-                }
-            });
+            }
+        });
     });
 
 
     $(document.body).on("click", ".edit-button", function () {
-        let id_Product = $(this).attr("data-id");
-        $("#editProductModal").modal("show")
-        $("#editProduct").attr("id_product", id_Product)
-        getDataProduct(id_Product)
+        let id_congreso = $(this).attr("data-id");
+        $("#editCongresoModal").modal("show")
+        $("#editCongreso").attr("id_congreso", id_congreso)
+        getDataCongreso(id_congreso)
     });
 
 
@@ -231,7 +272,7 @@ $(async function () {
 
         $.ajax({
             type: 'POST',
-            url: 'api/upload/single_image',
+            url: '/api/upload/single_image',
             data: formData,
             contentType: false,
             processData: false,

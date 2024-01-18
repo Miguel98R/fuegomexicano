@@ -11,15 +11,32 @@ section.section-padding
 
 
 
-div#template_congresos_.col-lg-4.col-md-6.col-12.my-3(style="display:none;")
+div#template_congresos_.col-md-6.col-12.my-3(style="display:none;")
 
-    .card.d-flex.flex-column(style="height: 100%;background:#000;")
-        .card-body(style="background:#000;")
-            h5.my-3.display-6.text-center.card-title.text-danger#name_congreso_
-            .row#date_congreso_
-            div.my-2#btn_enlace_congreso_ 
-                button#btnBoletos_(type="button").btn.custom-btn
-            div.my-2#lugar_congreso_ 
-                p.fw-bolder#location_congreso_ 
-            div.my-2#portada_congreso_
-                img.img-fluid#im_congreso_(style="height:358px;max-height:358px;border-radius:9px;")
+    .card.text-white(style="background:#000;")
+        a#link_img_(target="_blank")
+            img#img_congreso_.card-img-top(style="border-radius: 10px;")
+
+        .card-body
+            div.text-center
+                h3#name_congreso_.card-title.text-danger Tributo al creador
+                .text-light
+                    .icon-text
+                        span.icon
+                            i.bi-calendar-fill
+                        |
+                        span.mx-2#dates_congreso_
+                    .icon-text
+                        span.icon
+                            i.bi-clock-fill
+                        |
+                        span.mx-2#hour_congreso_
+                    .icon-text.fw-lighter
+                        span.icon
+                            i.bi-geo-fill
+                        |
+                        span.mx-2#location_congreso_
+                div.my-3
+                    a#btn_congreso_.custom-btn.btn(target="_blank") Obtener entradas
+
+

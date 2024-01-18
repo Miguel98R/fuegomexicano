@@ -8,7 +8,18 @@ const congresoSchema = new Schema({
         type: String,
         required: false,
     },
-    dates: Array,
+    date_initial: {
+        type: Date,
+        required: false,
+    },
+    date_finish: {
+        type: Date,
+        required: false,
+    },
+    hour_initial: {
+        type: String,
+        required: false,
+    },
     location: {
         type: String,
         required: false,
@@ -19,6 +30,10 @@ const congresoSchema = new Schema({
     },
     image: {
         type: String,
+        required: false,
+    },
+    activo: {
+        type: Boolean,
         required: false,
     },
 

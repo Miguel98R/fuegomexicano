@@ -135,7 +135,7 @@ const editProduct = (id) => {
     api_conection("PUT", `${apiUrl}/updateById/${id}`, body, function () {
         HoldOn.close()
         $("#editProductModal").modal("hide")
-        notyf.success("Usuario actualizado")
+        notyf.success("Producto actualizado")
         drawDataTable(dt)
     })
 }

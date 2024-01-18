@@ -3,7 +3,6 @@ let ms = require('../helpers/apiato.helper')
 let congresosModel = require('../models/congresos.model')
 
 
-
 //APIATO CONFIGURE
 let validationObject = {}
 let populationObject = false
@@ -28,4 +27,22 @@ module.exports = {
 
     datatable_aggregate: ms.datatable_aggregate(congresosModel, aggregate_pipeline_dt, ''),
     aggregate: ms.aggregate(congresosModel, aggregate_pipeline, options),
+    datatable_aggregate: async (req, res) => {
+
+
+        try {
+
+            let data = await congresosModel.find().select('name location date_initial date_finish hour_initial link_boletos image activo')
+            res.status(200).json({
+                success: true,
+                data: data
+            })
+        } catch (e) {
+            console.error(e)
+            res.status(500).json({
+                success: false,
+                error: e
+            })
+        }
+    },
 }
