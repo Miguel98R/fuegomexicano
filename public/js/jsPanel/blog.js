@@ -263,7 +263,7 @@ $(async function () {
 
         $.ajax({
             type: 'POST',
-            url: 'api/upload/single_image',
+            url: '/api/upload/single_image',
             data: formData,
             contentType: false,
             processData: false,
