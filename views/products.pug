@@ -47,9 +47,20 @@ html(lang='es')
                         |
                         //a.bi-heart-fill.product-icon(href='#')
 
+                    div#select_talla_.text-center.my-2
+                        p Tallas
+                        p(style="font-size:15px;") Selecciona la talla de tu preferencia
+                        .btn-group(role="group" aria-label="Tallas")
+                            input.btn-check(type="radio" id="talla_CH_"  value="CH"  autocomplete="off")
+                            label.btn.btn-outline-primary(for="talla_CH_") CH
 
-                    div 
-                        .row 
+                            input.btn-check(type="radio" id="talla_M_" value="M"   autocomplete="off")
+                            label.btn.btn-outline-primary(for="talla_M_") M
+
+                            input.btn-check(type="radio" id="talla_G_"  value="G"   autocomplete="off")
+                            label.btn.btn-outline-primary(for="talla_G_") G
+                    div
+                        .row
 
                             .col-12
                                 div.p-0.m-0

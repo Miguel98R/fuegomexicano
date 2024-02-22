@@ -11,6 +11,7 @@ const drawProductsCheck = (id_product) => {
     plantilla.find('#quantity_').attr('id', 'quantity_' + id_product).attr("id_product", id_product)
     plantilla.find('#total_product_').attr('id', 'total_product_' + id_product)
     plantilla.find('#delete-button_').attr('id', 'delete-button_' + id_product).attr("id_product", id_product)
+    plantilla.find('#talla_').attr('id', 'talla_' + id_product).attr("id_product", id_product)
 
     return plantilla
 }
@@ -77,6 +78,7 @@ const drawTableProducts = async (cart) => {
         element.find('#name_product_' + item.id_product).text(item.name)
         element.find('#price_unit_' + item.id_product).text(item.price + " c/u")
         element.find('#quantity_' + item.id_product).val(item.quantity).attr("min", 1)
+        element.find('#talla_' + item.id_product).text(item.selectedTalla != '' ? `Talla ${item.selectedTalla}` : '')
 
         let total_product = Number(item.price) * Number(item.quantity)
 

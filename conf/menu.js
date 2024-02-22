@@ -1,5 +1,6 @@
 let menu = [
     /*{href: '/conf_web', icon: 'bi-gear', label: 'Configuración Web', access: ['admin']},*/
+    {href: './conf_panel', icon: 'bi-gear-fill', label: 'Configuración', access: ['admin']},
     {href: './conf_users', icon: 'bi-people-fill', label: 'Usuarios', access: ['admin']},
     {href: '/conf_blog', icon: 'bi-book', label: 'Blog', access: ['admin']},
     {href: '/conf_invitations', icon: 'bi-envelope', label: 'Invitaciones', access: ['admin']},

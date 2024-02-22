@@ -19,6 +19,10 @@ const saleDetailsModel = new Schema({
         type: Number,
         required: false
     },
+    talla: {
+        type: String,
+        required: false
+    },
 
     priceProduct: {
         type: Number,

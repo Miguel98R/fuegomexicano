@@ -13,6 +13,7 @@ const payment = new Payment(client);
 const preference = new Preference(client);
 let uuid = require('uuid')
 const moment = require('moment')
+const confModel = require("../models/configurations.model");
 
 module.exports = {
     createOrder: async (req, res) => {
@@ -147,6 +148,7 @@ module.exports = {
                     cant: Number(item.quantity),
                     priceProduct: Number(item.price),
                     total_detalle: Number(item.price) * Number(item.quantity),
+                    talla: item.selectedTalla
 
                 })
 
@@ -246,6 +248,26 @@ module.exports = {
             let mail = await template.generic(image_banner, 'Notificación de pago', 'Finaliza tu pago', `Hola ${fullName}  es un recordatorio para finalizar tu compra por la cantidad de $ ${total_sale}, dale click al siguiente boton para finalizarla`, URI, 'Click Aqui')
 
             await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', data_user.email, 'Finaliza tu pago.', mail)
+
+
+            let emailNotificationConfig = await confModel.findOne({ description: 'email_notification' }).select('value');
+            let URI_panel = fullUrl + '/fgPanel'
+
+            let emailNotification = await template.generic(
+                image_banner,
+                'Nueva compra',
+                'Notificación de compra',
+                `Hola. Se ha generado una nueva compra realizada por el usuario ${fullName}. Haz clic en el siguiente botón para acceder al panel y gestionar la venta.`,
+                URI_panel,
+                'Ir al Panel de Ventas'
+            );
+
+            await sendMail(
+                '"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>',
+                emailNotificationConfig.value,
+                'Notificación de nueva compra',
+                emailNotification
+            );
 
 
         } catch (e) {

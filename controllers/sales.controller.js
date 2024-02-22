@@ -5,6 +5,7 @@ let usersModel = require('../models/users.model')
 let usersAddresModel = require('../models/userAddress.model')
 let usersShoppingModel = require('../models/userShipping.model')
 let productModel = require('../models/products.model')
+let confModel = require('../models/configurations.model')
 
 const {sendMail, template} = require('./../helpers/mail.helper')
 const mongoose = require("mongoose");
@@ -122,6 +123,7 @@ module.exports = {
                     searchProduct.active = false
                 }
 
+
                 let newDetalle = await salesDetailsModel.create({
 
                     product: item.id_product,
@@ -129,6 +131,7 @@ module.exports = {
                     cant: Number(item.quantity),
                     priceProduct: Number(item.price),
                     total_detalle: Number(item.price) * Number(item.quantity),
+                    talla: item.selectedTalla
 
                 })
 
@@ -167,14 +170,33 @@ module.exports = {
             })
 
 
+            // ------------------------------- ENVIO DE EMAILS PARA USUARIO Y ADMINISTRADOOR
 
             let fullName = searchShopping.name + ' ' + searchShopping.lastName + ' '
-
             let image_banner = 'https://www.fuegomexicano.com/public/images/fuego/logo_.png'
 
             let mail = await template.generic(image_banner, 'Recordatorio de pago', 'Finaliza tu pago', `Hola ${fullName}  es un recordatorio para finalizar tu compra por la cantidad de $ ${total_sale}, dale click al siguiente boton para finalizarla`, URI, 'Click Aqui')
-
             await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', data_user.email, 'Finaliza tu pago.', mail)
+
+
+            let emailNotificationConfig = await confModel.findOne({ description: 'email_notification' }).select('value');
+            let URI_panel = fullUrl + '/fgPanel'
+
+            let emailNotification = await template.generic(
+                image_banner,
+                'Nueva compra',
+                'Notificación de compra',
+                `Hola. Se ha generado una nueva compra realizada por el usuario ${fullName}. Haz clic en el siguiente botón para acceder al panel y gestionar la venta.`,
+                URI_panel,
+                'Ir al Panel de Ventas'
+            );
+
+            await sendMail(
+                '"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>',
+                emailNotificationConfig.value,
+                'Notificación de nueva compra',
+                emailNotification
+            );
 
 
 
@@ -216,7 +238,7 @@ module.exports = {
 
             let image_banner = 'https://www.fuegomexicano.com/public/images/fuego/logo_.png'
 
-            let mail = await template.generic(image_banner, 'Notificación de compra', 'Hemos recibido tu comprobante de pago', `Hola ${fullName}, hemos recibido tu comprobante de pago. El equipo de Fuego Mexicano revisará la información para asegurarse de que todo esté en orden. En caso de que haya algún problema, nos pondremos en contacto contigo.`, URI, 'Ir a la Página')
+            let mail = await template.generic(image_banner, 'Notificación de compra', 'Hemos recibido tu comprobante de pago', `Hola ${fullName}, hemos recibido tu comprobante de pago. El equipo de Fuego Mexicano revisará la información para asegurarse de que todo esté en orden. En caso de que haya algún problema, nos pondremos en contacto contigo. Recuerda que realizamos los envios los dias viernes antes de las 12 PM`, URI, 'Ir a la Página')
 
             await sendMail('"Fuego Mexicano - Héctor Andrade" <noreply@fuegomexicano.com>', searchConfUser.email, 'Notificación de Recepción de Comprobante de Pago.', mail)
 
@@ -378,6 +400,7 @@ module.exports = {
                                 cant: '$salesDetails.cant',
                                 priceProduct: '$salesDetails.priceProduct',
                                 total_detalle: '$salesDetails.total_detalle',
+                                talla: '$salesDetails.talla',
 
                             }
                         }

@@ -10,6 +10,7 @@ const drawProductsCheck = (id_product) => {
     plantilla.find('#quantity_').attr('id', 'quantity_' + id_product).attr("id_product", id_product)
     plantilla.find('#total_product_').attr('id', 'total_product_' + id_product)
     plantilla.find('#delete-button_').attr('id', 'delete-button_' + id_product).attr("id_product", id_product)
+    plantilla.find('#talla_').attr('id', 'talla_' + id_product).attr("id_product", id_product)
 
     return plantilla
 }
@@ -42,6 +43,8 @@ let getDataSale = async (id) => {
 
                     element.find('#quantity_' + product._id).text(details.cant)
                     element.find('#total_product_' + product._id).text(details.total_detalle)
+                    element.find('#talla_' + product._id).text(details.talla != '' ? `Talla ${details.talla}` : '')
+
 
                     $('#products_table').append(element)
                 }

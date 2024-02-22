@@ -14,7 +14,14 @@ const drawProducts = (id_product) => {
     plantilla.find('#add_product_').attr('id', 'add_product_' + id_product).attr("id_product", id_product)
     plantilla.find('#quantity_input_').attr('id', 'quantity_input_' + id_product).attr("id_product", id_product)
     plantilla.find('#remove_product_').attr('id', 'remove_product_' + id_product).attr("id_product", id_product)
+    plantilla.find('#select_talla_').attr('id', 'select_talla_' + id_product).attr("id_product", id_product)
+    plantilla.find('#talla_CH_').attr('id', 'talla_CH_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla')
+    plantilla.find('#talla_M_').attr('id', 'talla_M_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla')
+    plantilla.find('#talla_G_').attr('id', 'talla_G_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla')
 
+    plantilla.find('label[for="talla_CH_"]').attr('for', 'talla_CH_' + id_product);
+    plantilla.find('label[for="talla_M_"]').attr('for', 'talla_M_' + id_product);
+    plantilla.find('label[for="talla_G_"]').attr('for', 'talla_G_' + id_product);
 
     return plantilla
 }
@@ -36,6 +43,13 @@ const getProducts = async () => {
             let color = item.stock > 0 ? "text-success" : "text-danger";
 
             let element = drawProducts(item._id);
+
+            if(item.name.includes("Playera")){
+                element.find('#select_talla_' + item._id).show();
+            }else{
+                element.find('#select_talla_' + item._id).hide();
+            }
+
             element.find('#image_product_' + item._id).attr('src', item.image);
             element.find('#stock_aviable_' + item._id).text(stock).addClass(color);
             element.find('#name_product_' + item._id).text(item.name);
@@ -53,11 +67,35 @@ const getProducts = async () => {
     })
 }
 
+const updateCartStorage = async (id) => {
+   let selectedTalla = $('input[name="talla_' + id + '"]:checked').val();
+   let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+
+    let existingProduct = cart.find(item => item.id_product === id);
+
+    if (existingProduct) {
+        existingProduct.selectedTalla = selectedTalla;
+    } else {
+
+        cart.push(product);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    updateNumProducts();
+
+}
 const createCartStorage = async (id) => {
     let productName = $("#name_product_" + id).text();
     let productPrice = Number($("#price_product_" + id).attr('price'))
     let quantity = Number($("#quantity_input_" + id).val())
     let image = $("#image_product_" + id).attr('src');
+    let selectedTalla = ''
+
+    if(productName.includes('Playera')){
+        selectedTalla = $('input[name="talla_' + id + '"]:checked').val();
+    }
 
     var product = {
         id_product: id,
@@ -65,6 +103,7 @@ const createCartStorage = async (id) => {
         price: productPrice,
         quantity,
         image,
+        selectedTalla
     };
 
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -75,6 +114,7 @@ const createCartStorage = async (id) => {
     if (existingProduct) {
 
         existingProduct.quantity = quantity;
+        existingProduct.selectedTalla = selectedTalla;
     } else {
 
         cart.push(product);
@@ -82,7 +122,7 @@ const createCartStorage = async (id) => {
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
-    notyf.success("Producto agregado al carrito");
+    notyf.success("Producto agregado");
 
     updateNumProducts();
 };
@@ -141,6 +181,11 @@ $(async function () {
     $(".add_cart").click(async function () {
         let id_product = $(this).attr("id_product")
         await createCartStorage(id_product)
+    })
+
+    $(".changeTalla").click(async function () {
+        let id_product = $(this).attr("id_product")
+        await updateCartStorage(id_product)
     })
 
     $(".shop_now").click(async function () {
