@@ -55,6 +55,24 @@ module.exports = {
             return html
 
         },
+        invitation_repsonse: async function (image_banner, name_people, name_event) {
+            if (!image_banner || image_banner.trim() == '') {
+                image_banner = 'https://www.fuegomexicano.com/public/images/fuego/logo_.png'
+            }
+
+            let html = fs.readFileSync(path.join(__dirname, 'mailTemplates', 'response_invitations.html'), {
+                encoding: 'utf8',
+                flag: 'r'
+            });
+            html = html.replaceAll('{{image_banner}}', image_banner)
+            html = html.replaceAll('{{image_banner}}', image_banner)
+
+            html = html.replaceAll('{{name_people}}', name_people)
+            html = html.replaceAll('{{name_event}}', name_event)
+
+            return html
+
+        },
 
 
     }

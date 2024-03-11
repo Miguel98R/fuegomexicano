@@ -2,7 +2,7 @@ const apiUrl = "/api/invitations"
 
 const sentInvitation = async (body) => {
 
-    await api_conection("POST", apiUrl + "/createOne", body, function () {
+    await api_conection("POST", apiUrl + "/create_invitation", body, function () {
         Swal.fire({
             icon: 'success',
             title: 'Invitación enviada',
@@ -28,10 +28,31 @@ function validarCamposLlenos() {
     return true;
 }
 
+const valueMonth = (number_month) => {
+    let mes = ''
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+
+    if (number_month >= 1 && number_month <= 12) {
+        mes = months[number_month - 1]
+    } else {
+        console.error('Mes no reconocido');
+    }
+
+    return mes
+}
+
 $(async function () {
+    $.fn.datepicker.defaults.language = "es";
+    $('#fecha').datepicker()
+
+    const fechaActual = moment();
+    let mesActual = await  valueMonth(fechaActual.month() + 1);
+    $("#month_actual").text(mesActual);
+    let añoActual = fechaActual.year();
+    $("#year_actual").text(añoActual);
 
 
-    $("#sendInvitacion").click(function () {
+    $("#sendInvitacion").click( async function () {
         if (validarCamposLlenos()) {
             // Todos los campos están llenos, puedes continuar con la lógica de tu aplicación
 
@@ -43,10 +64,12 @@ $(async function () {
                 celular: $("#contacto").val(),
                 fechaEvento: moment($("#fecha").val()).format(),
                 numeroPersonas: $("#cantidad").val(),
+                nombre_evento: $("#nombre_evento").val(),
+                lugar_evento: $("#lugar_evento").val(),
                 descripcionEvento: $("#descripcion").val(),
             };
 
-            sentInvitation(body)
+            await sentInvitation(body)
 
             console.log(body);
         } else {

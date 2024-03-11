@@ -46,7 +46,7 @@ html(lang='es')
                                             input.form-control(type='text', id='ministerio', name='ministerio' style='background-color: black; color: white;')
 
                                         .form-group.my-2(style='background-color: black; padding: 10px;')
-                                            label.text-danger.my-1(for='email' style='color: white;') Email :
+                                            label.text-danger.my-1(for='email' style='color: white;') Email de contacto :
                                             input.form-control(type='email', id='email', name='email', required style='background-color: black; color: white;')
 
                                         .form-group.my-2(style='background-color: black; padding: 10px;')
@@ -55,8 +55,16 @@ html(lang='es')
 
                                     .col-12.col-md-6
                                         .form-group.my-2(style='background-color: black; padding: 10px;')
+                                            label.text-danger.my-1(for='nombre_evento' style='color: white;') Nombre del evento :
+                                            input.form-control(type='text', id='nombre_evento', name='nombre_evento', required style='background-color: black; color: white;')
+
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
+                                                label.text-danger.my-1(for='lugar_evento' style='color: white;') Lugar del evento :
+                                                input.form-control(type='text', id='lugar_evento', name='lugar_evento', required style='background-color: black; color: white;')
+
+                                        .form-group.my-2(style='background-color: black; padding: 10px;')
                                             label.text-danger.my-1(for='fecha' style='color: white;') Fecha del evento :
-                                            input.form-control(type='date', id='fecha', name='fecha', required style='background-color: black; color: white;')
+                                            input.form-control(type='text', id='fecha', name='fecha', required style='background-color: black; color: white;')
 
                                         .form-group.my-2(style='background-color: black; padding: 10px;')
                                             label.text-danger.my-1(for='cantidad' style='color: white;') Numero de personas esperadas :
@@ -69,6 +77,17 @@ html(lang='es')
                                         button.btn.custom-btn.w-100.my-3#sendInvitacion
                                             i.mx-2.bi.bi-send
                                             | Enviar invitación
+
+
+
+
+            section
+                .container.text-center
+                    .display-4.text-danger.my-3 Fechas
+                        span.text-white Apartadas
+                    .display-6.text-danger.my-3
+                        span#month_actual
+                        span.text-white#year_actual
 
 
 

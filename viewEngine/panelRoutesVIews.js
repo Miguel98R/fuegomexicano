@@ -19,7 +19,7 @@ router.get("/fgPanel", (req, res) => {
 
     if (req?.session?.user) {
         let menu = req?.session?.menu
-        res.render("panel/index", {
+        res.render("panel/conf_panel", {
             title: 'Fuego Mexicano | Control Panel',
             url_js_files,
             menu
@@ -54,9 +54,9 @@ router.get("/panel", validateSession, (req, res) => {
 
     if (req?.session?.user && req?.session?.user.usersTypes == "admin" && req?.session?.user.active) {
         let menu = req?.session?.menu
-        res.render("panel/index", {
+        res.render("panel/conf_panel", {
             title: 'Fuego Mexicano | Control Panel',
-            conf_page: "Dashboard",
+            conf_page: "Configuración",
             url_js_files,
             menu
 
@@ -94,7 +94,7 @@ router.get("/conf_panel", validateSession, (req, res) => {
 
     res.render("panel/conf_panel", {
         title: 'Fuego Mexicano | Control Panel',
-        conf_page: "Variables de configuracíon",
+        conf_page: "Configuración",
         url_js_files,
         menu
 

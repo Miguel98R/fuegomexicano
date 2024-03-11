@@ -251,7 +251,7 @@ module.exports = {
 
 
             let emailNotificationConfig = await confModel.findOne({ description: 'email_notification' }).select('value');
-            let URI_panel = fullUrl + '/fgPanel'
+            let URI_panel = urlHost + '/fgPanel'
 
             let emailNotification = await template.generic(
                 image_banner,

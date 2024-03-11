@@ -6,6 +6,21 @@ moment.locale('es', {
     weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
 });
 
+;(function ($) {
+    $.fn.datepicker.dates['es'] = {
+        days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+        daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+        daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+        months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+        monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+        today: "Hoy",
+        monthsTitle: "Meses",
+        clear: "Borrar",
+        weekStart: 0,
+        format: "yyyy-mm-dd"
+    };
+}(jQuery));
+
 /*
 ;(function ($) {
     $.fn.datepicker.dates['es'] = {
@@ -126,6 +141,8 @@ const updateNumProducts = () => {
 // Llama a la función al cargar la página
 $(function () {
     updateNumProducts();
+
+
 });
 
 

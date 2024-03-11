@@ -36,6 +36,14 @@ const invitacionesSchema = new Schema({
         type: String,
         required: true,
     },
+    nombre_evento: {
+        type: String,
+        required: true,
+    },
+    lugar_evento: {
+        type: String,
+        required: true,
+    },
 }, {
     timestamps: true
 })

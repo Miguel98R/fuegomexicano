@@ -30,6 +30,11 @@ module.exports = {
                         as: 'events',
                     },
                 },
+                {
+                    $sort: {  // Add a sort stage to order the results
+                        createdAt: 1  // Sort by "mes" in ascending order (1 for ascending)
+                    }
+                }
 
             ]);
 
@@ -62,6 +67,11 @@ module.exports = {
                         as: 'events',
                     },
                 },
+                {
+                    $sort: {  // Add a sort stage to order the results
+                        createdAt: 1  // Sort by "mes" in ascending order (1 for ascending)
+                    }
+                }
 
             ]);
 
