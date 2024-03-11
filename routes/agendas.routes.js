@@ -11,6 +11,7 @@ router.delete('/findIdAndDelete/:id', calendarController.findIdAndDelete)
 router.get('/getOneById/:id', calendarController.getOneById)
 router.get('/getMany', calendarController.getMany)
 router.get('/getManyActives', calendarController.getManyActives)
+router.post('/getOneActive', calendarController.getOneActive)
 
 router.post('/createMany', calendarController.createMany)
 router.post('/aggregate', calendarController.aggregate)

@@ -32,7 +32,7 @@ html(lang='es')
 
                             div
                                 .row
-                                    .col-12.col-md-6
+                                    .col-12.col-md-4
                                         .form-group.my-2(style='background-color: black; padding: 10px;')
                                             label.text-danger.my-1(for='nombre' style='color: white;') Nombre completo:
                                             input.form-control(type='text', id='nombre', name='nombre', required style='background-color: black; color: white;')
@@ -53,14 +53,14 @@ html(lang='es')
                                             label.text-danger.my-1(for='contacto' style='color: white;') Numero de contacto :
                                             input.form-control(type='tel', id='contacto', name='contacto', style='background-color: black; color: white;')
 
-                                    .col-12.col-md-6
+                                    .col-12.col-md-4
                                         .form-group.my-2(style='background-color: black; padding: 10px;')
                                             label.text-danger.my-1(for='nombre_evento' style='color: white;') Nombre del evento :
                                             input.form-control(type='text', id='nombre_evento', name='nombre_evento', required style='background-color: black; color: white;')
 
                                         .form-group.my-2(style='background-color: black; padding: 10px;')
-                                                label.text-danger.my-1(for='lugar_evento' style='color: white;') Lugar del evento :
-                                                input.form-control(type='text', id='lugar_evento', name='lugar_evento', required style='background-color: black; color: white;')
+                                            label.text-danger.my-1(for='lugar_evento' style='color: white;') Lugar del evento :
+                                            input.form-control(type='text', id='lugar_evento', name='lugar_evento', required style='background-color: black; color: white;')
 
                                         .form-group.my-2(style='background-color: black; padding: 10px;')
                                             label.text-danger.my-1(for='fecha' style='color: white;') Fecha del evento :
@@ -77,17 +77,24 @@ html(lang='es')
                                         button.btn.custom-btn.w-100.my-3#sendInvitacion
                                             i.mx-2.bi.bi-send
                                             | Enviar invitación
+                                    .col-12.col-md-4
+                                        section
+                                            .container.text-center
+                                                h3.text-danger.my-3 Fechas
+                                                    span.text-white Apartadas
+                                                h5.text-danger.my-3
+                                                    span#month_actual
+                                                    span.text-white#year_actual
+                                                div.my-4
+                                                    .row#dates_
 
 
+                                                div#tempalte_dates_.col-lg-4.col-md-6.col-12.my-3(style="display:none;")
+                                                    h4.m-0.p-0.card-text.text-white.fw-bold(style="font-size:23px;")#date_event_
+
+                                                    p.card-text.text-white(style="font-size:18px;")#date_location_
 
 
-            section
-                .container.text-center
-                    .display-4.text-danger.my-3 Fechas
-                        span.text-white Apartadas
-                    .display-6.text-danger.my-3
-                        span#month_actual
-                        span.text-white#year_actual
 
 
 

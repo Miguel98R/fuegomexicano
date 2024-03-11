@@ -1,4 +1,5 @@
 const apiUrl = "/api/invitations"
+const apiAgenda = "/api/agendas"
 
 const sentInvitation = async (body) => {
 
@@ -28,6 +29,17 @@ function validarCamposLlenos() {
     return true;
 }
 
+const drawEvents = async (id_event) => {
+
+    let template = $("#tempalte_dates_").clone();
+
+    template.attr('id', 'tempalte_dates_' + id_event).css('display', 'block');
+    template.find('#date_event_').attr('id', 'date_event_' + id_event)
+    template.find('#date_location_').attr('id', 'date_location_' + id_event)
+
+    return template
+}
+
 const valueMonth = (number_month) => {
     let mes = ''
     const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
@@ -40,6 +52,29 @@ const valueMonth = (number_month) => {
 
     return mes
 }
+const getDataMonthActual = async (month) => {
+    let body = {
+        mes:month.toString()
+    }
+    await api_conection("POST", apiAgenda + "/getOneActive", body, async function (data) {
+        let data_month = data.result
+
+        if (data_month.length > 0) {
+            for (let jtem of data_month[0].events) {
+
+                let div_event = await drawEvents(jtem._id);
+                div_event.find('#date_event_' + jtem._id).text(moment(jtem.date).format("dddd DD"));
+                div_event.find('#date_location_' + jtem._id).text(jtem.location)
+
+                $('#dates_').append(div_event)
+            }
+
+        } else {
+            $('#dates_').append(`<h6 class="text-center my-2 text-danger fw-lighter">No hay fechas establecidas para este mes</h6>`)
+        }
+
+    })
+}
 
 $(async function () {
     $.fn.datepicker.defaults.language = "es";
@@ -50,6 +85,8 @@ $(async function () {
     $("#month_actual").text(mesActual);
     let añoActual = fechaActual.year();
     $("#year_actual").text(añoActual);
+
+    await getDataMonthActual(mesActual)
 
 
     $("#sendInvitacion").click( async function () {

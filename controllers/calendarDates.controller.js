@@ -87,6 +87,49 @@ module.exports = {
             console.error(e);
         }
     },
+    getOneActive: async (req, res) => {
+
+        let body = req.body
+        console.log("body-----------------",body)
+        try {
+            const result = await calendarModel.aggregate([
+                {
+                    $match: {
+                        active: true,
+                        mes:body.mes
+                    }
+                },
+
+                {
+                    $lookup: {
+                        from: agendaModel.collection.name,
+                        localField: 'events',
+                        foreignField: '_id',
+                        as: 'events',
+                    },
+                },
+                {
+                    $sort: {  // Add a sort stage to order the results
+                        createdAt: 1  // Sort by "mes" in ascending order (1 for ascending)
+                    }
+                }
+
+            ]);
+
+            console.log("result-----------------",result)
+
+            res.status(200).json({
+                success: true,
+               result,
+            });
+        } catch (e) {
+            res.status(500).json({
+                success: false,
+                error: e.message,
+            });
+            console.error(e);
+        }
+    },
 
     findUpdateOrCreate: ms.findUpdateOrCreate(calendarModel, validationObject, populationObject, options),
     findUpdate: ms.findUpdate(calendarModel, validationObject, populationObject, options),
