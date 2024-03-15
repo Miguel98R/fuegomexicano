@@ -55,27 +55,28 @@ const valueMonth = (number_month) => {
 }
 const getDataMonthActual = async (month) => {
     let body = {
-        mes:month.toString()
-    }
+        mes: month.toString()
+    };
+
     await api_conection("POST", apiAgenda + "/getOneActive", body, async function (data) {
-        let data_month = data.result
+        let data_month = data.result;
 
         if (data_month.length > 0) {
-            for (let jtem of data_month[0].events) {
+            // Ordenar las fechas de forma descendente
+            data_month[0].events.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+            for (let jtem of data_month[0].events) {
                 let div_event = await drawEvents(jtem._id);
                 div_event.find('#date_event_' + jtem._id).text(moment(jtem.date).format("dddd DD"));
-                div_event.find('#date_location_' + jtem._id).text(jtem.location)
-
-                $('#dates_').append(div_event)
+                div_event.find('#date_location_' + jtem._id).text(jtem.location);
+                $('#dates_').append(div_event);
             }
-
         } else {
-            $('#dates_').append(`<h6 class="text-center my-2 text-danger fw-lighter">No hay fechas establecidas para este mes</h6>`)
+            $('#dates_').append(`<h6 class="text-center my-2 text-danger fw-lighter">No hay fechas establecidas para este mes</h6>`);
         }
+    });
+};
 
-    })
-}
 
 $(async function () {
     $.fn.datepicker.defaults.language = "es";
