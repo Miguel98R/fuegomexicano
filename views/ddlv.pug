@@ -1,0 +1,86 @@
+doctype html
+html(lang='es')
+    head
+        include templates/head
+        include templates/styles
+        style.
+            .move_image {
+                transition: transform 0.3s ease;
+            }
+
+            .move_image:hover {
+                transform: translateY(-10px);
+            }
+
+    body
+        include templates/spinner
+        main
+            include templates/nav
+            header.site-header.section-padding-img.site-header-image
+                .container
+                    .row
+                        .col-12.text-center
+                            img.move_image.img-fluid(src='/public/images/ddlv/logo_ddlv.png', style="max-height:370px;")
+                        .col-12.text-center
+                            a.custom-btn.btn(href="https://www.eventbrite.com.mx/e/ddlv24-tickets-849391080587?aff=ebdsshios" target="_blank") Obtener entradas
+                    .col-12.col-md-12
+                        .card-body
+                            video#ddlv(controls autoplay muted width="100%" type='video/mp4' height="550" src="/public/images/ddlv/trailer_ddlv.mp4")
+                                p Tu navegador no soporta el elemento de video.
+
+            section
+                .container
+                    .row
+                        h2.text-white Oradores
+                        .col-12.col-md-6
+                            .card-body
+                                img.move_image.img-fluid(src='/public/images/ddlv/oradores_1.jpg')
+                        .col-12.col-md-6
+                            .card-body
+                                img.move_image.img-fluid(src='/public/images/ddlv/oradores_2.jpg')
+                        .col-12.col-md-12
+                            .card-body
+                                video#ordaores(controls autoplay muted width="100%" type='video/mp4' height="550" src="/public/images/ddlv/Oradores.mp4")
+                                    p Tu navegador no soporta el elemento de video.
+
+            section
+                .container
+                    .row
+                        h2.text-white Precio y hospedaje
+                        .col-12.col-md-6
+                            .card-body
+                                img.move_image.img-fluid(src='/public/images/ddlv/precios.jpg')
+                        .col-12.col-md-6
+                            .card-body
+                                img.move_image.img-fluid(src='/public/images/ddlv/hoteles.jpg')
+
+
+            section.section-padding
+                .container
+                    h2.text-white Ubicación
+                    span.text-danger.mx-1 Centro de Estudios Teológicos y Ministeriales, Camino Venado a Téllez km. 1 s/n, 42186 Pachuca de Soto, Hgo.
+                    .card-body
+                            iframe(src='https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14992.539413840756!2d-98.7678048!3d20.0447935!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1a139980658f7%3A0x98d5d547e91909be!2sCentro%20de%20Estudios%20Teol%C3%B3gicos%20y%20Ministeriales!5e0!3m2!1ses-419!2smx!4v1716432363641!5m2!1ses-419!2smx' style='border:0;height:70%;width:100%;' allowfullscreen='' loading='lazy' referrerpolicy='no-referrer-when-downgrade')
+
+
+
+            section
+                .text-center
+                    h3.text-white Adquiere tus entradas
+                .row
+                    .col-12.text-center
+                        a(href="https://www.eventbrite.com.mx/e/ddlv24-tickets-849391080587?aff=ebdsshios" target="_blank")
+                            img.img-fluid(src='/public/images/ddlv/logo_ddlv.png', style="max-height:100px;")
+                    .col-12.text-center
+                        a.custom-btn.btn(href="https://www.eventbrite.com.mx/e/ddlv24-tickets-849391080587?aff=ebdsshios" target="_blank") Obtener entradas
+
+
+
+
+
+
+
+        include templates/footer
+        include templates/scripts
+        script(src=`/public/js/jsWeb/common.js?v=${Math.random()}`)
+        script(src=`/public/js/jsWeb/ddlv.js?v=${Math.random()}`)

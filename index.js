@@ -43,11 +43,12 @@ app.get(/robots\.txt$/, function (req, res) {
 });
 
 
+
 // Initialize client.
-let redisClient = createClient({
-    port: 3080,
-})
-redisClient.connect().catch(console.error)
+let redisClient = createClient()
+redisClient.on('error', err => console.log('Redis Client Error', err));
+
+redisClient.connect();
 
 // Initialize sesssion storage.
 app.use(
@@ -59,11 +60,11 @@ app.use(
         name: process.env.NAME_COOKIE_SESSION,
         resave: true,
         saveUninitialized: true,
-        cookie: {maxAge: 1 * 24 * 60 * 60 * 1000},
+        cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 },
         httpOnly: true
     })
-)
 
+)
 
 
 //rutas

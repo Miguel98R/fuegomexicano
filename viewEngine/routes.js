@@ -103,6 +103,13 @@ router.get("/checkout-payments/:id", async (req, res) => {
 
 });
 
+router.get("/ddlv", (req, res) => {
+    res.render("ddlv", {
+        title: 'Fuego Mexicano | DDLV 2024',
+
+    });
+});
+
 //RENDER IF DOES NOT EXIST THE PAGE
 router.get("/:page", async (req, res) => {
 
