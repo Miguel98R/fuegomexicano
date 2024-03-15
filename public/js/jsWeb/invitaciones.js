@@ -2,8 +2,9 @@ const apiUrl = "/api/invitations"
 const apiAgenda = "/api/agendas"
 
 const sentInvitation = async (body) => {
-
+    HoldOn.open(HoldOptions)
     await api_conection("POST", apiUrl + "/create_invitation", body, function () {
+        HoldOn.close()
         Swal.fire({
             icon: 'success',
             title: 'Invitación enviada',

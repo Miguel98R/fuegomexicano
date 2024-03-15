@@ -30,7 +30,12 @@ const columns = [
             return html
         }
 
-    }, {
+    },
+    {
+        data: 'lugar_evento',
+
+    },
+    {
         data: 'fechaEvento',
         render: function (data, type, row) {
 
