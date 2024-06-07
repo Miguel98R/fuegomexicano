@@ -29,10 +29,6 @@ const paymentsSchema = new Schema({
         type: String,
         required: false,
     },
-    status_detail:{
-        type: String,
-        required: false,
-    },
     total: {
         type: Number,
         required: false,

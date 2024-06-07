@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "apiato": "^1.2.4",
+    "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
     "connect-redis": "^7.1.0",
@@ -24,7 +25,8 @@
     "nodemailer": "^6.9.7",
     "pug": "^3.0.2",
     "redis": "4.6.7",
-    "simplebar": "^6.2.5"
+    "simplebar": "^6.2.5",
+    "stripe": "^15.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

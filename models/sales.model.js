@@ -16,7 +16,7 @@ const salesModel = new Schema({
     },
     type_payout: { // PRV = PREVENTA , OR= ORDEN
         type: String,
-        enum: ['transferencia', 'mercadoPago'],
+        enum: ['transferencia', 'mercadoPago','stripe'],
         default: 'transferencia'
     },
     user_data: {
@@ -41,7 +41,7 @@ const salesModel = new Schema({
         type: String,
         required: false,
     },
-    mercado_pago_status: {
+    payment_status: {
         type: String,
         required: false,
     },

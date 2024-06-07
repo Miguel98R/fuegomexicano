@@ -269,6 +269,21 @@ const createNewSaleMP = async (body) => {
     })
 }
 
+const createNewSaleStripe = async (body) => {
+    HoldOn.open(HoldOptions)
+    api_conection('POST', `${apiPayments}/createOrderStripe`, body, async function (data) {
+        HoldOn.close()
+        let uri = data.URI
+
+        localStorage.removeItem('sale_conf');
+        localStorage.removeItem('cart');
+        localStorage.removeItem('user');
+
+        location.href = uri
+
+    })
+}
+
 $(async function () {
 
     $('#pagarDespuesCOnfiModal').modal({backdrop: 'static', keyboard: false})
@@ -330,13 +345,24 @@ $(async function () {
                 $("#pagar_despues").hide();
                 $("#continue_payout").hide();
                 $("#continue_payout_mp").show();
+                $("#continue_payout_stripe").hide();
 
-            } else {
+            }else if (storedConfSale.type_payout == "stripe") {
+                text = `<p>Ha optado por realizar su pago a través de <b>Stripe</b>. Será redirigido a la página oficial para completar la transacción. Si surge alguna pregunta o inquietud, no dude en ponerse en contacto con nuestro equipo de soporte.</p>`;
+                $("#datos_transfer").hide();
+                $("#pagar_despues").hide();
+                $("#continue_payout").hide();
+                $("#continue_payout_mp").hide();
+                $("#continue_payout_stripe").show();
+
+            }else {
                 text = `<p>Ha elegido efectuar el pago mediante <b>transferencia</b>. Puede adjuntar su comprobante de pago, y nuestro equipo se encargará de verificar la transacción. También tiene la opción de realizar el pago más adelante. Le recordamos que dispone de un plazo de 3 días para completar la transacción. Si necesita los datos para la transferencia bancaria, a continuación se muestran:</p>`;
                 $("#datos_transfer").show();
                 $("#pagar_despues").show();
                 $("#continue_payout").show();
                 $("#continue_payout_mp").hide();
+                $("#continue_payout_stripe").hide();
+
             }
 
             $("#description_payout").append(text);
@@ -358,6 +384,19 @@ $(async function () {
         }
         await createNewSaleMP(body)
 
+    })
+
+    $("#continue_payout_stripe").click(async function () {
+
+        let body = {
+            storedUser: getStorageUser(),
+            storedConfSale: getStorageConf(),
+            storedCart: getStorageCart(),
+            statusSale: 'PRV_sale',
+            img_payment: ''
+
+        }
+        await createNewSaleStripe(body)
 
     })
 

@@ -21,10 +21,14 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.set('view engine', 'pug')
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({extended: false}))
-// parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(
+    bodyParser.json({
+        verify: function (req, res, buf) {
+            req.rawBody = buf;
+        }
+    })
+);
 
 app.use(morgan('dev'))
 
