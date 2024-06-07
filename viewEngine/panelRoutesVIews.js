@@ -102,6 +102,21 @@ router.get("/conf_panel", validateSession, (req, res) => {
 
 });
 
+router.get("/conf_payments", validateSession, (req, res) => {
+
+
+    let menu = req?.session?.menu
+
+    res.render("panel/conf_payments", {
+        title: 'Fuego Mexicano | Control Panel',
+        conf_page: "Pasarelas de pago",
+        url_js_files,
+        menu
+
+    });
+
+});
+
 
 router.get("/conf_blog", validateSession, (req, res) => {
 

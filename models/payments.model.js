@@ -41,6 +41,14 @@ const paymentsSchema = new Schema({
         type: String,
         required: false,
     },
+    full_JSON:{
+        type: mongoose.Schema.Types.Mixed,
+        required: false,
+    },
+    full_JSON_hook:{
+        type: mongoose.Schema.Types.Mixed,
+        required: false,
+    }
 
 
 

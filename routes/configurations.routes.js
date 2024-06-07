@@ -5,6 +5,10 @@ let configController = require('../controllers/configurations.controller')
 
 
 router.put('/createOrUpdateConf', configController.createOrUpdateConf)
+router.post('/getKeysPasarelas', configController.getKeysPasarelas)
+router.post('/updateOrCreateKey', configController.updateOrCreateKey)
+
+
 router.post('/createOne', configController.createOne)
 router.post('/datatable_aggregate', configController.datatable_aggregate)
 router.put('/updateById/:id', configController.updateById)

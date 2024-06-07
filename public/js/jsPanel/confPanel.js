@@ -1,4 +1,5 @@
 const apiUrl = "/api/conf"
+
 const getConfigurations = async () => {
     HoldOn.open(HoldOptions)
     api_conection("GET", `${apiUrl}/getMany/`, {}, function (data) {

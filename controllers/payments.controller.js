@@ -1,5 +1,4 @@
 const paymentModel = require("../models/payments.model")
-const {MercadoPagoConfig, Payment, Preference} = require("mercadopago")
 const {template, sendMail} = require("../helpers/mail.helper");
 const usersModel = require("../models/users.model");
 const usersShoppingModel = require("../models/userShipping.model");
@@ -8,12 +7,187 @@ const productModel = require("../models/products.model");
 const salesDetailsModel = require("../models/salesDetails.model");
 const salesModel = require("../models/sales.model");
 
-const client = new MercadoPagoConfig({accessToken: process.env.MERCADOPAGO_API_KEY,});
-const payment = new Payment(client);
-const preference = new Preference(client);
+const {MercadoPagoConfig, Payment, Preference} = require("mercadopago")
+
 let uuid = require('uuid')
 const moment = require('moment')
 const confModel = require("../models/configurations.model");
+
+
+const getConfMercadoPago = async () => {
+    let searchConf
+
+    if (eval(process.env.MERCADO_PAGO_PROD)) {
+        searchConf = await confModel.findOne({description: 'private_Key_mp'})
+    } else {
+        searchConf = await confModel.findOne({description: 'private_Key_mp_sandbox'})
+    }
+    return searchConf.value
+}
+
+const getConfStripe = async () => {
+    let searchConf
+    if (eval(process.env.STRIPE_PROD)) {
+        searchConf = await confModel.findOne({description: 'private_Key_stripe'})
+    } else {
+        searchConf = await confModel.findOne({description: 'private_Key_stripe_sandbox'})
+    }
+    return searchConf.value
+}
+
+const createPaymentMercadoPago = async (data, fullUrl, payment_type) => {
+
+    let PRIVATE_KEY
+    let response
+    let payout_info
+    let tag = await makeid(17)
+    const unique_id = uuid.v4()
+    let response_url
+
+    PRIVATE_KEY = await getConfMercadoPago()
+
+    const client = new MercadoPagoConfig({
+        accessToken: PRIVATE_KEY,
+        options: {timeout: 5000, idempotencyKey: unique_id}
+    });
+
+    const preference = new Preference(client);
+
+    let searchUser = await userModel.findById(data.user)
+
+    let payer = {
+        name: searchUser.name,
+        surname: searchUser.lastname,
+        email: searchUser.email,
+        phone: {
+            area_code: "+52",
+            number: searchUser.cellphone
+        },
+
+        address: {
+            street_name: searchUser.street,
+            street_number: searchUser.num_int,
+            zip_code: searchUser.zip_code
+        }
+    }
+
+    const fechaActual = moment();
+    const fechaActualFormateada = fechaActual.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+    const fechaVencimiento = fechaActual.add(5, 'days');
+    const fechaFormateada = fechaVencimiento.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+    let result = await preference.create({
+        body: {
+            metadata: {unique_id},
+            payer,
+            items: [
+                {
+                    title: `LEGANUX SERVICES : ${data.name_product}`,
+                    description: data.description,
+                    quantity: 1,
+                    unit_price: Number(data.total),
+                    currency_id: "MXN"
+                }
+            ],
+            back_urls: {
+                success: `${fullUrl}/thanks`,
+                failure: fullUrl + "/",
+                pending: fullUrl + "/",
+
+            },
+            payment_methods: {
+                default_payment_method_id: 'master',
+                excluded_payment_types: [
+                    {
+                        id: 'ticket',
+                    },
+                ],
+                excluded_payment_methods: [
+                    {
+                        id: '',
+                    },
+                ],
+                installments: 5,
+                default_installments: 1,
+            },
+            //notification_url: `${fullUrl}/api/payments/webhookMercadoPago`,
+            notification_url: `https://mygeek.zone/api/payments/webhookMercadoPago`,
+            auto_return: "approved",
+            expiration_date_from: fechaActualFormateada,
+            expiration_date_to: fechaFormateada,
+            expires: true
+        }
+    })
+
+    response = result
+
+    if (eval(process.env.MERCADO_PAGO_PROD)) {
+        response_url = result.init_point
+    } else {
+        response_url = result.sandbox_init_point
+    }
+
+    payout_info = await payments_infoModel.create({
+        payment_type,
+        tag,
+        id_payment: response.id,
+        url_pago: response_url,
+        user: data.user,
+        amount: Number(data.total),
+        status: 'charge_pending',
+        redirect_link: response_url,
+        full_JSON: response,
+    })
+
+    return payout_info
+}
+
+const createPaymentStripe = async (data, fullUrl, payment_type) => {
+
+    let PRIVATE_KEY = await getConfStripe()
+    let response
+    let payout_info
+    let tag = await makeid(17)
+    const unique_id = uuid.v4()
+    let response_url
+
+    //CREACION DE PAGO EN STRIPE
+    const stripe = new Stripe(PRIVATE_KEY)
+    const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                product_data: {
+                    name: `LEGANUX SERVICES : ${data.name_product}`,
+                    description: data.description,
+                },
+                currency: 'MXN',
+                unit_amount: Number(Number(data.total) * 100)
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: `${fullUrl}/thanks`,
+        cancel_url: `${fullUrl}`,
+
+    })
+
+    response = session
+
+    payout_info = await payments_infoModel.create({
+        payment_type,
+        tag,
+        id_payment: response.id,
+        url_pago: response.url,
+        user: data.user,
+        amount: Number(data.total),
+        status: 'charge_pending',
+        redirect_link: response.url,
+        full_JSON: response,
+    })
+
+    return payout_info
+}
 
 module.exports = {
     createOrder: async (req, res) => {
@@ -22,6 +196,18 @@ module.exports = {
         let body = req.body
 
         try {
+
+            const unique_id = uuid.v4()
+
+            const PRIVATE_KEY = await getConfMercadoPago()
+
+            const client = new MercadoPagoConfig({
+                accessToken: PRIVATE_KEY,
+                options: {timeout: 5000, idempotencyKey: unique_id}
+            });
+
+            const preference = new Preference(client);
+
 
             let data_user = body.storedUser
 
@@ -107,21 +293,7 @@ module.exports = {
             }
 
 
-            let payer = {
-                name: data_user.name,
-                surname: data_user.lastName,
-                email: data_user.email,
-                phone: {
-                    area_code: "+52",
-                    number:  data_user.cellphone
-                },
 
-                address: {
-                    street_name: data_user.address,
-                    street_number: data_user.noInt,
-                    zip_code: data_user.zip
-                }
-            }
 
 //-----------------------------------------------------------CREATE SALE
 
@@ -172,8 +344,29 @@ module.exports = {
             }
 
 
-            let unique_id = uuid.v4()
             let email_user = data_user.email
+
+            let payer = {
+                name: data_user.name,
+                surname: data_user.lastName,
+                email: data_user.email,
+                phone: {
+                    area_code: "+52",
+                    number:  data_user.cellphone
+                },
+
+                address: {
+                    street_name: data_user.address,
+                    street_number: data_user.noInt,
+                    zip_code: data_user.zip
+                }
+            }
+
+            const fechaActual = moment();
+            const fechaActualFormateada = fechaActual.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+            const fechaVencimiento = fechaActual.add(5, 'days');
+            const fechaFormateada = fechaVencimiento.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
 //---------------------------------------- CREATE SALE MERCADO PAGO
             let result = await preference.create({
                 body: {
@@ -181,11 +374,12 @@ module.exports = {
                     payer,
                     items: [
                         {
-                            title: 'Fuego Mexicano',
+                            title: 'MERCH FUEGO MEXICANO',
                             description: 'Fuego Mexicano',
                             quantity: 1,
                             unit_price: total_sale,
-                            currency_id: "MX"
+                            //unit_price: 10,
+                            currency_id: "MXN"
                         }
                     ],
                     back_urls: {
@@ -195,11 +389,17 @@ module.exports = {
 
                     },
                     //notification_url:urlHost+"/api/payments/webhook"
-                    notification_url: "https://wwww.fuegomexicano.com/api/payments/webhook"
+                    notification_url: "https://wwww.fuegomexicano.com/api/payments/webhook",
+                    auto_return: "approved",
+                    expiration_date_from: fechaActualFormateada,
+                    expiration_date_to: fechaFormateada,
+                    expires: true
                 }
             })
 
             let URI = result.init_point
+
+            let response = result
 
 
             res.status(200).json({
@@ -220,6 +420,7 @@ module.exports = {
                 url_payment: URI,
                 status_order: 'create',
                 status_detail: 'create',
+                full_JSON: response,
 
             })
 
@@ -281,6 +482,12 @@ module.exports = {
     },
     receiveWebhook: async (req, res) => {
         try {
+
+            let MERCADOPAGO_API_KEY = await getConfMercadoPago()
+
+            const client = new MercadoPagoConfig({accessToken: MERCADOPAGO_API_KEY});
+            const payment = new Payment(client);
+
             const payment_ = req.query;
 
             if (payment_.type === "payment") {
@@ -294,6 +501,8 @@ module.exports = {
 
                 let searchPayment = await paymentModel.findOne({unique_id: data.metadata.unique_id})
 
+
+                searchPayment.full_JSON_hook = data
                 searchPayment.status_order = data?.status
                 searchPayment.status_detail = data?.status_detail
                 searchPayment.total = data?.transaction_amount
@@ -307,6 +516,25 @@ module.exports = {
                 await sale.save()
 
                 res.sendStatus(204);
+
+
+
+                let url_update_preference = `https://api.mercadopago.com/checkout/preferences/${searchPayment.full_JSON.id}`
+
+                const fechaActual = moment();
+                const fechaActualFormateada = fechaActual.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+
+                const updatePreferenceRequest = {expiration_date_to: fechaActualFormateada}
+
+                await axios.put(url_update_preference, updatePreferenceRequest, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${MERCADOPAGO_API_KEY}`,
+                    }
+                });
+
+
+
 
                 let image_banner = 'https://www.fuegomexicano.com/public/images/fuego/logo_.png'
 
