@@ -1,7 +1,8 @@
 const apiSales = "/api/sales"
 const apiPayments = "/api/payments"
 const apiUsers = "/api/users"
-const drawProductsCheck = (id_product) => {
+
+const drawProductsCheck = async (id_product) => {
     let plantilla = $('#template_products_check_').clone()
 
     plantilla.attr('id', 'template_products_check_' + id_product).css('display', 'block');
@@ -45,6 +46,8 @@ const getStorageCart = () => {
 
 const delete_item = async (id_product) => {
 
+    console.log("id_product",id_product)
+
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 
@@ -56,9 +59,10 @@ const delete_item = async (id_product) => {
     localStorage.setItem('cart', JSON.stringify(filteredProducts));
 
     const cart2 = await getStorageCart();
-    no_product = cart2.length
-    if (no_product <= 0) {
+    let no_product = cart2.length
+    if (no_product === 0) {
         location.href = "/products"
+        return
     }
 
     await drawTableProducts(cart2)
@@ -73,7 +77,7 @@ const drawTableProducts = async (cart) => {
     $('#products_table').html('')
 
     for (let item of cart) {
-        let element = drawProductsCheck(item.id_product)
+        let element = await drawProductsCheck(item.id_product)
         element.find('#img_product_' + item.id_product).attr('src', item.image)
         element.find('#name_product_' + item.id_product).text(item.name)
         element.find('#price_unit_' + item.id_product).text(item.price + " c/u")
@@ -458,5 +462,9 @@ $(async function () {
 
         notyf.success("Copiado con éxito: " + copyText.innerText);
     });
+
+    $('.payments').change(function () {
+        notyf.success("Metodo de pago seleccionado");
+    })
 
 })

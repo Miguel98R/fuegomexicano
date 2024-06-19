@@ -3,6 +3,19 @@ html(lang='es')
     head
         include templates/head
         include templates/styles
+        link(href="https://fonts.googleapis.com/css?family=Oxygen:400,700" rel="stylesheet")
+        link(rel='stylesheet', href='/public/cdn/calendar_js/css/calendar.css')
+        link(rel='stylesheet', href='/public/cdn/calendar_js/css/stylesheet.css')
+        style.
+            #calendar {
+                max-width: 800px;
+                margin: auto;
+            }
+
+            #events {
+                max-width: 1000px;
+                margin: auto;
+            }
 
 
     body
@@ -11,12 +24,14 @@ html(lang='es')
             include templates/nav
             include templates/slider
             include templates/acercaDe
-            include templates/agenda
+            include templates/agenda2
             include templates/congresos_
 
 
         include templates/footer
         include templates/scripts
+        script.
+            let eventsByMonth = '!{eventsByMonth}'
         script(src=`/public/js/jsWeb/common.js?v=${Math.random()}`)
         script(src=`/public/js/jsWeb/home.js?v=${Math.random()}`)
 

@@ -11,7 +11,6 @@ const drawMonths = async (id_month) => {
     template.find('#events_').attr('id', 'events_' + id_month)
     template.find('#add_events_').attr('id', 'add_events_' + id_month).addClass('add_event_')
 
-
     return template
 }
 

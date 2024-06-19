@@ -95,6 +95,11 @@ const createCartStorage = async (id) => {
 
     if(productName.includes('Playera')){
         selectedTalla = $('input[name="talla_' + id + '"]:checked').val();
+        if(selectedTalla == undefined){
+            notyf.open({type: "warning", message: "Selecciona una talla"});
+
+            return
+        }
     }
 
     var product = {
@@ -133,6 +138,18 @@ const createCartShopNow = async (id) => {
     let productPrice = Number($("#price_product_" + id).attr('price'))
     let quantity = Number($("#quantity_input_" + id).val())
     let image = $("#image_product_" + id).attr('src');
+    let selectedTalla = ''
+
+    if(productName.includes('Playera')){
+        selectedTalla = $('input[name="talla_' + id + '"]:checked').val();
+        if(selectedTalla == undefined){
+            notyf.open({
+                type: 'warning',
+                message: 'Selecciona una talla'
+            });
+            return
+        }
+    }
 
     var product = {
         id_product: id,
@@ -140,6 +157,7 @@ const createCartShopNow = async (id) => {
         price: productPrice,
         quantity,
         image,
+        selectedTalla
     };
 
     let cart = [product];

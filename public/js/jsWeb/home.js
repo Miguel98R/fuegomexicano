@@ -108,10 +108,86 @@ const getMonths = async () => {
 }
 
 $(async function () {
+    // Incluye Moment.js y el idioma español
+    moment.locale('es');
+
+// Obtén la fecha actual
     const fechaActual = moment();
     const añoActual = fechaActual.year();
     $("#year_actual").text(añoActual);
 
-    await getMonths()
+// Obtén el nombre del mes actual en español
+    const mesActual = fechaActual.format('MMMM'); // Formatea el mes como palabra completa
+    $("#month_actual").text(mesActual);
+
+
+    //await getMonths()
     await getCongresos()
+
+
+
+    $('#calendar').calendar({color: 'red' });
+
+
+    let eventsByMonth = [
+        {
+            Uno: {
+                locations: ['Monterrey']
+            },
+            Dos: {
+                locations: ['Ixtapa', 'Estado de Mexico', 'Tulancingo']
+            },
+            Tres: {
+                locations: ['Morelia', 'Monterrey']
+            },
+            Cuatro: {
+                locations: ['Morelia']
+            },
+        },
+    ];
+
+    // Función para construir las tarjetas de eventos
+    function renderEventCards(events) {
+        // Selecciona el contenedor de eventos
+        let $eventsContainer = $('#events');
+
+        // Itera sobre cada mes en eventsByMonth
+        events.forEach(function (monthEvents) {
+            // Itera sobre cada semana en el mes
+            Object.keys(monthEvents).forEach(function (key) {
+                let value = monthEvents[key];
+
+                // Construye la estructura de la tarjeta de evento
+                let cardHtml = `
+                    <div class="col-12 col-md-3 ">
+                        <div class="card bg-black" style="background: #000000">
+                            <div class="card-body">
+                                <h5 class="card-title text-danger ">Semana<span class="text-white">${key}</span></h5>
+                                <ul class="collection">
+                `;
+
+                // Itera sobre las ubicaciones de la semana y agrega cada una como un ítem de lista
+                value.locations.forEach(function (location) {
+                    cardHtml += `
+                        <li class="collection-item text-danger">${location}</li>
+                    `;
+                });
+
+                // Cierra la estructura de la tarjeta de evento
+                cardHtml += `
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Agrega la tarjeta de evento al contenedor
+                $eventsContainer.append(cardHtml);
+            });
+        });
+    }
+
+    // Llama a la función para construir las tarjetas de eventos
+    renderEventCards(eventsByMonth);
+
 })
