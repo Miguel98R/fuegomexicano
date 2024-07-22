@@ -98,7 +98,6 @@ module.exports = {
     },
     datatable_aggregate: async (req, res) => {
 
-
         try {
 
             let dataUsers = await usersModel.find().select('user_name email name usersTypes active')
@@ -114,7 +113,6 @@ module.exports = {
             })
         }
     },
-    findIdAndDelete: ms.findIdAndDelete(usersModel, options),
     updateById: async (req, res) => {
         let {body} = req.body
         let {id} = req.params
@@ -232,6 +230,7 @@ module.exports = {
 
     findUpdateOrCreate: ms.findUpdateOrCreate(usersModel, validationObject, populationObject, options),
     findUpdate: ms.findUpdate(usersModel, validationObject, populationObject, options),
+    findIdAndDelete: ms.findIdAndDelete(usersModel, options),
 
 
     aggregate: ms.aggregate(usersModel, aggregate_pipeline, options),

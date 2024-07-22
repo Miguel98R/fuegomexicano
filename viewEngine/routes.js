@@ -20,14 +20,14 @@ router.get("/", (req, res) => {
 
     let images = ['/public/images/fuego/fuego_1.jpg', '/public/images/fuego/fuego_2.jpg', '/public/images/fuego/fuego_3.jpg', '/public/images/fuego/fuego_4.jpg']
 
-   /* res.render("index", {
-        title: 'Fuego Mexicano | Home',
-        images
-    }); */
+    /* res.render("index", {
+         title: 'Fuego Mexicano | Home',
+         images
+     }); */
 
     res.render("ddlv", {
         title: 'Fuego Mexicano | DDLV 2024',
-        
+
     });
 });
 
@@ -87,6 +87,20 @@ router.get("/checkout-payments/:id", async (req, res) => {
 
 
 });
+
+router.get("/suscripciones/:type", (req, res) => {
+
+    let {type} = req.params
+
+    let tipo_suscripcion = type
+
+    res.render("suscripciones", {
+        title: 'Fuego Mexicano | Suscripciones',
+        tipo_suscripcion
+
+    });
+});
+
 
 router.get("/ddlv", (req, res) => {
     res.render("ddlv", {

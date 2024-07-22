@@ -16,9 +16,7 @@ router.get('/getOneById/:id', usersController.getOneById)
 
 router.post('/createMany', usersController.createMany)
 router.post('/aggregate', usersController.aggregate)
-
 router.get('/getOneWhere/one', usersController.getOneWhere)
-
 router.get('/getMany', usersController.getMany)
 router.put('/findUpdateOrCreate', usersController.findUpdateOrCreate)
 router.put('/findUpdate', usersController.findUpdate)

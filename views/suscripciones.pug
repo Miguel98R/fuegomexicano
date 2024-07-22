@@ -1,0 +1,66 @@
+doctype html
+html(lang='es')
+    head
+        include templates/head
+        include templates/styles
+    body
+        include templates/spinner
+        main
+            include templates/nav
+            header.site-header.section-padding-img.site-header-image
+                .container
+                    .row
+                        .col-lg-6.col-12.header-info.text-center
+                            h1.display-2
+                                span.d-block.text-danger Suscripciones Misioneras
+                            span.slick-title
+                                | Fuego
+                                span.text-danger Mexicano
+                            div
+                                span.slick-title.fw-lighter(style="font-size:12px;")
+                                    | Hector
+                                    span.text-danger Andrade
+
+                img.header-image.img-fluid(src='/public/images/fuego/fuego_7.jpg', alt)
+
+            section.team.section-padding
+                .container
+                    h4.text-white Rellena el siguiente formulario
+                    .card.team
+                        .card-body.team
+                            div
+                                .row
+                                    .col-12
+                                        include templates/userForm
+            .container
+                div#GeneralSuscripcion
+                    h4.text-white#subscriptionTitle Elige entre los siguientes planes
+                    .row.text-center
+                        .col-md-4.mb-4
+                            .card#planBasico(style="background:#000")
+                                .card-body
+                                    h5.card-title.text-danger  Plan Básico
+                                    p.card-text.text-white
+                                        | Ayuda a nuestros misioneros con una donación mensual desde $300 MXN.
+                                    button#saveDonacionBasic.btn.btn-danger Suscribirse
+                        .col-md-4.mb-4
+                            .card#planIntermedio(style="background:#000")
+                                .card-body
+                                    h5.card-title.text-danger  Plan Pro
+                                    p.card-text.text-white
+                                        | Contribuye de manera significativa a la obra misionera con $500 MXN mensuales.
+                                    button#saveDonacionPro.btn.btn-danger Suscribirse
+                        .col-md-4.mb-4
+                            .card#planAvanzado(style="background:#000")
+                                .card-body
+                                    h5.card-title.text-danger  Plan Premium
+                                    p.card-text.text-white
+                                        | Haz una gran diferencia con tu generosa donación mensual de $900 MXN.
+                                    button#saveDonacionPremium.btn.btn-danger Suscribirse
+
+        include templates/footer
+        include templates/scripts
+        script.
+            const type = '!{tipo_suscripcion}'
+        script(src=`/public/js/jsWeb/common.js?v=${Math.random()}`)
+        script(src=`/public/js/jsWeb/suscripciones.js?v=${Math.random()}`)

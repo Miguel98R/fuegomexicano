@@ -32,6 +32,12 @@ const usersSchema = new Schema({
         require: true,
         default: false
 
+    },
+    suscriptionActive: {
+        type: Boolean,
+        require: true,
+        default: false
+
     }
 
 }, {

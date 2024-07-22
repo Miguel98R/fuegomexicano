@@ -13,4 +13,5 @@ router.use("/datesAgenda/", require("./datesAgendas.routes"))
 router.use("/sales/", require("./sales.routes"))
 router.use("/congresos/", require("./congresos.routes"))
 router.use("/conf/", require("./configurations.routes"))
+router.use("/suscriptions/", require("./suscriptions.routes"))
 module.exports = router
