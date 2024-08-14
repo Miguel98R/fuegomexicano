@@ -1,53 +1,95 @@
-let apiProducts = "/api/products"
+let apiProducts = "/api/products";
 
-const drawProducts = (id_product) => {
-    let plantilla = $('#template_products_').clone()
+let currentPage = 1;
+
+async function loadAndRenderPDF(url, pageNum) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/public/cdn/pdfjs-dist/build/pdf.worker.mjs';
+
+    const loadingTask = pdfjsLib.getDocument(url);
+    const pdf = await loadingTask.promise;
+
+    if (pageNum >= 5) {
+        $('#pdfViewModal').modal('hide'); // Cerrar la modal
+        alert('Debes comprar el producto para continuar leyendo.');
+        return;
+    }
+
+    if (pageNum <= 0 || pageNum > pdf.numPages) {
+        return;
+    }
+
+    currentPage = pageNum;
+    const page = await pdf.getPage(pageNum);
+
+    const modalWidth = $('#pdfViewModal .modal-dialog').width();
+    const viewport = page.getViewport({scale: modalWidth / page.getViewport({scale: 1}).width});
+
+    const canvas = document.getElementById("pdfViewer");
+    const context = canvas.getContext("2d");
+
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    const renderContext = {
+        canvasContext: context,
+        viewport,
+    };
+
+    page.render(renderContext);
+}
+
+const drawProducts = (id_product, name_product) => {
+    let plantilla = $('#template_products_').clone();
 
     plantilla.attr('id', 'template_products_' + id_product).css('display', 'block');
-    plantilla.find('#image_product_').attr('id', 'image_product_' + id_product)
-    plantilla.find('#stock_aviable_').attr('id', 'stock_aviable_' + id_product)
-    plantilla.find('#name_product_').attr('id', 'name_product_' + id_product)
-    plantilla.find('#description_product_').attr('id', 'description_product_' + id_product)
-    plantilla.find('#price_product_').attr('id', 'price_product_' + id_product)
-    plantilla.find('#shop_now_').attr('id', 'shop_now_' + id_product).attr("id_product", id_product)
-    plantilla.find('#add_cart_').attr('id', 'add_cart_' + id_product).attr("id_product", id_product)
-    plantilla.find('#add_product_').attr('id', 'add_product_' + id_product).attr("id_product", id_product)
-    plantilla.find('#quantity_input_').attr('id', 'quantity_input_' + id_product).attr("id_product", id_product)
-    plantilla.find('#remove_product_').attr('id', 'remove_product_' + id_product).attr("id_product", id_product)
-    plantilla.find('#select_talla_').attr('id', 'select_talla_' + id_product).attr("id_product", id_product)
-    plantilla.find('#talla_CH_').attr('id', 'talla_CH_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla')
-    plantilla.find('#talla_M_').attr('id', 'talla_M_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla')
-    plantilla.find('#talla_G_').attr('id', 'talla_G_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla')
+    plantilla.find('#image_product_').attr('id', 'image_product_' + id_product);
+    plantilla.find('#stock_aviable_').attr('id', 'stock_aviable_' + id_product);
+    plantilla.find('#name_product_').attr('id', 'name_product_' + id_product);
+    plantilla.find('#description_product_').attr('id', 'description_product_' + id_product);
+    plantilla.find('#price_product_').attr('id', 'price_product_' + id_product);
+    plantilla.find('#shop_now_').attr('id', 'shop_now_' + id_product).attr("id_product", id_product);
+    plantilla.find('#add_cart_').attr('id', 'add_cart_' + id_product).attr("id_product", id_product);
+    plantilla.find('#add_product_').attr('id', 'add_product_' + id_product).attr("id_product", id_product);
+    plantilla.find('#quantity_input_').attr('id', 'quantity_input_' + id_product).attr("id_product", id_product);
+    plantilla.find('#remove_product_').attr('id', 'remove_product_' + id_product).attr("id_product", id_product);
 
-    plantilla.find('label[for="talla_CH_"]').attr('for', 'talla_CH_' + id_product);
-    plantilla.find('label[for="talla_M_"]').attr('for', 'talla_M_' + id_product);
-    plantilla.find('label[for="talla_G_"]').attr('for', 'talla_G_' + id_product);
+    plantilla.find('#select_talla_').attr('id', 'select_talla_' + id_product).attr("id_product", id_product);
+    plantilla.find('#talla_CH_').attr('id', 'talla_CH_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla');
+    plantilla.find('#talla_M_').attr('id', 'talla_M_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla');
+    plantilla.find('#talla_G_').attr('id', 'talla_G_' + id_product).attr("name", 'talla_' + id_product).attr("id_product", id_product).addClass('changeTalla');
 
-    return plantilla
-}
+    plantilla.find('#viewPDF_').attr('id', 'viewPDF_' + id_product).attr("id_product", id_product);
+    plantilla.find('#btnViewPreview_').attr('id', 'btnViewPreview_' + id_product).attr("id_product", id_product).attr('name_product', name_product);
+
+    return plantilla;
+};
+
 const getProducts = async () => {
     await api_conection("GET", apiProducts + "/getMany", {}, async function (data) {
-        let data_product = data.data
+        let data_product = data.data;
 
         if (data_product.length === 0) {
-
             var mensajeMercanciaProxima = "<h4 class='py-4 display-5 text-center fw-lighter text-white'>Próximamente conocerás nuestra mercancía oficial. ¡Estamos trabajando en ello!</h4>";
-
             $('#grid_products').append(mensajeMercanciaProxima);
             return;
         }
-
 
         for (let item of data_product) {
             let stock = item.stock > 0 ? "En stock" : "Agotado";
             let color = item.stock > 0 ? "text-success" : "text-danger";
 
-            let element = drawProducts(item._id);
+            let element = drawProducts(item._id, item.name);
 
-            if(item.name.includes("Playera")){
+            if (item.name.includes("Playera")) {
                 element.find('#select_talla_' + item._id).show();
-            }else{
+            } else {
                 element.find('#select_talla_' + item._id).hide();
+            }
+
+            if (item.name.includes("Digital")) {
+                element.find('#viewPDF_' + item._id).show();
+            } else {
+                element.find('#viewPDF_' + item._id).hide();
             }
 
             element.find('#image_product_' + item._id).attr('src', item.image);
@@ -63,42 +105,38 @@ const getProducts = async () => {
 
             $('#grid_products').append(element);
         }
-
-    })
-}
+    });
+};
 
 const updateCartStorage = async (id) => {
-   let selectedTalla = $('input[name="talla_' + id + '"]:checked').val();
-   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
+    let selectedTalla = $('input[name="talla_' + id + '"]:checked').val();
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     let existingProduct = cart.find(item => item.id_product === id);
 
     if (existingProduct) {
         existingProduct.selectedTalla = selectedTalla;
     } else {
-
         cart.push(product);
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
     updateNumProducts();
+};
 
-}
 const createCartStorage = async (id) => {
     let productName = $("#name_product_" + id).text();
-    let productPrice = Number($("#price_product_" + id).attr('price'))
-    let quantity = Number($("#quantity_input_" + id).val())
+    let productPrice = Number($("#price_product_" + id).attr('price'));
+    let quantity = Number($("#quantity_input_" + id).val());
     let image = $("#image_product_" + id).attr('src');
-    let selectedTalla = ''
+    let selectedTalla = '';
 
-    if(productName.includes('Playera')){
+    if (productName.includes('Playera')) {
         selectedTalla = $('input[name="talla_' + id + '"]:checked').val();
-        if(selectedTalla == undefined){
+        if (selectedTalla == undefined) {
             notyf.open({type: "warning", message: "Selecciona una talla"});
-
-            return
+            return;
         }
     }
 
@@ -113,15 +151,12 @@ const createCartStorage = async (id) => {
 
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-
     let existingProduct = cart.find(item => item.id_product === id);
 
     if (existingProduct) {
-
         existingProduct.quantity = quantity;
         existingProduct.selectedTalla = selectedTalla;
     } else {
-
         cart.push(product);
     }
 
@@ -132,22 +167,21 @@ const createCartStorage = async (id) => {
     updateNumProducts();
 };
 
-
 const createCartShopNow = async (id) => {
     let productName = $("#name_product_" + id).text();
-    let productPrice = Number($("#price_product_" + id).attr('price'))
-    let quantity = Number($("#quantity_input_" + id).val())
+    let productPrice = Number($("#price_product_" + id).attr('price'));
+    let quantity = Number($("#quantity_input_" + id).val());
     let image = $("#image_product_" + id).attr('src');
-    let selectedTalla = ''
+    let selectedTalla = '';
 
-    if(productName.includes('Playera')){
+    if (productName.includes('Playera')) {
         selectedTalla = $('input[name="talla_' + id + '"]:checked').val();
-        if(selectedTalla == undefined){
+        if (selectedTalla == undefined) {
             notyf.open({
                 type: 'warning',
                 message: 'Selecciona una talla'
             });
-            return
+            return;
         }
     }
 
@@ -165,10 +199,8 @@ const createCartShopNow = async (id) => {
     // Sobrescribe el carrito actual en el localStorage con el nuevo producto
     localStorage.setItem("cart", JSON.stringify(cart));
     updateNumProducts();
-    location.href="/checkout"
+    location.href = "/checkout";
 };
-
-
 
 const increaseQuantity = async (id_product) => {
     let quantityInput = $("#quantity_input_" + id_product);
@@ -180,7 +212,6 @@ const increaseQuantity = async (id_product) => {
     }
 };
 
-
 const decreaseQuantity = async (id_product) => {
     let quantityInput = $("#quantity_input_" + id_product);
 
@@ -189,37 +220,63 @@ const decreaseQuantity = async (id_product) => {
     if (currentQuantity > 1) {
         quantityInput.val(currentQuantity - 1);
     }
-}
-
-
-
+};
 $(async function () {
-    await getProducts()
+    await getProducts();
 
     $(".add_cart").click(async function () {
-        let id_product = $(this).attr("id_product")
-        await createCartStorage(id_product)
-    })
+        let id_product = $(this).attr("id_product");
+        await createCartStorage(id_product);
+    });
 
     $(".changeTalla").click(async function () {
-        let id_product = $(this).attr("id_product")
-        await updateCartStorage(id_product)
-    })
+        let id_product = $(this).attr("id_product");
+        await updateCartStorage(id_product);
+    });
 
     $(".shop_now").click(async function () {
-        let id_product = $(this).attr("id_product")
-        await createCartShopNow(id_product)
-    })
-
+        let id_product = $(this).attr("id_product");
+        await createCartShopNow(id_product);
+    });
 
     $(".add_product").click(async function () {
-        let id_product = $(this).attr("id_product")
+        let id_product = $(this).attr("id_product");
         await increaseQuantity(id_product);
     });
 
     $(".remove_product").click(async function () {
-        let id_product = $(this).attr("id_product")
+        let id_product = $(this).attr("id_product");
         await decreaseQuantity(id_product);
     });
 
-})
+    $('.verPreview').click(function () {
+
+        let name = $(this).attr('name_product');
+        let pdf
+
+        if (name.includes('Semblanza')) {
+            pdf = 'FRENTE_DE_COMBATE_.pdf'
+        }
+
+        if (name.includes('ORAR')) {
+            pdf = 'ENSEÑANOS_A_ORAR.pdf'
+        }
+
+        const pdfUrl = `/public/files/${pdf}`; // Reemplaza con la URL correcta del PDF
+
+        $('#pdfViewModal').modal('show');
+        $('#pdfViewerContainer').show();
+        loadAndRenderPDF(pdfUrl, 1); // Iniciar desde la página 1
+
+        // Resetear botones
+        $('#prevPageBtn').off('click').on('click', function () {
+            loadAndRenderPDF(pdfUrl, currentPage - 1);
+        });
+        $('#nextPageBtn').off('click').on('click', function () {
+            loadAndRenderPDF(pdfUrl, currentPage + 1);
+        });
+    });
+
+
+});
+

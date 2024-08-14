@@ -20,15 +20,15 @@ router.get("/", (req, res) => {
 
     let images = ['/public/images/fuego/fuego_1.jpg', '/public/images/fuego/fuego_2.jpg', '/public/images/fuego/fuego_3.jpg', '/public/images/fuego/fuego_4.jpg']
 
-    /* res.render("index", {
+     res.render("index", {
          title: 'Fuego Mexicano | Home',
          images
-     }); */
+     });
 
-    res.render("ddlv", {
+    /*res.render("ddlv", {
         title: 'Fuego Mexicano | DDLV 2024',
 
-    });
+    });*/
 });
 
 router.get("/index", (req, res) => {

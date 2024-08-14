@@ -1,0 +1,12 @@
+#pdfViewModal.modal.fade(tabindex='-1' aria-hidden='true')
+    .modal-dialog.modal-md
+        .modal-content.bg-dark
+           .modal-body
+                .container.text-center
+                    div#pdfViewerContainer(style="display: flex; justify-content: center; align-items: center; height: 100%;")
+                        canvas#pdfViewer(style="display: block; margin: auto;")
+                div.text-center.py-3
+                    button#prevPageBtn.btn.btn-dark.mx-2 Anterior
+                    button#nextPageBtn.btn.btn-dark.mx-2 Siguiente
+           .modal-footer
+                button(type="button" class="btn btn-dark" data-bs-dismiss="modal") Cerrar

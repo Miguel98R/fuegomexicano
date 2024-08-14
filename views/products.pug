@@ -5,6 +5,7 @@ html(lang='es')
         include templates/styles
 
 
+
     body
         include templates/spinner
         main
@@ -46,6 +47,20 @@ html(lang='es')
                         span.product-alert.me-auto#stock_aviable_(style="font-size:18px;").bg-transparent
                         |
                         //a.bi-heart-fill.product-icon(href='#')
+                    div
+                        .product-info.d-flex.text-center
+                            div
+                                h6.product-title.mb-1.text-white
+
+                                    a.product-title-link.text-white(href='')#name_product_
+                                p
+                                    span.product-price.text-muted.ms-auto.my-3#price_product_
+
+                                p.product-p#description_product_
+                    div#viewPDF_.text-center.my-2
+                        button#btnViewPreview_.verPreview.btn.custom-btn_store.product-p Vista Previa
+
+
 
                     div#select_talla_.text-center.my-2
                         p Tallas
@@ -84,15 +99,6 @@ html(lang='es')
                                         i.mx-2.bi.bi-cart-check-fill
                                         | Comprar ahora
                             .col-12
-                                .product-info.d-flex.text-center
-                                    div
-                                        h6.product-title.mb-1.text-white
-
-                                            a.product-title-link.text-white(href='')#name_product_
-                                        p
-                                            span.product-price.text-muted.ms-auto.my-3#price_product_
-
-                                        p.product-p#description_product_
 
 
 
@@ -102,7 +108,11 @@ html(lang='es')
 
 
 
+
+        include modals/pdfViewModal
         include templates/footer
         include templates/scripts
+        script(src='/public/cdn/pdfjs-dist/build/pdf.mjs' type='module')
+
         script(src=`/public/js/jsWeb/common.js?v=${Math.random()}`)
         script(src=`/public/js/jsWeb/merch.js?v=${Math.random()}`)
