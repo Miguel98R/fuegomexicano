@@ -259,7 +259,7 @@ $(async function () {
         }
 
         if (name.includes('orar')) {
-            pdf = 'ENSEÑANOS_A_ORAR.pdf'
+            pdf = 'ORAR.pdf'
         }
 
         const pdfUrl = `/public/files/${pdf}`; // Reemplaza con la URL correcta del PDF
