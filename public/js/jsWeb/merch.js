@@ -258,7 +258,7 @@ $(async function () {
             pdf = 'FRENTE_DE_COMBATE_.pdf'
         }
 
-        if (name.includes('ORAR')) {
+        if (name.includes('orar')) {
             pdf = 'ENSEÑANOS_A_ORAR.pdf'
         }
 
