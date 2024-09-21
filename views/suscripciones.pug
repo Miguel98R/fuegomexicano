@@ -3,6 +3,8 @@ html(lang='es')
     head
         include templates/head
         include templates/styles
+        //- CDN de Lightbox2
+        link(href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css", rel="stylesheet")
     body
         include templates/spinner
         main
@@ -21,7 +23,31 @@ html(lang='es')
                                     | Hector
                                     span.text-danger Andrade
 
-                img.header-image.img-fluid(src='/public/images/fuego/fuego_7.jpg', alt)
+                img.header-image.img-fluid(src='/public/images/misiones/misiones_1.png', alt)
+
+            //- Sección de Galería
+            section.gallery.section-padding
+                .container
+                    h4.text-white Galería de Imágenes y Videos
+                    .row
+                        .col-md-4.mb-4
+                            a(href='/public/images/misiones/fuego_8.jpg', data-lightbox='gallery', data-title='Imagen 2')
+                                img.img-fluid(src='/public/images/misiones/fuego_7.jpg', alt='Imagen 1')
+                        .col-md-4.mb-4
+                            a(href='/public/images/misiones/fuego_8.jpg', data-lightbox='gallery', data-title='Imagen 2')
+                                img.img-fluid(src='/public/images/misiones/fuego_8.jpg', alt='Imagen 2')
+                        .col-md-4.mb-4
+                            a(href='/public/videos/video_1.mp4', data-lightbox='gallery', data-title='Video 1')
+                                img.img-fluid(src='/public/images/misiones/video-thumbnail.jpg', alt='Video 1')
+                        .col-md-4.mb-4
+                            a(href='/public/images/fuego/fuego_9.jpg', data-lightbox='gallery', data-title='Imagen 3')
+                                img.img-fluid(src='/public/images/misiones/fuego_9.jpg', alt='Imagen 3')
+                        .col-md-4.mb-4
+                            a(href='/public/images/fuego/fuego_10.jpg', data-lightbox='gallery', data-title='Imagen 4')
+                                img.img-fluid(src='/public/images/misiones/fuego_10.jpg', alt='Imagen 4')
+                        .col-md-4.mb-4
+                            a(href='/public/videos/video_2.mp4', data-lightbox='gallery', data-title='Video 2')
+                                img.img-fluid(src='/public/images/misiones/video-thumbnail2.jpg', alt='Video 2')
 
             section.team.section-padding
                 .container
@@ -32,6 +58,8 @@ html(lang='es')
                                 .row
                                     .col-12
                                         include templates/userForm
+
+            //- Sección de planes de suscripción
             .container
                 div#GeneralSuscripcion
                     h4.text-white#subscriptionTitle Elige entre los siguientes planes
@@ -39,28 +67,30 @@ html(lang='es')
                         .col-md-4.mb-4
                             .card#planBasico(style="background:#000")
                                 .card-body
-                                    h5.card-title.text-danger  Plan Básico
+                                    h5.card-title.text-danger Plan Básico
                                     p.card-text.text-white
                                         | Ayuda a nuestros misioneros con una donación mensual desde $300 MXN.
                                     button#saveDonacionBasic.btn.btn-danger Suscribirse
                         .col-md-4.mb-4
                             .card#planIntermedio(style="background:#000")
                                 .card-body
-                                    h5.card-title.text-danger  Plan Pro
+                                    h5.card-title.text-danger Plan Pro
                                     p.card-text.text-white
                                         | Contribuye de manera significativa a la obra misionera con $500 MXN mensuales.
                                     button#saveDonacionPro.btn.btn-danger Suscribirse
                         .col-md-4.mb-4
                             .card#planAvanzado(style="background:#000")
                                 .card-body
-                                    h5.card-title.text-danger  Plan Premium
+                                    h5.card-title.text-danger Plan Premium
                                     p.card-text.text-white
                                         | Haz una gran diferencia con tu generosa donación mensual de $900 MXN.
                                     button#saveDonacionPremium.btn.btn-danger Suscribirse
 
         include templates/footer
         include templates/scripts
+        //- CDN de Lightbox2
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js")
         script.
-            const type = '!{tipo_suscripcion}'
+            const type = '!{tipo_suscripcion}';
         script(src=`/public/js/jsWeb/common.js?v=${Math.random()}`)
         script(src=`/public/js/jsWeb/suscripciones.js?v=${Math.random()}`)

@@ -60,7 +60,39 @@ router.get("/", (req, res) => {
 router.get("/index", (req, res) => {
 
 
-    let images = ['/public/images/fuego/fuego_1.jpg', '/public/images/fuego/fuego_2.jpg', '/public/images/fuego/fuego_3.jpg', '/public/images/fuego/fuego_4.jpg']
+    let images = [
+        {
+            src: '/public/images/fuego/misiones_head.png',
+
+        },
+        {
+            src: '/public/images/fuego/fuego_1.jpg',
+            message: 'Oficial Web Site',
+            title: 'Fuego',
+            spanText: 'Mexicano'
+        },
+
+
+        {
+            src: '/public/images/fuego/fuego_2.jpg',
+            message: 'Siempre mantén encendida la llama del Espíritu Santo',
+            title: 'Fuego',
+            spanText: 'Mexicano'
+        },
+        {
+            src: '/public/images/fuego/fuego_3.jpg',
+            message: 'Predicando el Evangelio a todo el mundo',
+            title: 'Evangelismo',
+            spanText: 'Global'
+        },
+        {
+            src: '/public/images/fuego/fuego_4.jpg',
+            message: 'Predicando el Evangelio a todo el mundo',
+            title: 'Evangelismo',
+            spanText: 'Global'
+        },
+
+    ];
 
     res.render("index", {
         title: 'Fuego Mexicano | Home',
