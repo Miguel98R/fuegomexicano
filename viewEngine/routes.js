@@ -16,20 +16,46 @@ router.use(require('./panelRoutesVIews'))
 //--------------------------------------------------------------------------------------------------------------------//
 
 router.get("/", (req, res) => {
+    let images = [
+        {
+            src: '/public/images/fuego/misiones_head.png',
+
+        },
+        {
+            src: '/public/images/fuego/fuego_1.jpg',
+            message: 'Oficial Web Site',
+            title: 'Fuego',
+            spanText: 'Mexicano'
+        },
 
 
-    let images = ['/public/images/fuego/fuego_1.jpg', '/public/images/fuego/fuego_2.jpg', '/public/images/fuego/fuego_3.jpg', '/public/images/fuego/fuego_4.jpg']
+        {
+            src: '/public/images/fuego/fuego_2.jpg',
+            message: 'Siempre mantén encendida la llama del Espíritu Santo',
+            title: 'Fuego',
+            spanText: 'Mexicano'
+        },
+        {
+            src: '/public/images/fuego/fuego_3.jpg',
+            message: 'Predicando el Evangelio a todo el mundo',
+            title: 'Evangelismo',
+            spanText: 'Global'
+        },
+        {
+            src: '/public/images/fuego/fuego_4.jpg',
+            message: 'Predicando el Evangelio a todo el mundo',
+            title: 'Evangelismo',
+            spanText: 'Global'
+        },
 
-     res.render("index", {
-         title: 'Fuego Mexicano | Home',
-         images
-     });
+    ];
 
-    /*res.render("ddlv", {
-        title: 'Fuego Mexicano | DDLV 2024',
-
-    });*/
+    res.render("index", {
+        title: 'Fuego Mexicano | Home',
+        images
+    });
 });
+
 
 router.get("/index", (req, res) => {
 

@@ -1,18 +1,22 @@
 section.slick-slideshow
-
-
     if images
         each image in images
             .slick-custom
-                img.img-fluid(src=image, alt)
+                img.img-fluid(src=image.src, alt)
                 .slick-bottom
                     .container
                         .row
                             .col-lg-7.col-10
-                                h2.display-4.slick-title
-                                    | Fuego
-                                    span.text-danger Mexicano
-                                h6.slick-title
-                                    | Web Oficial
-                                div.my-2
-                                    p.lead.text-white.mt-lg-3.mb-lg-5 Siempre mantén encendida la llama del Espíritu Santo
+                                //- Mostrar el título y el span de manera dinámica
+                                if image.title && image.spanText
+                                    h2.display-4.slick-title
+                                        | #{image.title}
+                                        span.text-danger #{image.spanText}
+                                else
+                                    h2.display-4.slick-title
+                                        |
+                                        span.text-danger
+                                //- Mostrar el subtítulo si existe
+                                if image.message
+                                    div.my-2
+                                        p.lead.text-white.mt-lg-3.mb-lg-5= image.message
