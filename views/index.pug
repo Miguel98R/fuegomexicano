@@ -23,7 +23,22 @@ html(lang='es')
         main
             include templates/nav
             include templates/slider
+
+
+
+
             include templates/acercaDe
+            div.py-4
+                .row
+                    .col-12.text-center
+                        h2.text-white.mb-5
+                            | Aviva
+                            span.text-danger.mx-1 llamas
+
+                .row
+                    .col-12.col-md-12
+                        .card-body
+                            video#ddlv(loop controls style="width: 100%;" height="550" autoplay="true" type='video/mp4' src="/public/images/avivallamas.mp4")
             include templates/agenda2
             include templates/congresos_
 
